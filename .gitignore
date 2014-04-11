@@ -1,0 +1,9 @@
+PocketPoints/bin
+PocketPoints/gen
+PocketPoints/libs
+PocketPointsTest/bin
+PocketPointsTest/gen
+PocketPointsTest/libs
+
+*.classpath
+*.project
