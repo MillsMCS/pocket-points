@@ -1,9 +1,9 @@
 PocketPoints/bin
 PocketPoints/gen
 PocketPoints/libs
-PocketPointsTest/bin
-PocketPointsTest/gen
-PocketPointsTest/libs
+PocketPointsTestTest/bin
+PocketPointsTestTest/gen
+PocketPointsTestTest/libs
 
 *.classpath
 *.project
