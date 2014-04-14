@@ -2,6 +2,7 @@ package edu.mills.cs180a.pocketpoints.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -16,14 +17,24 @@ public class StudentTest {
     private static final long STUDENT_ID = 1;
     private static final String STUDENT_NAME = "Josie Pye";
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void ctor_nullName_throws() {
-        new Student(STUDENT_ID, null);
+        try {
+            Student student = new Student(STUDENT_ID, null);
+            fail("Expected AssertionError thrown; instead got " + student);
+        } catch (AssertionError expected) {
+            // Expected.
+        }
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void ctor_emptyName_throws() {
-        new Student(STUDENT_ID, "");
+        try {
+            Student student = new Student(STUDENT_ID, null);
+            fail("Expected AssertionError thrown; instead got " + student);
+        } catch (AssertionError expected) {
+            // Expected.
+        }
     }
 
     @Test
@@ -31,20 +42,31 @@ public class StudentTest {
         Student student = new Student(STUDENT_ID, STUDENT_NAME);
         assertEquals(STUDENT_ID, student.getId());
         assertEquals(STUDENT_NAME, student.getName());
-        assertEquals(null, student.getId()); // Initialized to null, since none specified.
+        assertEquals(null, student.getImgName()); // Initialized to null, since none specified.
         assertEquals(0, student.getNumStickers()); // Initialized to 0, since none specified.
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void setName_null_throws() {
         Student student = new Student(STUDENT_ID, STUDENT_NAME);
-        student.setName(null);
+        try {
+            student.setName(null);
+            fail("Expected AssertionError thrown");
+        } catch (AssertionError expected) {
+            // Expected.
+        }
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void setName_emptyString_throws() {
         Student student = new Student(STUDENT_ID, STUDENT_NAME);
-        student.setName("");
+        try {
+            student.setName("");
+            fail("Expected AssertionError thrown; instead, set student name to '"
+                    + student.getName() + "'");
+        } catch (AssertionError expected) {
+            // Expected.
+        }
     }
 
     @Test
@@ -74,10 +96,16 @@ public class StudentTest {
         assertEquals(null, student.getImgName());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void setNumStickers_negativeValue_throws() {
         Student student = new Student(STUDENT_ID, STUDENT_NAME);
-        student.setNumStickers(-1);
+        try {
+            student.setNumStickers(-1);
+            fail("Expected AssertionError thrown; instead, set num stickers to '"
+                    + student.getNumStickers() + "'");
+        } catch (AssertionError expected) {
+            // Expected.
+        }
     }
 
     @Test
@@ -111,11 +139,16 @@ public class StudentTest {
         assertEquals(initialNumStickers + 4, student.getNumStickers());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void removeLastSticker_noStickersToRemove_throws() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
-        student.setNumStickers(0);
-        student.removeLastSticker();
+        Student student = new Student(STUDENT_ID, STUDENT_NAME).setNumStickers(0);
+        try {
+            student.removeLastSticker();
+            fail("Expected AssertionError thrown; instead, num stickers is now '"
+                    + student.getNumStickers() + "'");
+        } catch (AssertionError expected) {
+            // Expected.
+        }
     }
 
     @Test
