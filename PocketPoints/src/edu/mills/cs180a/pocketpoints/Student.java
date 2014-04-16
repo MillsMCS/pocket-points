@@ -6,20 +6,20 @@ package edu.mills.cs180a.pocketpoints;
  * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class Student {
-    private final long mId;
-    private String mName;
+    private long mId;
+    private String mName = null;
     private String mImgName = null;
     private int mNumStickers = 0;
 
     /**
-     * Create a student with the given required fields.
+     * Create an empty student object.
      *
-     * @param id the unique ID of the student
-     * @param name the non-empty name of the student
+     * <p>
+     * Note that upon construction, this {@code Student} object is not valid for insertion into the
+     * database. The name and ID of the student must be set for the student to be valid.
      */
-    public Student(long id, String name) {
-        mId = id;
-        setName(name);
+    public Student() {
+        // Dummy constructor.
     }
 
     /**
@@ -29,6 +29,20 @@ public class Student {
      */
     public long getId() {
         return mId;
+    }
+
+    /**
+     * Sets the unique ID of the student to the given value.
+     *
+     * <p>
+     * NOTE: this method should ONLY be called by the {@link StudentManager} class!
+     *
+     * @param id the ID to set
+     * @return {@code this}, for chaining
+     */
+    public Student setID(long id) {
+        mId = id;
+        return this;
     }
 
     /**
