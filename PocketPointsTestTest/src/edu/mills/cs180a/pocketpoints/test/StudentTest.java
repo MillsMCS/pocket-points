@@ -1,9 +1,9 @@
 package edu.mills.cs180a.pocketpoints.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import edu.mills.cs180a.pocketpoints.Student;
@@ -14,41 +14,42 @@ import edu.mills.cs180a.pocketpoints.Student;
  * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class StudentTest {
-    private static final long STUDENT_ID = 1;
-    private static final String STUDENT_NAME = "Josie Pye";
+    private Student student;
 
-    @Test
-    public void ctor_nullName_throws() {
-        try {
-            Student student = new Student(STUDENT_ID, null);
-            fail("Expected AssertionError thrown; instead got " + student);
-        } catch (AssertionError expected) {
-            // Expected.
-        }
+    @Before
+    public void setUp() {
+        student = new Student();
     }
 
     @Test
-    public void ctor_emptyName_throws() {
-        try {
-            Student student = new Student(STUDENT_ID, null);
-            fail("Expected AssertionError thrown; instead got " + student);
-        } catch (AssertionError expected) {
-            // Expected.
-        }
+    public void ctor() {
+        Student student = new Student();
+        assertEquals(null, student.getName()); // Should be initialized to null.
+        assertEquals(null, student.getImgName()); // Should be initialized to null.
+        assertEquals(0, student.getNumStickers()); // Should be initialized to 0.
     }
 
     @Test
-    public void ctor_succeeds() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
-        assertEquals(STUDENT_ID, student.getId());
-        assertEquals(STUDENT_NAME, student.getName());
-        assertEquals(null, student.getImgName()); // Initialized to null, since none specified.
-        assertEquals(0, student.getNumStickers()); // Initialized to 0, since none specified.
+    public void setId() {
+        // CASE: Set ID to positive number.
+        long id = 4;
+        student.setID(id);
+        assertEquals(id, student.getId());
+
+        // CASE: Set ID to 0.
+        id = 0;
+        student.setID(id);
+        assertEquals(id, student.getId());
+
+        // CASE: Set ID to negative number.
+        id = 0;
+        student.setID(id);
+        assertEquals(id, student.getId());
     }
 
     @Test
     public void setName_null_throws() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
+        Student student = new Student();
         try {
             student.setName(null);
             fail("Expected AssertionError thrown");
@@ -59,7 +60,7 @@ public class StudentTest {
 
     @Test
     public void setName_emptyString_throws() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
+        Student student = new Student();
         try {
             student.setName("");
             fail("Expected AssertionError thrown; instead, set student name to '"
@@ -71,16 +72,15 @@ public class StudentTest {
 
     @Test
     public void setName_nonEmptyString_succeeds() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
-        String newName = "Diana Barry";
-        assertFalse(newName.equals(student.getName())); // Want to set the name to a NEW value.
-        student.setName(newName);
-        assertEquals(newName, student.getName());
+        String name = "Josie Pye";
+        Student student = new Student();
+        student.setName(name);
+        assertEquals(name, student.getName());
     }
 
     @Test
     public void setImgName() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
+        Student student = new Student();
 
         // CASE: Set image name to non-empty string.
         String imgName = "34_student_profile.jpg";
@@ -98,7 +98,7 @@ public class StudentTest {
 
     @Test
     public void setNumStickers_negativeValue_throws() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
+        Student student = new Student();
         try {
             student.setNumStickers(-1);
             fail("Expected AssertionError thrown; instead, set num stickers to '"
@@ -110,7 +110,7 @@ public class StudentTest {
 
     @Test
     public void setNumStickers_succeeds() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
+        Student student = new Student();
 
         // CASE: Set number of stickers to 0.
         int numStickers = 0;
@@ -125,7 +125,7 @@ public class StudentTest {
 
     @Test
     public void addSticker() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
+        Student student = new Student();
         int initialNumStickers = student.getNumStickers();
 
         // Add stickers.
@@ -141,7 +141,7 @@ public class StudentTest {
 
     @Test
     public void removeLastSticker_noStickersToRemove_throws() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME).setNumStickers(0);
+        Student student = new Student().setNumStickers(0);
         try {
             student.removeLastSticker();
             fail("Expected AssertionError thrown; instead, num stickers is now '"
@@ -153,7 +153,7 @@ public class StudentTest {
 
     @Test
     public void removeLastSticker_succeeds() {
-        Student student = new Student(STUDENT_ID, STUDENT_NAME);
+        Student student = new Student();
         int initialNumStickers = 4;
         student.setNumStickers(initialNumStickers);
 
