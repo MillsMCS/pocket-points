@@ -51,9 +51,9 @@ public class StudentSQLiteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE_STUDENTS + "("
                 + COLUMN_ID + " integer primary key autoincrement, "
-                + COLUMN_NAME + " varchar(50) not null "
+                + COLUMN_NAME + " varchar(255) not null "
                 + "check (" + COLUMN_NAME + " != ''), "
-                + COLUMN_IMAGE_NAME + " varchar(100), "
+                + COLUMN_IMAGE_NAME + " varchar(255), "
                 + COLUMN_NUM_STICKERS + " integer not null default 0 "
                 + "check (" + COLUMN_NUM_STICKERS + ">-1)"
                 + ")");
