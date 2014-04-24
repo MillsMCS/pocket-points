@@ -6,17 +6,25 @@ package edu.mills.cs180a.pocketpoints;
  * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class Student {
-    private long mId;
+    /**
+     * A value representing an invalid student ID (a student will have an invalid ID, for example,
+     * if the {@link Student} object has just been constructed and/or does not yet exist in the
+     * database).
+     */
+    public static final long INVALID_ID = -1;
+
+    private long mId = INVALID_ID;
     private String mName = null;
     private String mImgName = null;
     private int mNumStickers = 0;
 
     /**
-     * Create an empty student object.
+     * Create an empty student object. The ID of the student will be set to {@link #INVALID_ID}.
      *
      * <p>
      * Note that upon construction, this {@code Student} object is not valid for insertion into the
-     * database. The name and ID of the student must be set for the student to be valid.
+     * database. The name of the student must be set for the student to insertable into the
+     * database.
      */
     public Student() {
         // Dummy constructor.
@@ -35,7 +43,9 @@ public class Student {
      * Sets the unique ID of the student to the given value.
      *
      * <p>
-     * NOTE: this method should ONLY be called by the {@link StudentManager} class!
+     * NOTE: this method should ONLY be called by the {@link StudentManager} class! This ID
+     * represents the unique ID of the student in the underlying database, and should not be changed
+     * by other classes.
      *
      * @param id the ID to set
      * @return {@code this}, for chaining
