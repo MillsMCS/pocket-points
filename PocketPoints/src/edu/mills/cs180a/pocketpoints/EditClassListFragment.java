@@ -1,6 +1,5 @@
 package edu.mills.cs180a.pocketpoints;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -26,7 +25,8 @@ import android.widget.TextView;
 public class EditClassListFragment extends Fragment {
 	private LayoutInflater mInflater;
 	private List<Student> mStudentList;
-	private Student mMyStudent;
+	private StudentManager mStudentManager;
+
 	/**
 	 * Interface definition for the callback to be invoked
 	 * when a student in the class list is selected.
@@ -42,47 +42,10 @@ public class EditClassListFragment extends Fragment {
 		public void onEditStudentSelected(Student student);
 	}
 
-	/**
-	 * Mocks inserting students into the database so they appear
-	 * in the EditClassListFragment
-	 *
-	 * @param id
-	 * @param imgName		student's picture
-	 * @param name			student's name
-	 * @param numSticks		initial number of stickers assigned to student
-	 *
-	 * @return a student object that has an id, image name, name, and sticker count
-	 */
-	public Student createStudent(long id, String imgName, String name, int numSticks) {
-		Student createdStudent = mMyStudent;
-		createdStudent = new Student()
-		.setID(id)
-		.setImgName(imgName)
-		.setName(name)
-		.setNumStickers(numSticks);
-		return createdStudent;
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mStudentList = new ArrayList<Student>();
-		mStudentList.add(createStudent(1, "Ching.png", "Ching", 6));
-		mStudentList.add(createStudent(2, "Renee.png", "Renee", 5));
-		mStudentList.add(createStudent(3, "Ashley.png", "Ashley", 4));
-		mStudentList.add(createStudent(4, "AJ.png", "AJ", 3));
-		mStudentList.add(createStudent(5, "Kent.png", "Kent", 2));
-		mStudentList.add(createStudent(6, "Zaida.png", "Zaida", 1));
-		mStudentList.add(createStudent(7, "Courtney.png", "Courtney", 0));
-		mStudentList.add(createStudent(8, "Jodessa.png", "Jodessa", 1));
-		mStudentList.add(createStudent(9, "Honomi.png", "Honomi", 2));
-		mStudentList.add(createStudent(10, "Kelly.png", "Kelly", 3));
-		mStudentList.add(createStudent(11, "Jessica.png", "Jessica", 4));
-		mStudentList.add(createStudent(12, "Michele.png", "Michele", 5));
-		mStudentList.add(createStudent(13, "Goni.png", "Goni", 6));
-		mStudentList.add(createStudent(14, "Valeria.png", "Valeria", 7));
-		mStudentList.add(createStudent(15, "Angelica.png", "Angelica", 8));
-		mStudentList.add(createStudent(16, "Gabriella.png", "Gabriella", 9));
+		mStudentList = mStudentManager.getAllStudents();
 	}
 
 	@Override
@@ -102,7 +65,6 @@ public class EditClassListFragment extends Fragment {
 
 	private class EditStudentArrayAdapter extends ArrayAdapter<Student> {
 		EditStudentArrayAdapter(Context context) {
-			// TODO: Need to call StudentManager.getAllStudents();
 			super(context, R.layout.fragment_edit_classlist_row, R.id.rowStudentName, mStudentList);
 		}
 
