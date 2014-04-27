@@ -16,18 +16,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * ClassListFragment (classlist_fragment.xml) is the main page created by
- * MainActivity when the application is first launched.
+ * ClassListFragment is displayed as the main page when the application
+ * is first launched.
  *
  * The fragment will have a StudentArrayAdapter to populate the
- * ListView row (classlist_row.xml) with each student’s picture and name.
+ * ListView row with each student’s picture and name.
  * Selecting a student from the list will direct to StudentStickerFragment.
  * It will also contain two buttons on the upper righthand corner of the
  * screen: ‘Edit Student’ and ‘Add New Student’. Clicking on the ‘Edit Student’
  * button will direct to EditClassListFragment and the ‘Add New Student’
  * button will direct to EditStudentFragment.
- * .
- * @author Ching Yu (chingmyu@gmail.com)
+ *
+ * @author chingmyu@gmail.com (Ching Yu)
  */
 public class ClassListFragment extends Fragment {
 	private LayoutInflater mInflater;
@@ -38,6 +38,8 @@ public class ClassListFragment extends Fragment {
 	/**
 	 * Interface definition for the callback to be invoked
 	 * when a student in the class list is selected.
+	 *
+	 * @author chingmyu@gmail.com (Ching Yu)
 	 */
 	protected interface OnStudentSelectedListener {
 		/**

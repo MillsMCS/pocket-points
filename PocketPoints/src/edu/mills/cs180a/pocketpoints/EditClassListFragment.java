@@ -14,14 +14,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import edu.mills.cs180a.pocketpoints.ClassListFragment.OnStudentSelectedListener;
 
 /**
  * Fragment to display a list of students available for editing.  Clicking on a student
- * notifies an {@link OnStudentSelectedListener}. Clicking on the "Done" button will return
+ * notifies an {@link OnEditStudentSelectedListener}. Clicking on the "Done" button will return
  * the user to the previously created {@link ClassListFragment}.
  *
  * @author renee.johnston1149@gmail.com (Renee Johnston)
+ * @author chingmyu@gmail.com (Ching Yu)
  */
 public class EditClassListFragment extends Fragment {
 	private LayoutInflater mInflater;
@@ -30,6 +30,8 @@ public class EditClassListFragment extends Fragment {
 	/**
 	 * Interface definition for the callback to be invoked
 	 * when a student in the class list is selected.
+	 *
+	 * @author chingmyu@gmail.com (Ching Yu)
 	 */
 	protected interface OnEditStudentSelectedListener {
 		/**

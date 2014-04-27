@@ -9,7 +9,7 @@ import android.view.MenuItem;
 /**
  * Activity that decides which fragment to display.
  *
- * @author (chingmyu@gmail.com) Ching Yu
+ * @author chingmyu@gmail.com (Ching Yu)
  */
 public class MainActivity extends Activity
 	implements ClassListFragment.OnStudentSelectedListener,
