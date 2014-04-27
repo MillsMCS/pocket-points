@@ -94,7 +94,7 @@ public class ClassListFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mInflater = inflater;
-		View view = inflater.inflate(R.layout.classlist_fragment, container, false);
+		View view = inflater.inflate(R.layout.fragment_classlist, container, false);
 
 		// Set up the adapter.
 		Activity activity = getActivity();
@@ -108,13 +108,13 @@ public class ClassListFragment extends Fragment {
 	private class StudentArrayAdapter extends ArrayAdapter<Student> {
 		StudentArrayAdapter(Context context) {
 			// TODO: Need to call StudentManager.getAllStudents();
-			super(context, R.layout.classlist_row, R.id.rowStudentName, mStudentList);
+			super(context, R.layout.fragment_classlist_row, R.id.rowStudentName, mStudentList);
 		}
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			if (null == convertView) {
-				convertView = mInflater.inflate(R.layout.classlist_row, null);
+				convertView = mInflater.inflate(R.layout.fragment_classlist_row, null);
 			}
 			Student student = getItem(position);
 			ImageView picture = (ImageView) convertView.findViewById(R.id.rowStudentPicture);
