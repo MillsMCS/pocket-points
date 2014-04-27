@@ -69,7 +69,7 @@ public class EditClassListFragment extends Fragment {
 		}
 
 		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
+		public View getView(int position, View convertView, ViewGroup parent) {
 			if (null == convertView) {
 				convertView = mInflater.inflate(R.layout.fragment_edit_classlist_row, null);
 			}
