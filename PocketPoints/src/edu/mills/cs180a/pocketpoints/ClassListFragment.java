@@ -51,6 +51,7 @@ public class ClassListFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mStudentManager = StudentManager.get(getActivity());
 		mStudentList = mStudentManager.getAllStudents();
 	}
 
