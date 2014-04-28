@@ -31,7 +31,7 @@ import android.widget.Toast;
  *<p>
  * If the student has already been added, clicking on the Delete
  * button will delete the student from the database; otherwise, it will have no effect. Clicking
- * on the Save button will either update or add the Student to the database. 
+ * on the Save button will either update a previous database entry or add the Student to the database. 
  *</p>
  *
  * @author Renee Johnston (renee.johnston1149@gmail.com)
@@ -43,10 +43,6 @@ public class EditStudentFragment extends Fragment {
 	private EditText mNameField;
 	private Student mStudent;
 	private StudentManager mStudentManager;
-
-
-
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
