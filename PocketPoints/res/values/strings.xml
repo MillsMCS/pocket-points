@@ -6,7 +6,7 @@
     <string name="edit_students">Edit Students</string>
     <string name="add_student">Add New Student</string>
     <string name="done_edit_classlist">Done Editting</string>
-	<string name="name_header"><u>Student Name</u></string>
-	<string name="sticker_header"><u>Stickers</u></string>
-	<string name="row_edit_student_icon">Edit Student</string>
+    <string name="name_header"><u>Student Name</u></string>
+    <string name="sticker_header"><u>Stickers</u></string>
+    <string name="row_edit_student_icon">Edit Student</string>
 </resources>
