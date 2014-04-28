@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <fragment
-        android:id="@+id/classlist_fragment"
+        android:id="@+id/fragment_classlist"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
