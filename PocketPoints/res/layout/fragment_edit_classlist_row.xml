@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/rowStudentPicture"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/row_image_content_description"
+        android:maxHeight="100dip"
+        android:maxWidth="100dip"
+        android:padding="5dip"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/rowStudentName"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:paddingLeft="50dip"
+        android:paddingTop="20dip"
+        android:text="@string/row_student_name"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/rowStickerCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="50dip"
+        android:text="@string/row_sticker_count"
+        android:textSize="20sp" />
+
+    <!-- TODO: Need to handle rotation so back button is near the right edge of screen -->
+    <ImageView
+        android:id="@+id/rowEditStudentIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/row_image_content_description"
+        android:paddingLeft="200dip"
+        android:paddingTop="20dip"
+        android:src="@drawable/ic_go"
+        android:text="@string/row_edit_student_icon" />
+
+</LinearLayout>
