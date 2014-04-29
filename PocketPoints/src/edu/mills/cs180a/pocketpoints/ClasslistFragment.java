@@ -18,16 +18,16 @@ import android.widget.TextView;
  * ClassListFragment is displayed as the main page when the application
  * is first launched.
  *
- * The fragment will display a populated list view of student’s picture and name.
+ * The fragment will display a populated list view of student's picture and name.
  * Selecting a student from the list will direct to {@link StudentStickerFragment}.
  * It will also contain two buttons on the upper righthand corner of the
- * screen: ‘Edit Student’ and ‘Add New Student’. Clicking on the ‘Edit Student’
- * button will direct to {@link EditClassListFragment} and the ‘Add New Student’
+ * screen: 'Edit Student' and 'Add New Student'. Clicking on the 'Edit Student'
+ * button will direct to {@link EditClasslistFragment} and the 'Add New Student'
  * button will direct to {@link EditStudentFragment}.
  *
  * @author chingmyu@gmail.com (Ching Yu)
  */
-public class ClassListFragment extends Fragment {
+public class ClasslistFragment extends Fragment {
 	private LayoutInflater mInflater;
 	private List<Student> mStudentList;
 	private StudentManager mStudentManager;

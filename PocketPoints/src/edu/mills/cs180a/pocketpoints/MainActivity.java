@@ -14,14 +14,15 @@ import android.view.MenuItem;
  * @author chingmyu@gmail.com (Ching Yu)
  */
 public class MainActivity extends Activity
-	implements ClassListFragment.OnStudentSelectedListener,
-	EditClassListFragment.OnEditStudentSelectedListener {
+	implements ClasslistFragment.OnStudentSelectedListener,
+	EditClasslistFragment.OnEditStudentSelectedListener {
     private static final String TAG = "MainActivity";
     
     private FragmentManager mFragmentManager;
     private Fragment mEditStudentFragment;
     private Fragment mClassListFragment;
     private Fragment mEditClasslistFragment;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class MainActivity extends Activity
 		 // Get references to fragment manager and fragments.
         mFragmentManager = getFragmentManager();
         mEditStudentFragment = mFragmentManager.findFragmentById(R.id.editStudentFragment);
-        mClassListFragment = mFragmentManager.findFragmentById(R.id.fragment_classlist);
+        mClassListFragment = mFragmentManager.findFragmentById(R.id.classlistFragment);
         mEditClasslistFragment = mFragmentManager.findFragmentById(R.id.editClasslistFragment);
         
         mFragmentManager.beginTransaction()
@@ -57,8 +58,10 @@ public class MainActivity extends Activity
 			.commit();
 			return true;
 		case R.id.menu_item_add_student:
-			// Display the EditStudentActivity.
-			// TODO: Not yet implemented.
+			mFragmentManager.beginTransaction()
+			.hide(mClassListFragment)
+			.show(mEditStudentFragment)
+			.commit();
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -74,7 +77,7 @@ public class MainActivity extends Activity
 	public void onEditStudentSelected(Student student) {
 		// Display the EditStudentFragment.
 		mFragmentManager.beginTransaction()
-		.hide(mClassListFragment)
+		.hide(mEditClasslistFragment)
 		.show(mEditStudentFragment)
 		.commit();
 		
