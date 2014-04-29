@@ -12,8 +12,8 @@ import android.view.MenuItem;
  * @author chingmyu@gmail.com (Ching Yu)
  */
 public class MainActivity extends Activity
-	implements ClasslistFragment.OnStudentSelectedListener,
-	EditClasslistFragment.OnEditStudentSelectedListener {
+	implements ClasslistFragment_NewName.OnStudentSelectedListener,
+	EditClasslistFragment_NewName.OnEditStudentSelectedListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
