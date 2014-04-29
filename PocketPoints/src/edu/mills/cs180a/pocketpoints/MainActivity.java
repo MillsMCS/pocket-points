@@ -1,6 +1,8 @@
 package edu.mills.cs180a.pocketpoints;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,11 +16,28 @@ import android.view.MenuItem;
 public class MainActivity extends Activity
 	implements ClassListFragment.OnStudentSelectedListener,
 	EditClassListFragment.OnEditStudentSelectedListener {
+    private static final String TAG = "MainActivity";
+    
+    private FragmentManager mFragmentManager;
+    private Fragment mEditStudentFragment;
+    private Fragment mClassListFragment;
+    private Fragment mEditClasslistFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		 // Get references to fragment manager and fragments.
+        mFragmentManager = getFragmentManager();
+        mEditStudentFragment = mFragmentManager.findFragmentById(R.id.editStudentFragment);
+        mClassListFragment = mFragmentManager.findFragmentById(R.id.fragment_classlist);
+        mEditClasslistFragment = mFragmentManager.findFragmentById(R.id.editClasslistFragment);
+        
+        mFragmentManager.beginTransaction()
+		.hide(mEditStudentFragment)
+		.hide(mEditClasslistFragment)
+		.commit();
 	}
 
 	@Override
@@ -32,8 +51,10 @@ public class MainActivity extends Activity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_item_edit_students:
-			// Display the EditClassListFragment.
-			// TODO: Not yet implemented.
+			mFragmentManager.beginTransaction()
+			.hide(mClassListFragment)
+			.show(mEditClasslistFragment)
+			.commit();
 			return true;
 		case R.id.menu_item_add_student:
 			// Display the EditStudentActivity.
@@ -52,6 +73,12 @@ public class MainActivity extends Activity
 	@Override
 	public void onEditStudentSelected(Student student) {
 		// Display the EditStudentFragment.
-		// TODO: Not yet implemented.
+		mFragmentManager.beginTransaction()
+		.hide(mClassListFragment)
+		.show(mEditStudentFragment)
+		.commit();
+		
+		// Show the current person.
+        ((EditStudentFragment) mEditStudentFragment).setStudent(student.getId());
 	}
 }

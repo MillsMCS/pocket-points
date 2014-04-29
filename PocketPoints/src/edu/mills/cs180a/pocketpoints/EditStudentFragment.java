@@ -44,6 +44,22 @@ public class EditStudentFragment extends Fragment {
 	private Student mStudent;
 	private StudentManager mStudentManager;
 
+	/**
+	 * Interface definition for a callback to be invoked when a {@link Person} is selected in the
+	 * list view.
+	 *
+	 * @author renee.johnston1149@gmail.com (Renee Johnston)
+	 */
+	interface OnEditStudentSelectedListener {
+
+		/**
+		 * Called when a {@code Student} is selected from the {@link ClasslistFragment}
+		 *
+		 * @param personId the ID of the selected person
+		 */
+		void OnEditStudentSelected(int studentId);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_edit_student, container, false);
@@ -164,7 +180,7 @@ public class EditStudentFragment extends Fragment {
 		} else {
 			saved = mStudentManager.updateStudent(mStudent);
 		}
-		
+
 		// Inform the user if the student was saved.
 		if (saved){
 			Toast.makeText(getActivity(), "Student Saved", Toast.LENGTH_SHORT).show();

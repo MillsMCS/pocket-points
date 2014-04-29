@@ -10,8 +10,26 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        class="edu.mills.cs180a.pocketpoints.ClassListFragment" 
-        tools:layout="@layout/fragment_classlist">
+        class="edu.mills.cs180a.pocketpoints.ClassListFragment"
+        tools:layout="@layout/fragment_classlist" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/editClasslistFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        class="edu.mills.cs180a.pocketpoints.EditClassListFragment"
+        tools:layout="@layout/fragment_classlist" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/editStudentFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        class="edu.mills.cs180a.pocketpoints.EditStudentFragment"
+        tools:layout="@layout/fragment_edit_student" >
     </fragment>
 
 </LinearLayout>
