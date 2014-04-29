@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -66,7 +67,6 @@ public class EditClasslistFragment extends Fragment {
 		return view;
 	}
 	
-
 	private class EditStudentArrayAdapter extends ArrayAdapter<Student> {
 		EditStudentArrayAdapter(Context context) {
 			super(context, R.layout.fragment_edit_classlist_row, R.id.rowStudentName, mStudentList);

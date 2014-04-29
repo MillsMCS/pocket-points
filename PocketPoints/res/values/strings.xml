@@ -17,4 +17,6 @@
     <string name="name_header"><u>Student Name</u></string>
     <string name="sticker_header"><u>Stickers</u></string>
     <string name="row_edit_student_icon">Edit Student</string>
+    <string name="delete_success_toast">Student Deleted</string>
+    <string name="delete_failure_toast">Deletion Failed</string>
 </resources>
