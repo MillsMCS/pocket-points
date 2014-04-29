@@ -38,8 +38,7 @@ public class EditClasslistFragment extends Fragment {
         /**
          * Called when a student in the list is selected.
          * 
-         * @param student
-         *            the selected student
+         * @param student the selected student
          */
         public void onEditStudentSelected(int studentId);
     }

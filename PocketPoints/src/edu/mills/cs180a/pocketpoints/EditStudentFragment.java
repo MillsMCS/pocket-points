@@ -56,8 +56,7 @@ public class EditStudentFragment extends Fragment {
         /**
          * Called when a {@code Student} is selected.
          * 
-         * @param personId
-         *            the ID of the selected person
+         * @param personId the ID of the selected person
          */
         void OnEditStudentSelected(int studentId);
     }
@@ -82,8 +81,7 @@ public class EditStudentFragment extends Fragment {
      * a new student.
      * </p>
      * 
-     * @param personId
-     *            the ID of the recipient
+     * @param personId the ID of the recipient
      */
     void setStudent(long studentId) {
         TextView displayName = (TextView) getView().findViewById(
