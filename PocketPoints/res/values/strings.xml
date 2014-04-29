@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">PocketPoints</string>
+    <string name="save_button">Save</string>
+    <string name="delete_button">Delete</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="verify_delete_comment_text">Do you want to delete this comment now?</string>
+    <string name="yes_button">Yes</string>
+    <string name="no_button">No</string>
+    <string name="new_student">New Student</string>
+    <string name="name_prompt">Name</string>
     <string name="row_image_content_description">Student Image</string>
     <string name="row_student_name">Student Name</string>
     <string name="row_sticker_count">Sticker Count</string>
@@ -9,4 +17,6 @@
     <string name="name_header"><u>Student Name</u></string>
     <string name="sticker_header"><u>Stickers</u></string>
     <string name="row_edit_student_icon">Edit Student</string>
+    <string name="delete_success_toast">Student Deleted</string>
+    <string name="delete_failure_toast">Deletion Failed</string>
 </resources>
