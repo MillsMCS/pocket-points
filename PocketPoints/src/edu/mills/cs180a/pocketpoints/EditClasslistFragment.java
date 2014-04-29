@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +31,7 @@ public class EditClasslistFragment extends Fragment {
 
 	/**
 	 * Interface definition for the callback to be invoked
-	 * when a student in the class list is selected.
+	 * when a student in the edit class list is selected.
 	 *
 	 * @author chingmyu@gmail.com (Ching Yu)
 	 */
@@ -39,7 +41,7 @@ public class EditClasslistFragment extends Fragment {
 		 *
 		 * @param student	the selected student
 		 */
-		public void onEditStudentSelected(Student student);
+		public void onEditStudentSelected(int studentId);
 	}
 
 	@Override
@@ -63,6 +65,7 @@ public class EditClasslistFragment extends Fragment {
 
 		return view;
 	}
+	
 
 	private class EditStudentArrayAdapter extends ArrayAdapter<Student> {
 		EditStudentArrayAdapter(Context context) {
@@ -74,6 +77,7 @@ public class EditClasslistFragment extends Fragment {
 			if (null == convertView) {
 				convertView = mInflater.inflate(R.layout.fragment_edit_classlist_row, null);
 			}
+
 			Student student = getItem(position);
 			ImageView picture = (ImageView) convertView.findViewById(R.id.rowStudentPicture);
 			// TODO: Need to get an image resource ID

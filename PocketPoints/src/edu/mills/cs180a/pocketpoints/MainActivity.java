@@ -18,10 +18,12 @@ public class MainActivity extends Activity
 	EditClasslistFragment.OnEditStudentSelectedListener {
     private static final String TAG = "MainActivity";
     
+    
     private FragmentManager mFragmentManager;
     private Fragment mEditStudentFragment;
-    private Fragment mClassListFragment;
+    private Fragment mClasslistFragment;
     private Fragment mEditClasslistFragment;
+    private long selectedPersonId = Student.INVALID_ID; // Initialize to invalid value.
 
 
 	@Override
@@ -32,7 +34,7 @@ public class MainActivity extends Activity
 		 // Get references to fragment manager and fragments.
         mFragmentManager = getFragmentManager();
         mEditStudentFragment = mFragmentManager.findFragmentById(R.id.editStudentFragment);
-        mClassListFragment = mFragmentManager.findFragmentById(R.id.classlistFragment);
+        mClasslistFragment = mFragmentManager.findFragmentById(R.id.classlistFragment);
         mEditClasslistFragment = mFragmentManager.findFragmentById(R.id.editClasslistFragment);
         
         mFragmentManager.beginTransaction()
@@ -53,13 +55,14 @@ public class MainActivity extends Activity
 		switch (item.getItemId()) {
 		case R.id.menu_item_edit_students:
 			mFragmentManager.beginTransaction()
-			.hide(mClassListFragment)
+			.hide(mClasslistFragment)
 			.show(mEditClasslistFragment)
 			.commit();
 			return true;
 		case R.id.menu_item_add_student:
 			mFragmentManager.beginTransaction()
-			.hide(mClassListFragment)
+			.hide(mClasslistFragment)
+			.hide(mEditClasslistFragment)
 			.show(mEditStudentFragment)
 			.commit();
 		default:
@@ -74,7 +77,9 @@ public class MainActivity extends Activity
 	}
 
 	@Override
-	public void onEditStudentSelected(Student student) {
+	public void onEditStudentSelected(int studentId) {
+		selectedPersonId= studentId;
+		
 		// Display the EditStudentFragment.
 		mFragmentManager.beginTransaction()
 		.hide(mEditClasslistFragment)
@@ -82,6 +87,6 @@ public class MainActivity extends Activity
 		.commit();
 		
 		// Show the current person.
-        ((EditStudentFragment) mEditStudentFragment).setStudent(student.getId());
+        ((EditStudentFragment) mEditStudentFragment).setStudent(selectedPersonId);
 	}
 }
