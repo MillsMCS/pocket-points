@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -59,13 +60,13 @@ public class EditClasslistFragment extends ListFragment {
         // Set up the adapter.
         Activity activity = getActivity();
         ArrayAdapter<Student> adapter = new EditStudentArrayAdapter(activity);
-        // ListView listview = (ListView) view.findViewById(R.id.listView1);
-        // listview.setAdapter(adapter);
-
         setListAdapter(adapter);
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
-        // return view;
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+
     }
 
     private class EditStudentArrayAdapter extends ArrayAdapter<Student> {
