@@ -3,7 +3,7 @@ package edu.mills.cs180a.pocketpoints;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -23,7 +22,7 @@ import android.widget.TextView;
  * @author renee.johnston1149@gmail.com (Renee Johnston)
  * @author chingmyu@gmail.com (Ching Yu)
  */
-public class EditClasslistFragment extends Fragment {
+public class EditClasslistFragment extends ListFragment {
     private LayoutInflater mInflater;
     private List<Student> mStudentList;
     private StudentManager mStudentManager;
@@ -60,10 +59,13 @@ public class EditClasslistFragment extends Fragment {
         // Set up the adapter.
         Activity activity = getActivity();
         ArrayAdapter<Student> adapter = new EditStudentArrayAdapter(activity);
-        ListView listview = (ListView) view.findViewById(R.id.listView1);
-        listview.setAdapter(adapter);
+        // ListView listview = (ListView) view.findViewById(R.id.listView1);
+        // listview.setAdapter(adapter);
 
-        return view;
+        setListAdapter(adapter);
+        return super.onCreateView(inflater, container, savedInstanceState);
+
+        // return view;
     }
 
     private class EditStudentArrayAdapter extends ArrayAdapter<Student> {
