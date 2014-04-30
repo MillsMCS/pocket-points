@@ -40,7 +40,7 @@ public class EditClasslistFragment extends ListFragment {
          * 
          * @param student the selected student
          */
-        public void onEditStudentSelected(int studentId);
+        public void onEditStudentSelected(Student selectedStudent);
     }
 
     @Override
@@ -66,7 +66,9 @@ public class EditClasslistFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-
+        OnEditStudentSelectedListener listener = (OnEditStudentSelectedListener) getActivity();
+        Student selectedStudent = mStudentList.get(position);
+        listener.onEditStudentSelected(selectedStudent);
     }
 
     private class EditStudentArrayAdapter extends ArrayAdapter<Student> {
