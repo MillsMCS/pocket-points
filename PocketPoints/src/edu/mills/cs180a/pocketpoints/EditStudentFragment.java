@@ -17,22 +17,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * {@code EditStudentFragment} is displayed whenever the
- * {@link ClassListFragment} "Add Student" button is pressed or when a student's
- * row in the {@link EditClassListFragment} is selected.
+ * {@code EditStudentFragment} is displayed whenever the {@link ClassListFragment} "Add Student"
+ * button is pressed or when a student's row in the {@link EditClassListFragment} is selected.
  * 
  * <p>
- * For an existing student, the fragment view displays an image of the selected
- * student, the student's name, and a {@link TextField} to edit the student's
- * name. Clicking on the student's picture will launch the device's embedded
- * camera application, regardless of whether the picture has been set or not.
+ * For an existing student, the fragment view displays an image of the selected student, the
+ * student's name, and a {@link TextField} to edit the student's name. Clicking on the student's
+ * picture will launch the device's embedded camera application, regardless of whether the picture
+ * has been set or not.
  * </p>
  * 
  * <p>
- * If the student has already been added, clicking on the Delete button will
- * delete the student from the database; otherwise, it will have no effect.
- * Clicking on the Save button will either update a previous database entry or
- * add the student to the database.
+ * If the student has already been added, clicking on the Delete button will delete the student from
+ * the database; otherwise, it will have no effect. Clicking on the Save button will either update a
+ * previous database entry or add the student to the database.
  * </p>
  * 
  * @author Renee Johnston (renee.johnston1149@gmail.com)
@@ -46,8 +44,8 @@ public class EditStudentFragment extends Fragment {
     private StudentManager mStudentManager;
 
     /**
-     * Interface definition for a callback to be invoked when a {@link Student}
-     * is selected in the list view.
+     * Interface definition for a callback to be invoked when a {@link Student} is selected in the
+     * list view.
      * 
      * @author renee.johnston1149@gmail.com (Renee Johnston)
      */
@@ -62,32 +60,26 @@ public class EditStudentFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_edit_student, container,
-                false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_edit_student, container, false);
         mNameField = (EditText) view.findViewById(R.id.editStudentName);
         mStudentManager = StudentManager.get(getActivity());
         return view;
     }
 
     /**
-     * Sets the student whose information is displayed in this
-     * {@code EditStudentFragment}.
+     * Sets the student whose information is displayed in this {@code EditStudentFragment}.
      * 
      * <p>
-     * We expect this to be called by the {@code OnSelectStudentListener} which
-     * should supply a {@code studentId} argument of -1 in the event of creating
-     * a new student.
+     * We expect this to be called by the {@code OnSelectStudentListener} which should supply a
+     * {@code studentId} argument of -1 in the event of creating a new student.
      * </p>
      * 
      * @param personId the ID of the recipient
      */
     void setStudent(long studentId) {
-        TextView displayName = (TextView) getView().findViewById(
-                R.id.studentName);
-        ImageButton imageButton = (ImageButton) getView().findViewById(
-                R.id.studentImageButton);
+        TextView displayName = (TextView) getView().findViewById(R.id.studentName);
+        ImageButton imageButton = (ImageButton) getView().findViewById(R.id.studentImageButton);
 
         // If this is a new student display fields with defaults.
         if (studentId == Student.INVALID_ID) {
@@ -119,8 +111,7 @@ public class EditStudentFragment extends Fragment {
             }
         });
 
-        Button saveButton = (Button) getView().findViewById(
-                R.id.studentSaveButton);
+        Button saveButton = (Button) getView().findViewById(R.id.studentSaveButton);
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -128,20 +119,17 @@ public class EditStudentFragment extends Fragment {
             }
         });
 
-        Button deleteButton = (Button) getView().findViewById(
-                R.id.studentDeleteButton);
+        Button deleteButton = (Button) getView().findViewById(R.id.studentDeleteButton);
         deleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 deleteCurrentStudent();
                 // TODO: implement delete dialog.
-                Log.d(TAG, "In delete student: "
-                        + mStudentManager.getAllStudents().toString());
+                Log.d(TAG, "In delete student: " + mStudentManager.getAllStudents().toString());
             }
         });
 
-        Button cancelButton = (Button) getView().findViewById(
-                R.id.studentCancelButton);
+        Button cancelButton = (Button) getView().findViewById(R.id.studentCancelButton);
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,22 +142,19 @@ public class EditStudentFragment extends Fragment {
     // TODO: implement this within the deleteButton listener.
     private AlertDialog createDeleteStudentDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.verify_delete_comment_text).setTitle(
-                R.string.delete_button);
-        builder.setPositiveButton(R.string.yes_button,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteCurrentStudent();
-                    }
-                });
-        builder.setNegativeButton(R.string.no_button,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing.
-                    }
-                });
+        builder.setMessage(R.string.verify_delete_comment_text).setTitle(R.string.delete_button);
+        builder.setPositiveButton(R.string.yes_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteCurrentStudent();
+            }
+        });
+        builder.setNegativeButton(R.string.no_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing.
+            }
+        });
         return builder.create();
     }
 
@@ -179,15 +164,14 @@ public class EditStudentFragment extends Fragment {
         if (mStudent.getId() != Student.INVALID_ID) {
             boolean deleted = mStudentManager.deleteStudent(mStudent.getId());
             if (deleted) {
-                Toast.makeText(getActivity(), R.string.delete_success_toast,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT)
+                        .show();
             } else {
-                Toast.makeText(getActivity(), R.string.delete_failure_toast,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.delete_failure_toast, Toast.LENGTH_SHORT)
+                        .show();
             }
         } else {
-            Toast.makeText(getActivity(), "Student Deleted", Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(getActivity(), "Student Deleted", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -205,11 +189,9 @@ public class EditStudentFragment extends Fragment {
 
         // Inform the user if the student was saved.
         if (saved) {
-            Toast.makeText(getActivity(), "Student Saved", Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(getActivity(), "Student Saved", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getActivity(), "Saving Failed", Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(getActivity(), "Saving Failed", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -13,9 +13,8 @@ import android.view.MenuItem;
  * 
  * @author chingmyu@gmail.com (Ching Yu)
  */
-public class MainActivity extends Activity implements
-ClasslistFragment.OnStudentSelectedListener,
-EditClasslistFragment.OnEditStudentSelectedListener {
+public class MainActivity extends Activity implements ClasslistFragment.OnStudentSelectedListener,
+        EditClasslistFragment.OnEditStudentSelectedListener {
     private static final String TAG = "MainActivity";
 
     private FragmentManager mFragmentManager;
@@ -23,6 +22,7 @@ EditClasslistFragment.OnEditStudentSelectedListener {
     private Fragment mClasslistFragment;
     private Fragment mEditClasslistFragment;
     private long selectedPersonId = Student.INVALID_ID; // Initialize to invalid
+
     // value.
 
     @Override
@@ -32,15 +32,17 @@ EditClasslistFragment.OnEditStudentSelectedListener {
 
         // Get references to fragment manager and fragments.
         mFragmentManager = getFragmentManager();
-        mEditStudentFragment = mFragmentManager
-                .findFragmentById(R.id.editStudentFragment);
-        mClasslistFragment = mFragmentManager
-                .findFragmentById(R.id.classlistFragment);
-        mEditClasslistFragment = mFragmentManager
-                .findFragmentById(R.id.editClasslistFragment);
+        mEditStudentFragment = mFragmentManager.findFragmentById(R.id.editStudentFragment);
+        mClasslistFragment = mFragmentManager.findFragmentById(R.id.classlistFragment);
+        mEditClasslistFragment = mFragmentManager.findFragmentById(R.id.editClasslistFragment);
 
-        mFragmentManager.beginTransaction().hide(mEditStudentFragment)
-        .hide(mEditClasslistFragment).commit();
+        mFragmentManager
+                .beginTransaction()
+                .hide(mEditStudentFragment)
+                .hide(mEditClasslistFragment)
+                .commit();
+
+        ((EditStudentFragment) mEditStudentFragment).setStudent(selectedPersonId);
     }
 
     @Override
@@ -54,13 +56,12 @@ EditClasslistFragment.OnEditStudentSelectedListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_item_edit_students:
-            mFragmentManager.beginTransaction().hide(mClasslistFragment)
-            .show(mEditClasslistFragment).commit();
+            mFragmentManager.beginTransaction().hide(mClasslistFragment).show(
+                    mEditClasslistFragment).commit();
             return true;
         case R.id.menu_item_add_student:
-            mFragmentManager.beginTransaction().hide(mClasslistFragment)
-            .hide(mEditClasslistFragment).show(mEditStudentFragment)
-            .commit();
+            mFragmentManager.beginTransaction().hide(mClasslistFragment).hide(
+                    mEditClasslistFragment).show(mEditStudentFragment).commit();
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -77,11 +78,13 @@ EditClasslistFragment.OnEditStudentSelectedListener {
         selectedPersonId = selectedStudent.getId();
 
         // Display the EditStudentFragment.
-        mFragmentManager.beginTransaction().hide(mEditClasslistFragment)
-        .show(mEditStudentFragment).commit();
+        mFragmentManager
+                .beginTransaction()
+                .hide(mEditClasslistFragment)
+                .show(mEditStudentFragment)
+                .commit();
 
         // Show the current person.
-        ((EditStudentFragment) mEditStudentFragment)
-        .setStudent(selectedPersonId);
+        ((EditStudentFragment) mEditStudentFragment).setStudent(selectedPersonId);
     }
 }
