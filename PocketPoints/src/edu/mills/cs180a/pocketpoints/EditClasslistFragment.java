@@ -19,7 +19,7 @@ import android.widget.TextView;
  * student notifies an {@link OnEditStudentSelectedListener}. Clicking on the
  * 'Done' button will return the user to the previously created
  * {@link ClasslistFragment}.
- * 
+ *
  * @author renee.johnston1149@gmail.com (Renee Johnston)
  * @author chingmyu@gmail.com (Ching Yu)
  */
@@ -31,13 +31,13 @@ public class EditClasslistFragment extends ListFragment {
     /**
      * Interface definition for the callback to be invoked when a student in the
      * edit class list is selected.
-     * 
+     *
      * @author chingmyu@gmail.com (Ching Yu)
      */
     protected interface OnEditStudentSelectedListener {
         /**
          * Called when a student in the list is selected.
-         * 
+         *
          * @param student the selected student
          */
         public void onEditStudentSelected(Student selectedStudent);
@@ -61,6 +61,7 @@ public class EditClasslistFragment extends ListFragment {
         Activity activity = getActivity();
         ArrayAdapter<Student> adapter = new EditStudentArrayAdapter(activity);
         setListAdapter(adapter);
+        adapter.setNotifyOnChange(true);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

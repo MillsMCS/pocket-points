@@ -19,21 +19,21 @@ import android.widget.Toast;
  * {@code EditStudentFragment} is displayed whenever the
  * {@link ClassListFragment} "Add Student" button is pressed or when a student's
  * row in the {@link EditClassListFragment} is selected.
- * 
+ *
  * <p>
  * For an existing student, the fragment view displays an image of the selected
  * student, the student's name, and a {@link TextField} to edit the student's
  * name. Clicking on the student's picture will launch the device's embedded
  * camera application, regardless of whether the picture has been set or not.
  * </p>
- * 
+ *
  * <p>
  * If the student has already been added, clicking on the Delete button will
  * delete the student from the database; otherwise, it will have no effect.
  * Clicking on the Save button will either update a previous database entry or
  * add the student to the database.
  * </p>
- * 
+ *
  * @author Renee Johnston (renee.johnston1149@gmail.com)
  */
 public class EditStudentFragment extends Fragment {
@@ -47,17 +47,17 @@ public class EditStudentFragment extends Fragment {
     /**
      * Interface definition for a callback to be invoked when a {@link Student}
      * is selected in the list view.
-     * 
+     *
      * @author renee.johnston1149@gmail.com (Renee Johnston)
      */
     interface OnEditStudentButtonClickedListener {
 
         /**
          * Called when a {@code Student} is selected.
-         * 
+         *
          * @param personId the ID of the selected person
          */
-        void OnEditStudentButtonClicked(int buttonResId);
+        void onEditStudentButtonClicked(int buttonResId);
     }
 
     @Override
@@ -73,13 +73,13 @@ public class EditStudentFragment extends Fragment {
     /**
      * Sets the student whose information is displayed in this
      * {@code EditStudentFragment}.
-     * 
+     *
      * <p>
      * We expect this to be called by the {@code OnSelectStudentListener} which
      * should supply a {@code studentId} argument of -1 in the event of creating
      * a new student.
      * </p>
-     * 
+     *
      * @param personId the ID of the recipient
      */
     void setStudent(long studentId) {
@@ -125,6 +125,8 @@ public class EditStudentFragment extends Fragment {
             public void onClick(View arg0) {
                 Log.d(TAG, "Save button clicked");
                 saveCurrentStudent();
+                OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
+                listener.onEditStudentButtonClicked(R.id.studentSaveButton);
             }
         });
 
@@ -135,17 +137,17 @@ public class EditStudentFragment extends Fragment {
             public void onClick(View arg0) {
                 deleteCurrentStudent();
                 // TODO: implement delete dialog.
-                Log.d(TAG, "In delete student: "
-                        + mStudentManager.getAllStudents().toString());
+                OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
+                listener.onEditStudentButtonClicked(R.id.studentDeleteButton);
             }
         });
 
-        Button cancelButton = (Button) getView().findViewById(
-                R.id.studentCancelButton);
+        Button cancelButton = (Button) getView().findViewById(R.id.studentCancelButton);
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Go back to either classList or editClassList.
+                OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
+                listener.onEditStudentButtonClicked(R.id.studentCancelButton);
             }
         });
 

@@ -17,7 +17,7 @@ import android.widget.TextView;
 /**
  * ClassListFragment is displayed as the main page when the application is first
  * launched.
- * 
+ *
  * The fragment will display a populated list view of student's picture and
  * name. Selecting a student from the list will direct to
  * {@link StudentStickerFragment}. It will also contain two buttons on the upper
@@ -25,7 +25,7 @@ import android.widget.TextView;
  * Clicking on the 'Edit Student' button will direct to
  * {@link EditClasslistFragment} and the 'Add New Student' button will direct to
  * {@link EditStudentFragment}.
- * 
+ *
  * @author chingmyu@gmail.com (Ching Yu)
  */
 public class ClasslistFragment extends Fragment {
@@ -36,15 +36,14 @@ public class ClasslistFragment extends Fragment {
     /**
      * Interface definition for the callback to be invoked when a student in the
      * class list is selected.
-     * 
+     *
      * @author chingmyu@gmail.com (Ching Yu)
      */
     protected interface OnStudentSelectedListener {
         /**
          * Called when a student in the list is selected.
-         * 
-         * @param student
-         *            the selected student
+         *
+         * @param student the selected student
          */
         public void onStudentSelected(Student student);
     }
@@ -69,8 +68,12 @@ public class ClasslistFragment extends Fragment {
         ListView listView = (ListView) view.findViewById(R.id.listView1);
         listView.setAdapter(adapter);
 
+        adapter.setNotifyOnChange(true);
+
         return view;
     }
+
+   // public  onResume ()
 
     private class StudentArrayAdapter extends ArrayAdapter<Student> {
         StudentArrayAdapter(Context context) {
