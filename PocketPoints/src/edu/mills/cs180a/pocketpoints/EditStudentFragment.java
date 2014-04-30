@@ -1,9 +1,19 @@
 package edu.mills.cs180a.pocketpoints;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,10 +47,13 @@ import android.widget.Toast;
 public class EditStudentFragment extends Fragment {
     private static final String TAG = "EditStudentFragment";
     private static final String DEFAULT_NAME = "New Student";
+    private static final int REQUEST_TAKE_PHOTO = 1;
 
     private EditText mNameField;
     private Student mStudent;
     private StudentManager mStudentManager;
+    private String mCurrentPhotoPath;
+
 
     /**
      * Interface definition for a callback to be invoked when a {@link Student} is selected in the
@@ -106,7 +119,7 @@ public class EditStudentFragment extends Fragment {
         imageButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // take me to the camera!
+                takePicture();
             }
         });
 
@@ -169,10 +182,10 @@ public class EditStudentFragment extends Fragment {
             boolean deleted = mStudentManager.deleteStudent(mStudent.getId());
             if (deleted) {
                 Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT)
-                        .show();
+                .show();
             } else {
                 Toast.makeText(getActivity(), R.string.delete_failure_toast, Toast.LENGTH_SHORT)
-                        .show();
+                .show();
             }
         } else {
             Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT).show();
@@ -201,5 +214,54 @@ public class EditStudentFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), R.string.saved_failure_toast, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void takePicture() {
+        PackageManager pm = getActivity().getPackageManager();
+        if (pm != null && pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            // Then take the picture.
+            dispatchTakePictureIntent();
+        } else {
+            Toast.makeText(getActivity(), R.string.no_camera_toast, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                // TODO
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        // We want to store the files in a directory which is private for our application.
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+                );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        // Note: This file name can later be stored in the SQL database.
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
     }
 }
