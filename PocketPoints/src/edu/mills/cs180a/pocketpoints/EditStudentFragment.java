@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,14 +50,14 @@ public class EditStudentFragment extends Fragment {
      * 
      * @author renee.johnston1149@gmail.com (Renee Johnston)
      */
-    interface OnEditStudentSelectedListener {
+    interface OnEditStudentButtonClickedListener {
 
         /**
          * Called when a {@code Student} is selected.
          * 
          * @param personId the ID of the selected person
          */
-        void OnEditStudentSelected(int studentId);
+        void OnEditStudentButtonClicked(int buttonResId);
     }
 
     @Override
@@ -124,6 +123,7 @@ public class EditStudentFragment extends Fragment {
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                Log.d(TAG, "Save button clicked");
                 saveCurrentStudent();
             }
         });
@@ -158,18 +158,18 @@ public class EditStudentFragment extends Fragment {
                 R.string.delete_button);
         builder.setPositiveButton(R.string.yes_button,
                 new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteCurrentStudent();
-                    }
-                });
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteCurrentStudent();
+            }
+        });
         builder.setNegativeButton(R.string.no_button,
                 new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing.
-                    }
-                });
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing.
+            }
+        });
         return builder.create();
     }
 
@@ -186,29 +186,36 @@ public class EditStudentFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(getActivity(), "Student Deleted", Toast.LENGTH_SHORT)
+            Toast.makeText(getActivity(), R.string.delete_success_toast,
+                    Toast.LENGTH_SHORT)
                     .show();
         }
     }
 
     private void saveCurrentStudent() {
+        Log.d(TAG, "saveCurrentStudent() method called");
         mStudent.setName(mNameField.getText().toString());
         // mStudent.setImgName(imgName);
 
         // Try to save the student in the database.
         boolean saved = false;
         if (mStudent.getId() == Student.INVALID_ID) {
+            Log.d(TAG, "New Student to be saved ");
             saved = mStudentManager.createStudent(mStudent);
+            Log.d(TAG, "New Student should be saved: "
+                    + mStudentManager.getStudent(mStudent.getId()).toString());
         } else {
             saved = mStudentManager.updateStudent(mStudent);
         }
 
         // Inform the user if the student was saved.
         if (saved) {
-            Toast.makeText(getActivity(), "Student Saved", Toast.LENGTH_SHORT)
+            Toast.makeText(getActivity(), R.string.saved_success_toast,
+                    Toast.LENGTH_SHORT)
                     .show();
         } else {
-            Toast.makeText(getActivity(), "Saving Failed", Toast.LENGTH_SHORT)
+            Toast.makeText(getActivity(), R.string.saved_failure_toast,
+                    Toast.LENGTH_SHORT)
                     .show();
         }
     }

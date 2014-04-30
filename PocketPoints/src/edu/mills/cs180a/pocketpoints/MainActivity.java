@@ -14,8 +14,9 @@ import android.view.MenuItem;
  * @author chingmyu@gmail.com (Ching Yu)
  */
 public class MainActivity extends Activity implements
-        ClasslistFragment.OnStudentSelectedListener,
-        EditClasslistFragment.OnEditStudentSelectedListener {
+ClasslistFragment.OnStudentSelectedListener,
+EditClasslistFragment.OnEditStudentSelectedListener,
+EditStudentFragment.OnEditStudentButtonClickedListener {
     private static final String TAG = "MainActivity";
 
     private FragmentManager mFragmentManager;
@@ -23,7 +24,8 @@ public class MainActivity extends Activity implements
     private Fragment mClasslistFragment;
     private Fragment mEditClasslistFragment;
     private long selectedPersonId = Student.INVALID_ID; // Initialize to invalid
-                                                        // value.
+
+    // value.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class MainActivity extends Activity implements
                 .findFragmentById(R.id.editClasslistFragment);
 
         mFragmentManager.beginTransaction().hide(mEditStudentFragment)
-                .hide(mEditClasslistFragment).commit();
+        .hide(mEditClasslistFragment).commit();
     }
 
     @Override
@@ -55,12 +57,17 @@ public class MainActivity extends Activity implements
         switch (item.getItemId()) {
         case R.id.menu_item_edit_students:
             mFragmentManager.beginTransaction().hide(mClasslistFragment)
-                    .show(mEditClasslistFragment).commit();
+            .show(mEditClasslistFragment).commit();
             return true;
         case R.id.menu_item_add_student:
             mFragmentManager.beginTransaction().hide(mClasslistFragment)
-                    .hide(mEditClasslistFragment).show(mEditStudentFragment)
-                    .commit();
+            .hide(mEditClasslistFragment).show(mEditStudentFragment)
+            .commit();
+
+            // Set Student Fragment to new Student (selectedPersonId should be
+            // invalid).
+            ((EditStudentFragment) mEditStudentFragment)
+                    .setStudent(selectedPersonId);
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -73,15 +80,23 @@ public class MainActivity extends Activity implements
     }
 
     @Override
-    public void onEditStudentSelected(int studentId) {
-        selectedPersonId = studentId;
+    public void onEditStudentSelected(Student selectedStudent) {
+        selectedPersonId = selectedStudent.getId();
 
         // Display the EditStudentFragment.
         mFragmentManager.beginTransaction().hide(mEditClasslistFragment)
-                .show(mEditStudentFragment).commit();
+        .show(mEditStudentFragment).commit();
 
         // Show the current person.
         ((EditStudentFragment) mEditStudentFragment)
-                .setStudent(selectedPersonId);
+        .setStudent(selectedPersonId);
+    }
+
+    @Override
+    public void OnEditStudentButtonClicked(int buttonResId) {
+        // TODO Auto-generated method stub
+
+        // If
+
     }
 }

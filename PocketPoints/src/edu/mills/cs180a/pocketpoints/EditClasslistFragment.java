@@ -3,7 +3,7 @@ package edu.mills.cs180a.pocketpoints;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,7 +23,7 @@ import android.widget.TextView;
  * @author renee.johnston1149@gmail.com (Renee Johnston)
  * @author chingmyu@gmail.com (Ching Yu)
  */
-public class EditClasslistFragment extends Fragment {
+public class EditClasslistFragment extends ListFragment {
     private LayoutInflater mInflater;
     private List<Student> mStudentList;
     private StudentManager mStudentManager;
@@ -40,7 +40,7 @@ public class EditClasslistFragment extends Fragment {
          * 
          * @param student the selected student
          */
-        public void onEditStudentSelected(int studentId);
+        public void onEditStudentSelected(Student selectedStudent);
     }
 
     @Override
@@ -60,10 +60,15 @@ public class EditClasslistFragment extends Fragment {
         // Set up the adapter.
         Activity activity = getActivity();
         ArrayAdapter<Student> adapter = new EditStudentArrayAdapter(activity);
-        ListView listview = (ListView) view.findViewById(R.id.listView1);
-        listview.setAdapter(adapter);
+        setListAdapter(adapter);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
-        return view;
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        OnEditStudentSelectedListener listener = (OnEditStudentSelectedListener) getActivity();
+        Student selectedStudent = mStudentList.get(position);
+        listener.onEditStudentSelected(selectedStudent);
     }
 
     private class EditStudentArrayAdapter extends ArrayAdapter<Student> {
