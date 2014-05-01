@@ -43,12 +43,14 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                 .findFragmentById(R.id.classlistFragment);
         mEditClasslistFragment = (EditClasslistFragment) mFragmentManager
                 .findFragmentById(R.id.editClasslistFragment);
+        mStickerChartFragment = (StickerChartFragment) mFragmentManager
+                .findFragmentById(R.id.stickerChartFragment);
 
         mFragmentManager
                 .beginTransaction()
                 .hide(mEditStudentFragment)
                 .hide(mEditClasslistFragment)
-                .hide(mStickerChartFragment)
+                .hide(mClasslistFragment)
                 .commit();
     }
 
