@@ -11,19 +11,11 @@ import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
  * Class that manages all interactions with the {@code students} database in the PocketPoints app.
  * This class abstracts the front-end of the application from the implementation of the back end, so
  * that if the database's implementation was changed, only this class would have to be altered.
-<<<<<<< HEAD
  *
  * <p>
  * All of the activities and fragments in the PocketPoints app should access the database through
  * this class. They should not (repeat: *NOT*) access the database implementation directly.
  *
-=======
- *
- * <p>
- * All of the activities and fragments in the PocketPoints app should access the database through
- * this class. They should not (repeat: *NOT*) access the database implementation directly.
- *
->>>>>>> a00a65bd45004883cd4fa5731d17994f9f960fdf
  * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 // Modeled after the RunManager class from the RunTracker app in "Android
@@ -52,10 +44,11 @@ public class StudentManager {
 
     /**
      * Creates an instance of {@code StudentManager} for the given test context.
-     *
+     * 
      * <p>
      * <b><i> PLEASE NOTE </i></b> that this method exists only for testing the
      * {@code StudentManager}. Please use it for NO other purpose.
+     *
      * @param context the context of the test for which to create this {@code StudentManager}
      *        instance
      * @return the {@code StudentManager} test instance for the given context
@@ -107,11 +100,7 @@ public class StudentManager {
 
     /**
      * Retrieves the student with the given ID from the database.
-<<<<<<< HEAD
      *
-=======
-     *
->>>>>>> a00a65bd45004883cd4fa5731d17994f9f960fdf
      * @param id the ID of the student to get
      * @return the student with the given ID, or {@code null} if there is no student with the given
      *         ID in the database
@@ -121,7 +110,6 @@ public class StudentManager {
         Student student = null;
         if (studentCursor.moveToFirst()) {
             student = studentCursor.getStudent();
-
             if (!studentCursor.isLast()) {
                 Log.e(TAG, "Cursor returned more than 1 result for student with id = " + id);
             }

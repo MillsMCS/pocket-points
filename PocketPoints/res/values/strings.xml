@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">PocketPoints</string>
     <string name="save_button">Save</string>
     <string name="delete_button">Delete</string>
@@ -21,6 +22,5 @@
     <string name="delete_failure_toast">Deletion Failed</string>
     <string name="saved_success_toast">Student Saved</string>
     <string name="saved_failure_toast">Save Not Successful</string>
-     <string name="no_camera_toast">Unable to take picture</string>
-    
+    <string name="no_camera_toast">Unable to take picture</string>
 </resources>

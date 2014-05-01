@@ -20,16 +20,10 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     private static final String TAG = "MainActivity";
 
     private FragmentManager mFragmentManager;
-
     private StickerChartFragment mStickerChartFragment;
     private EditStudentFragment mEditStudentFragment;
     private ClasslistFragment mClasslistFragment;
     private EditClasslistFragment mEditClasslistFragment;
-<<<<<<< HEAD
-
-    private long selectedPersonId = Student.INVALID_ID; // Initialize to invalid value.
-=======
->>>>>>> a00a65bd45004883cd4fa5731d17994f9f960fdf
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +32,6 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
 
         // Get references to fragment manager and fragments.
         mFragmentManager = getFragmentManager();
-
         mEditStudentFragment = (EditStudentFragment) mFragmentManager
                 .findFragmentById(R.id.editStudentFragment);
         mClasslistFragment = (ClasslistFragment) mFragmentManager
@@ -52,7 +45,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                 .beginTransaction()
                 .hide(mEditStudentFragment)
                 .hide(mEditClasslistFragment)
-                .hide(mClasslistFragment)
+                .hide(mStickerChartFragment)
                 .commit();
     }
 
