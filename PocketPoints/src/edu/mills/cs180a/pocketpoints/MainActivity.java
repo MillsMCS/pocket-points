@@ -22,6 +22,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     private Fragment mEditStudentFragment;
     private Fragment mClasslistFragment;
     private Fragment mEditClasslistFragment;
+    private Fragment mStickerChartFragment;
     private long selectedPersonId = Student.INVALID_ID; // Initialize to invalid value.
 
     @Override
@@ -34,11 +35,13 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
         mEditStudentFragment = mFragmentManager.findFragmentById(R.id.editStudentFragment);
         mClasslistFragment = mFragmentManager.findFragmentById(R.id.classlistFragment);
         mEditClasslistFragment = mFragmentManager.findFragmentById(R.id.editClasslistFragment);
+        mStickerChartFragment = mFragmentManager.findFragmentById(R.id.stickerChartFragment);
 
         mFragmentManager
                 .beginTransaction()
                 .hide(mEditStudentFragment)
                 .hide(mEditClasslistFragment)
+                .hide(mStickerChartFragment)
                 .commit();
     }
 
