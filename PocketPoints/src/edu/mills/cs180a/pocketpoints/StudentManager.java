@@ -8,15 +8,13 @@ import android.util.Log;
 import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
- * Class that manages all interactions with the {@code students} database in the
- * PocketPoints app. This class abstracts the front-end of the application from
- * the implementation of the back end, so that if the database's implementation
- * was changed, only this class would have to be altered.
+ * Class that manages all interactions with the {@code students} database in the PocketPoints app.
+ * This class abstracts the front-end of the application from the implementation of the back end, so
+ * that if the database's implementation was changed, only this class would have to be altered.
  *
  * <p>
- * All of the activities and fragments in the PocketPoints app should access the
- * database through this class. They should not (repeat: *NOT*) access the
- * database implementation directly.
+ * All of the activities and fragments in the PocketPoints app should access the database through
+ * this class. They should not (repeat: *NOT*) access the database implementation directly.
  *
  * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
@@ -29,8 +27,8 @@ public class StudentManager {
     private StudentSQLiteOpenHelper mHelper;
 
     /**
-     * Get the singleton instance of {@code StudentManager}. If no instance currently exists, create
-     * an instance using the singleton application context provided by the given context.
+     * Gets the singleton instance of {@code StudentManager}. If no instance currently exists,
+     * create an instance using the singleton application context provided by the given context.
      *
      * @param context the context to use
      * @return the current instance of {@StudentManager}
