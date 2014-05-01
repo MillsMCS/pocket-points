@@ -76,6 +76,7 @@ public class StickerChartFragment extends Fragment {
         return view;
     }
 
+
     private class GridViewCustomAdapter<Bitmap> extends ArrayAdapter {
         public GridViewCustomAdapter(Context context) {
             super(context, R.id.rowSmileImage, gridArray);
