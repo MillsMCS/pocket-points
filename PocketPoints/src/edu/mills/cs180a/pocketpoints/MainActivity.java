@@ -1,7 +1,5 @@
 package edu.mills.cs180a.pocketpoints;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -9,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
  * Activity that decides which fragment to display.
@@ -103,25 +102,20 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
 
     @Override
     public void onEditStudentButtonClicked(int buttonResId) {
-        mFragmentManager
-                .beginTransaction()
-                .hide(mEditStudentFragment)
-                .show(mEditClasslistFragment)
-                .commit();
+        // TODO: we want to return to the fragment we came from.
         mFragmentManager.popBackStack();
+        // TODO: after add, why are both classlist and editClasslist fragments showing up?
 
         // Update the students displayed on EditClasslistFragment.
-        List<Student> students = StudentManager.get(this).getAllStudents();
-        StudentArrayAdapter studentAdapter =
-                ((StudentArrayAdapter) mEditClasslistFragment.getListAdapter());
-        studentAdapter.clear();
-        studentAdapter.addAll(students);
+        StudentCursor studentCursor = StudentManager.get(this).getAllStudentsCursor();
+        StudentCursorAdapter studentAdapter = ((StudentCursorAdapter) mEditClasslistFragment
+                .getListAdapter());
+        studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
 
         // Update the students displayed on ClasslistFragment.
         ListView classListView = (ListView) mClasslistFragment.getView().findViewById(
                 R.id.listView1);
-        studentAdapter = ((StudentArrayAdapter) classListView.getAdapter());
-        studentAdapter.clear();
-        studentAdapter.addAll(students);
+        studentAdapter = ((StudentCursorAdapter) classListView.getAdapter());
+        studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
     }
 }

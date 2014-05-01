@@ -1,13 +1,12 @@
 package edu.mills.cs180a.pocketpoints;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,39 +53,38 @@ public class ClasslistFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_classlist, container, false);
 
         // Set up the adapter.
-        Activity activity = getActivity();
-        ArrayAdapter<Student> adapter = new ClasslistAdapter(activity);
         ListView listView = (ListView) view.findViewById(R.id.listView1);
-        listView.setAdapter(adapter);
-
-        adapter.setNotifyOnChange(true);
+        listView.setAdapter(new ClasslistAdapter(getActivity()));
 
         return view;
     }
 
-    private class ClasslistAdapter extends StudentArrayAdapter {
+    private class ClasslistAdapter extends StudentCursorAdapter {
         ClasslistAdapter(Context context) {
-            super(context, R.layout.fragment_classlist_row);
+            super(context);
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (null == convertView) {
-                convertView = mInflater.inflate(R.layout.fragment_classlist_row, null);
-            }
-            Student student = getItem(position);
-            ImageView picture = (ImageView) convertView.findViewById(R.id.rowStudentPicture);
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            return mInflater.inflate(R.layout.fragment_classlist_row, parent, false);
+        }
+
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            // Get the student for the current row.
+            Student student = getCursor().getStudent();
+
+            // Populate the fields with the student data.
+            ImageView picture = (ImageView) view.findViewById(R.id.rowStudentPicture);
             // TODO: Need to get an image resource ID
             // picture.setImageResource(student.getImgName());
             picture.setImageResource(R.drawable.ic_contact_picture);
 
-            TextView name = (TextView) convertView.findViewById(R.id.rowStudentName);
+            TextView name = (TextView) view.findViewById(R.id.rowStudentName);
             name.setText(student.getName());
 
-            TextView stickerCount = (TextView) convertView.findViewById(R.id.rowStickerCount);
+            TextView stickerCount = (TextView) view.findViewById(R.id.rowStickerCount);
             stickerCount.setText(String.valueOf(student.getNumStickers()));
-
-            return convertView;
         }
     }
 }
