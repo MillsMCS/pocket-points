@@ -70,8 +70,8 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                     .addToBackStack(null)
                     .commit();
 
-            // Set Student Fragment to new Student (selectedPersonId should be invalid).
-            mEditStudentFragment.setStudent(selectedPersonId);
+            // Tell the EditStudentFragment that it is creating a new student.
+            mEditStudentFragment.setStudent(Student.INVALID_ID);
         default:
             return super.onOptionsItemSelected(item);
         }
