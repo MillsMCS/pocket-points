@@ -48,7 +48,7 @@ public class EditClasslistFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_classlist, container, false);
 
         // Set up the adapter.
-        ArrayAdapter<Student> adapter = new EditClasslastAdapter(getActivity());
+        ArrayAdapter<Student> adapter = new EditClasslistAdapter(getActivity());
         setListAdapter(adapter);
         adapter.setNotifyOnChange(true);
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -61,8 +61,8 @@ public class EditClasslistFragment extends ListFragment {
         listener.onEditStudentSelected(selectedStudent);
     }
 
-    private class EditClasslastAdapter extends StudentArrayAdapter {
-        private EditClasslastAdapter(Context context) {
+    private class EditClasslistAdapter extends StudentArrayAdapter {
+        private EditClasslistAdapter(Context context) {
             super(context, R.layout.fragment_edit_classlist_row);
         }
 
