@@ -1,29 +1,51 @@
 package edu.mills.cs180a.pocketpoints;
 
-import android.app.Activity;
+import java.util.ArrayList;
+
+import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridView;
 
 /**
- * 
- * An {@code Fragment} that displays a graphical representation of the number of stickers currently
- * associated with a selected student.
- * 
- * <P>
- * After clicking on the "empty sticker", the user is given the choice (via an alert dialog) of
- * adding or canceling the sticker. If added, the student's sticker count will increment by one, the
- * new sticker count is added to the database, and the result code {@link Activity.RESULT_OK} is
- * provided to the parent activity. Otherwise, the database is not modified, and the result code
- * {@link Activity.RESULT_CANCELED} is provided.
- * 
- * <P>
- * Clicking the "Undo" button will, after confirming via an alert dialog, erase the most recently
- * added sticker.
  *
- * <P>
- * Clicking the "Clear ALl" button will, after confirming via an alert dialog, clear all stickers
- * associated with the student and will update the database accordingly.
- * 
- * @author renee.johnston1149@gmail.com (Renee Johnston)
+ * @author manish.s
+ *
  */
-public class StickerChartFragment {
 
+public class StickerChartFragment extends Fragment {
+    GridView gridView;
+    ArrayList<Bitmap> gridArray = new ArrayList<Bitmap>();
+    CustomGridViewAdapter customGridAdapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // set grid view item
+        Bitmap smileSticker = BitmapFactory.decodeResource(this.getResources(), R.drawable.satisfied);
+
+        gridArray.add(smileSticker);
+        gridArray.add(smileSticker);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_sticker_chart, container, false);
+
+        super.onCreate(savedInstanceState);
+        int iconSize=getResources().getDimensionPixelSize(android.R.dimen.app_icon_size);
+
+        GridView gridview = (GridView) view.findViewById(R.id.gridView1);
+
+
+        return view;
+    }
 }
