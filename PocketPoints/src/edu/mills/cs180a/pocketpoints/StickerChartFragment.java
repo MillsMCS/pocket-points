@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 /**
  *
@@ -52,16 +51,16 @@ public class StickerChartFragment extends Fragment {
     private List<Student> mStudentList;
     private StudentManager mStudentManager;
     private Student mStudent;
+    private int mStickerCount;
+    private Bitmap mSmileSticker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Set grid view item.
-        Bitmap smileSticker = BitmapFactory.decodeResource(this.getResources(),R.drawable.satisfied);
+        mSmileSticker = BitmapFactory.decodeResource(this.getResources(), R.drawable.satisfied);
 
-        gridArray.add(smileSticker);
-        gridArray.add(smileSticker);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class StickerChartFragment extends Fragment {
      * @param personId the ID of the student whose stickers are being displayed
      */
     void setStickersForStudent(long studentId) {
-        TextView displayName = (TextView) getView().findViewById(R.id.studentName);
+        // TextView displayName = (TextView) getView().findViewById(R.id.studentName);
 
         // If this is a new student display fields with defaults.
         if (studentId == Student.INVALID_ID) {
@@ -97,10 +96,18 @@ public class StickerChartFragment extends Fragment {
         } else {
             mStudent = mStudentManager.getStudent(studentId);
 
+            // Get sticker count.
+            mStickerCount = mStudent.getNumStickers();
+
+            // Add required number of stickers to mGridArray.
+            for (int i = 0; i < mStickerCount - 1; i++) {
+                gridArray.add(mSmileSticker);
+            }
+
             // Display the Students name at the top of the screen (if it
             // exists).
-            String name = mStudent.getName();
-            displayName.setText(name);
+            // String name = mStudent.getName();
+            // displayName.setText(name);
 
             // Show a picture of the student. (if it exists).
             // icon.setImageResource(R.id.ic_launcher);

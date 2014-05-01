@@ -45,7 +45,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                 .beginTransaction()
                 .hide(mEditStudentFragment)
                 .hide(mEditClasslistFragment)
-                .hide(mStickerChartFragment)
+                .hide(mClasslistFragment)
                 .commit();
     }
 
