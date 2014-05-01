@@ -1,7 +1,5 @@
 package edu.mills.cs180a.pocketpoints;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -9,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
  * Activity that decides which fragment to display.
@@ -24,7 +23,6 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     private EditStudentFragment mEditStudentFragment;
     private ClasslistFragment mClasslistFragment;
     private EditClasslistFragment mEditClasslistFragment;
-    private long selectedPersonId = Student.INVALID_ID; // Initialize to invalid value.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +65,12 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
         case R.id.menu_item_add_student:
             mFragmentManager.beginTransaction()
                     .hide(mClasslistFragment)
-                    .hide(mEditClasslistFragment)
                     .show(mEditStudentFragment)
                     .addToBackStack(null)
                     .commit();
 
-            // Set Student Fragment to new Student (selectedPersonId should be invalid).
-            mEditStudentFragment.setStudent(selectedPersonId);
+            // Tell the EditStudentFragment that it is creating a new student.
+            mEditStudentFragment.setStudent(Student.INVALID_ID);
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -87,7 +84,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
 
     @Override
     public void onEditStudentSelected(Student selectedStudent) {
-        selectedPersonId = selectedStudent.getId();
+        long selectedPersonId = selectedStudent.getId();
 
         // Display the EditStudentFragment.
         mFragmentManager
@@ -103,25 +100,19 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
 
     @Override
     public void onEditStudentButtonClicked(int buttonResId) {
-        mFragmentManager
-                .beginTransaction()
-                .hide(mEditStudentFragment)
-                .show(mEditClasslistFragment)
-                .commit();
+        // Return to the fragment we just came from.
         mFragmentManager.popBackStack();
 
         // Update the students displayed on EditClasslistFragment.
-        List<Student> students = StudentManager.get(this).getAllStudents();
-        StudentArrayAdapter studentAdapter =
-                ((StudentArrayAdapter) mEditClasslistFragment.getListAdapter());
-        studentAdapter.clear();
-        studentAdapter.addAll(students);
+        StudentCursor studentCursor = StudentManager.get(this).getAllStudentsCursor();
+        StudentCursorAdapter studentAdapter = ((StudentCursorAdapter) mEditClasslistFragment
+                .getListAdapter());
+        studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
 
         // Update the students displayed on ClasslistFragment.
         ListView classListView = (ListView) mClasslistFragment.getView().findViewById(
                 R.id.listView1);
-        studentAdapter = ((StudentArrayAdapter) classListView.getAdapter());
-        studentAdapter.clear();
-        studentAdapter.addAll(students);
+        studentAdapter = ((StudentCursorAdapter) classListView.getAdapter());
+        studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
     }
 }

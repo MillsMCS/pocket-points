@@ -2,11 +2,11 @@ package edu.mills.cs180a.pocketpoints;
 
 import android.app.ListFragment;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -48,9 +48,7 @@ public class EditClasslistFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_classlist, container, false);
 
         // Set up the adapter.
-        ArrayAdapter<Student> adapter = new EditClasslistAdapter(getActivity());
-        setListAdapter(adapter);
-        adapter.setNotifyOnChange(true);
+        setListAdapter(new EditClasslistAdapter(getActivity()));
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -61,30 +59,34 @@ public class EditClasslistFragment extends ListFragment {
         listener.onEditStudentSelected(selectedStudent);
     }
 
-    private class EditClasslistAdapter extends StudentArrayAdapter {
+    private class EditClasslistAdapter extends StudentCursorAdapter {
         private EditClasslistAdapter(Context context) {
-            super(context, R.layout.fragment_edit_classlist_row);
+            super(context);
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (null == convertView) {
-                convertView = mInflater.inflate(R.layout.fragment_edit_classlist_row, null);
-            }
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            return inflater.inflate(R.layout.fragment_edit_classlist_row, parent, false);
+        }
 
-            Student student = getItem(position);
-            ImageView picture = (ImageView) convertView.findViewById(R.id.rowStudentPicture);
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            // Get the student for the current row.
+            Student student = getCursor().getStudent();
+
+            // Populate the row's fields with the student data.
+            ImageView picture = (ImageView) view.findViewById(R.id.rowStudentPicture);
             // TODO: Need to get an image resource ID
             // picture.setImageResource(student.getName());
             picture.setImageResource(R.drawable.ic_contact_picture);
 
-            TextView name = (TextView) convertView.findViewById(R.id.rowStudentName);
+            TextView name = (TextView) view.findViewById(R.id.rowStudentName);
             name.setText(student.getName());
 
-            TextView stickerCount = (TextView) convertView.findViewById(R.id.rowStickerCount);
+            TextView stickerCount = (TextView) view.findViewById(R.id.rowStickerCount);
             stickerCount.setText(String.valueOf(student.getNumStickers()));
-
-            return convertView;
         }
     }
 }
