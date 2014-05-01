@@ -66,7 +66,6 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
         case R.id.menu_item_add_student:
             mFragmentManager.beginTransaction()
                     .hide(mClasslistFragment)
-                    .hide(mEditClasslistFragment)
                     .show(mEditStudentFragment)
                     .addToBackStack(null)
                     .commit();
@@ -102,9 +101,8 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
 
     @Override
     public void onEditStudentButtonClicked(int buttonResId) {
-        // TODO: we want to return to the fragment we came from.
+        // Return to the fragment we just came from.
         mFragmentManager.popBackStack();
-        // TODO: after add, why are both classlist and editClasslist fragments showing up?
 
         // Update the students displayed on EditClasslistFragment.
         StudentCursor studentCursor = StudentManager.get(this).getAllStudentsCursor();
