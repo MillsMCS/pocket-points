@@ -1,12 +1,14 @@
 package edu.mills.cs180a.pocketpoints;
 
+import java.util.List;
+
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 /**
  * Activity that decides which fragment to display.
@@ -19,9 +21,9 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     private static final String TAG = "MainActivity";
 
     private FragmentManager mFragmentManager;
-    private Fragment mEditStudentFragment;
-    private Fragment mClasslistFragment;
-    private Fragment mEditClasslistFragment;
+    private EditStudentFragment mEditStudentFragment;
+    private ClasslistFragment mClasslistFragment;
+    private EditClasslistFragment mEditClasslistFragment;
     private long selectedPersonId = Student.INVALID_ID; // Initialize to invalid value.
 
     @Override
@@ -31,9 +33,12 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
 
         // Get references to fragment manager and fragments.
         mFragmentManager = getFragmentManager();
-        mEditStudentFragment = mFragmentManager.findFragmentById(R.id.editStudentFragment);
-        mClasslistFragment = mFragmentManager.findFragmentById(R.id.classlistFragment);
-        mEditClasslistFragment = mFragmentManager.findFragmentById(R.id.editClasslistFragment);
+        mEditStudentFragment = (EditStudentFragment) mFragmentManager
+                .findFragmentById(R.id.editStudentFragment);
+        mClasslistFragment = (ClasslistFragment) mFragmentManager
+                .findFragmentById(R.id.classlistFragment);
+        mEditClasslistFragment = (EditClasslistFragment) mFragmentManager
+                .findFragmentById(R.id.editClasslistFragment);
 
         mFragmentManager
                 .beginTransaction()
@@ -53,15 +58,22 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_item_edit_students:
-            mFragmentManager.beginTransaction().hide(mClasslistFragment).show(
-                    mEditClasslistFragment).commit();
+            mFragmentManager.beginTransaction()
+                    .hide(mClasslistFragment)
+                    .show(mEditClasslistFragment)
+                    .addToBackStack(null)
+                    .commit();
             return true;
         case R.id.menu_item_add_student:
-            mFragmentManager.beginTransaction().hide(mClasslistFragment).hide(
-                    mEditClasslistFragment).show(mEditStudentFragment).commit();
+            mFragmentManager.beginTransaction()
+                    .hide(mClasslistFragment)
+                    .hide(mEditClasslistFragment)
+                    .show(mEditStudentFragment)
+                    .addToBackStack(null)
+                    .commit();
 
             // Set Student Fragment to new Student (selectedPersonId should be invalid).
-            ((EditStudentFragment) mEditStudentFragment).setStudent(selectedPersonId);
+            mEditStudentFragment.setStudent(selectedPersonId);
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -82,10 +94,11 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                 .beginTransaction()
                 .hide(mEditClasslistFragment)
                 .show(mEditStudentFragment)
+                .addToBackStack(null)
                 .commit();
 
         // Show the current person.
-        ((EditStudentFragment) mEditStudentFragment).setStudent(selectedPersonId);
+        mEditStudentFragment.setStudent(selectedPersonId);
     }
 
     @Override
@@ -95,5 +108,20 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                 .hide(mEditStudentFragment)
                 .show(mEditClasslistFragment)
                 .commit();
+        mFragmentManager.popBackStack();
+
+        // Update the students displayed on EditClasslistFragment.
+        List<Student> students = StudentManager.get(this).getAllStudents();
+        StudentArrayAdapter studentAdapter =
+                ((StudentArrayAdapter) mEditClasslistFragment.getListAdapter());
+        studentAdapter.clear();
+        studentAdapter.addAll(students);
+
+        // Update the students displayed on ClasslistFragment.
+        ListView classListView = (ListView) mClasslistFragment.getView().findViewById(
+                R.id.listView1);
+        studentAdapter = ((StudentArrayAdapter) classListView.getAdapter());
+        studentAdapter.clear();
+        studentAdapter.addAll(students);
     }
 }
