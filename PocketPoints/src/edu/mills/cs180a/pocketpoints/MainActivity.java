@@ -23,7 +23,6 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     private EditStudentFragment mEditStudentFragment;
     private ClasslistFragment mClasslistFragment;
     private EditClasslistFragment mEditClasslistFragment;
-    private long selectedPersonId = Student.INVALID_ID; // Initialize to invalid value.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +84,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
 
     @Override
     public void onEditStudentSelected(Student selectedStudent) {
-        selectedPersonId = selectedStudent.getId();
+        long selectedPersonId = selectedStudent.getId();
 
         // Display the EditStudentFragment.
         mFragmentManager
