@@ -10,6 +10,8 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -53,7 +55,7 @@ public class EditStudentFragment extends Fragment {
     private Student mStudent;
     private StudentManager mStudentManager;
     private String mCurrentPhotoPath;
-
+    private ImageButton mImageButton;
 
     /**
      * Interface definition for a callback to be invoked when a {@link Student} is selected in the
@@ -75,8 +77,24 @@ public class EditStudentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_student, container, false);
         mNameField = (EditText) view.findViewById(R.id.editStudentName);
+        mImageButton = (ImageButton) view.findViewById(R.id.studentImageButton);
         mStudentManager = StudentManager.get(getActivity());
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onACtivityResult request code is " + requestCode + "Result code is "
+                + resultCode);
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == getActivity().RESULT_OK) {
+            Log.d(TAG, "onActivityResult photo taken!");
+            if (data != null) {
+                Log.d(TAG, "data not null");
+            }
+
+            Log.d(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
+            setPic();
+        }
     }
 
     /**
@@ -91,7 +109,6 @@ public class EditStudentFragment extends Fragment {
      */
     void setStudent(long studentId) {
         TextView displayName = (TextView) getView().findViewById(R.id.studentName);
-        ImageButton imageButton = (ImageButton) getView().findViewById(R.id.studentImageButton);
 
         // If this is a new student display fields with defaults.
         if (studentId == Student.INVALID_ID) {
@@ -116,7 +133,7 @@ public class EditStudentFragment extends Fragment {
         }
 
         // Add listeners.
-        imageButton.setOnClickListener(new OnClickListener() {
+        mImageButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePicture();
@@ -182,10 +199,10 @@ public class EditStudentFragment extends Fragment {
             boolean deleted = mStudentManager.deleteStudent(mStudent.getId());
             if (deleted) {
                 Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT)
-                .show();
+                        .show();
             } else {
                 Toast.makeText(getActivity(), R.string.delete_failure_toast, Toast.LENGTH_SHORT)
-                .show();
+                        .show();
             }
         } else {
             Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT).show();
@@ -236,8 +253,11 @@ public class EditStudentFragment extends Fragment {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
-                // TODO
+                Log.e(TAG, "Unable to create image file to save.", ex);
+                Toast.makeText(getActivity(), "Sorry, Can't take a picture right now.",
+                        Toast.LENGTH_SHORT).show();
             }
+
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
@@ -257,11 +277,36 @@ public class EditStudentFragment extends Fragment {
                 imageFileName, /* prefix */
                 ".jpg", /* suffix */
                 storageDir /* directory */
-                );
+        );
 
         // Save a file: path for use with ACTION_VIEW intents
         // Note: This file name can later be stored in the SQL database.
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        Log.d(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
         return image;
+    }
+
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = mImageButton.getWidth();
+        int targetH = mImageButton.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImageButton.setImageBitmap(bitmap);
     }
 }

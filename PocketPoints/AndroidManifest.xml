@@ -3,8 +3,13 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <!-- Camera feature not required: need to check for camera presence at runtime. -->
     <uses-feature android:name="android.hardware.camera"
-                  android:required="true" />
+                  android:required="false" />
+    
+    <!-- Allows photos to be saved into/loaded from a directory that can only be accessed by this app -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="18" />
     
     <uses-sdk
         android:minSdkVersion="11"
