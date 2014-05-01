@@ -1,7 +1,5 @@
 package edu.mills.cs180a.pocketpoints;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -27,7 +25,6 @@ import android.widget.TextView;
  */
 public class ClasslistFragment extends Fragment {
     private LayoutInflater mInflater;
-    private List<Student> mStudentList;
     private StudentManager mStudentManager;
 
     /**
@@ -49,7 +46,6 @@ public class ClasslistFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mStudentManager = StudentManager.get(getActivity());
-        mStudentList = mStudentManager.getAllStudents();
     }
 
     @Override
@@ -59,7 +55,7 @@ public class ClasslistFragment extends Fragment {
 
         // Set up the adapter.
         Activity activity = getActivity();
-        ArrayAdapter<Student> adapter = new StudentArrayAdapter(activity);
+        ArrayAdapter<Student> adapter = new ClasslistAdapter(activity);
         ListView listView = (ListView) view.findViewById(R.id.listView1);
         listView.setAdapter(adapter);
 
@@ -68,9 +64,9 @@ public class ClasslistFragment extends Fragment {
         return view;
     }
 
-    private class StudentArrayAdapter extends ArrayAdapter<Student> {
-        StudentArrayAdapter(Context context) {
-            super(context, R.layout.fragment_classlist_row, R.id.rowStudentName, mStudentList);
+    private class ClasslistAdapter extends StudentArrayAdapter {
+        ClasslistAdapter(Context context) {
+            super(context, R.layout.fragment_classlist_row);
         }
 
         @Override

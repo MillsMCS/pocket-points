@@ -1,8 +1,5 @@
 package edu.mills.cs180a.pocketpoints;
 
-import java.util.List;
-
-import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -18,25 +15,23 @@ import android.widget.TextView;
  * Fragment to display a list of students available for editing. Clicking on a student notifies an
  * {@link OnEditStudentSelectedListener}. Clicking on the 'Done' button will return the user to the
  * previously created {@link ClasslistFragment}.
- * 
+ *
  * @author renee.johnston1149@gmail.com (Renee Johnston)
  * @author chingmyu@gmail.com (Ching Yu)
  */
 public class EditClasslistFragment extends ListFragment {
     private LayoutInflater mInflater;
-    private List<Student> mStudentList;
-    private StudentManager mStudentManager;
 
     /**
      * Interface definition for the callback to be invoked when a student in the edit class list is
      * selected.
-     * 
+     *
      * @author chingmyu@gmail.com (Ching Yu)
      */
     protected interface OnEditStudentSelectedListener {
         /**
          * Called when a student in the list is selected.
-         * 
+         *
          * @param student the selected student
          */
         public void onEditStudentSelected(Student selectedStudent);
@@ -45,8 +40,6 @@ public class EditClasslistFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStudentManager = StudentManager.get(getActivity());
-        mStudentList = mStudentManager.getAllStudents();
     }
 
     @Override
@@ -55,8 +48,7 @@ public class EditClasslistFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_classlist, container, false);
 
         // Set up the adapter.
-        Activity activity = getActivity();
-        ArrayAdapter<Student> adapter = new EditStudentArrayAdapter(activity);
+        ArrayAdapter<Student> adapter = new EditClasslastAdapter(getActivity());
         setListAdapter(adapter);
         adapter.setNotifyOnChange(true);
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -65,13 +57,13 @@ public class EditClasslistFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         OnEditStudentSelectedListener listener = (OnEditStudentSelectedListener) getActivity();
-        Student selectedStudent = mStudentList.get(position);
+        Student selectedStudent = (Student) getListAdapter().getItem(position);
         listener.onEditStudentSelected(selectedStudent);
     }
 
-    private class EditStudentArrayAdapter extends ArrayAdapter<Student> {
-        EditStudentArrayAdapter(Context context) {
-            super(context, R.layout.fragment_edit_classlist_row, R.id.rowStudentName, mStudentList);
+    private class EditClasslastAdapter extends StudentArrayAdapter {
+        private EditClasslastAdapter(Context context) {
+            super(context, R.layout.fragment_edit_classlist_row);
         }
 
         @Override
