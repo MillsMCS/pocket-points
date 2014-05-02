@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
  * Activity that decides which fragment to display.
@@ -69,7 +68,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
             return true;
         case R.id.menu_item_done_edit:
             mFragmentManager.popBackStack();
-
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -90,12 +89,6 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
 
         // Show the current person.
         mStickerChartFragment.setStickersForStudent(selectedPersonId);
-
-        // Update the students displayed on ClasslistFragment.
-        StudentCursor studentCursor = StudentManager.get(this).getAllStudentsCursor();
-        StudentCursorAdapter studentAdapter = ((StudentCursorAdapter) mClasslistFragment
-                .getListAdapter());
-        studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
     }
 
     @Override
@@ -118,15 +111,5 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     public void onEditStudentButtonClicked(int buttonResId) {
         // Return to the fragment we just came from.
         mFragmentManager.popBackStack();
-
-        // Update the students displayed on EditClasslistFragment.
-        StudentCursor studentCursor = StudentManager.get(this).getAllStudentsCursor();
-        StudentCursorAdapter studentAdapter = ((StudentCursorAdapter) mEditClasslistFragment
-                .getListAdapter());
-        studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
-
-        // Update the students displayed on ClasslistFragment.
-        studentAdapter = ((StudentCursorAdapter) mClasslistFragment.getListAdapter());
-        studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
     }
 }

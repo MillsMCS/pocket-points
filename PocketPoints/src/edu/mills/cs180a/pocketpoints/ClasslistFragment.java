@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
  * ClassListFragment is displayed as the main page when the application is first launched.
@@ -29,6 +30,7 @@ import android.widget.TextView;
 public class ClasslistFragment extends ListFragment {
     private LayoutInflater mInflater;
     private StudentManager mStudentManager;
+    private ClasslistAdapter mAdapter;
 
     /**
      * Interface definition for the callback to be invoked when a student in the class list is
@@ -43,6 +45,14 @@ public class ClasslistFragment extends ListFragment {
          * @param student the selected student
          */
         public void onStudentSelected(Student student);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            StudentCursor studentCursor = StudentManager.get(getActivity()).getAllStudentsCursor();
+            mAdapter.changeCursor(studentCursor); // closes old cursor
+        }
     }
 
     @Override
@@ -63,7 +73,8 @@ public class ClasslistFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_classlist, container, false);
 
         // Set up the adapter.
-        setListAdapter(new ClasslistAdapter(getActivity()));
+        mAdapter = new ClasslistAdapter(getActivity());
+        setListAdapter(mAdapter);
 
         return view;
     }
