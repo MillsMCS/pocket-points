@@ -3,6 +3,7 @@ package edu.mills.cs180a.pocketpoints;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
@@ -73,12 +74,12 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     @Override
     public void onStudentSelected(Student selectedStudent) {
         long selectedPersonId = selectedStudent.getId();
+        Log.d(TAG, "Student id is " + selectedPersonId);
 
         // Display the EditStudentFragment.
         mFragmentManager
                 .beginTransaction()
                 .hide(mClasslistFragment)
-                .hide(mEditClasslistFragment)
                 .show(mStickerChartFragment)
                 .addToBackStack(null)
                 .commit();

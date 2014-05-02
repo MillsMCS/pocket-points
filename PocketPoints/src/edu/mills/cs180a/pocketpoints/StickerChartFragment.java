@@ -46,7 +46,7 @@ public class StickerChartFragment extends Fragment {
     private static final String TAG = "StickerChartFragment";
 
     private GridView mGridView;
-
+    GridViewCustomAdapter<Bitmap> mAdapter;
     private ArrayList<Bitmap> gridArray = new ArrayList<Bitmap>();
     private GridViewCustomAdapter mCustomGridAdapter;
     private LayoutInflater mInflater;
@@ -62,7 +62,8 @@ public class StickerChartFragment extends Fragment {
 
         // Set grid view item.
         mSmileSticker = BitmapFactory.decodeResource(this.getResources(), R.drawable.satisfied);
-
+        gridArray.add(mSmileSticker);
+        gridArray.add(mSmileSticker);
         setHasOptionsMenu(true);
     }
 
@@ -78,9 +79,9 @@ public class StickerChartFragment extends Fragment {
 
         // Set up the adapter.
         Activity activity = getActivity();
-        GridViewCustomAdapter<Bitmap> adapter = new GridViewCustomAdapter<Bitmap>(activity);
-        GridView gridView = (GridView) view.findViewById(R.id.gridView1);
-        gridView.setAdapter(adapter);
+        mAdapter = new GridViewCustomAdapter<Bitmap>(activity);
+        mGridView = (GridView) view.findViewById(R.id.gridView1);
+        mGridView.setAdapter(mAdapter);
         return view;
     }
 
@@ -96,35 +97,42 @@ public class StickerChartFragment extends Fragment {
      * @param personId the ID of the student whose stickers are being displayed
      */
     void setStickersForStudent(long studentId) {
-        // TextView displayName = (TextView) getView().findViewById(R.id.studentName);
+        gridArray.add(mSmileSticker);
+        gridArray.add(mSmileSticker);
+        mAdapter.notifyDataSetChanged();
+        mGridView.setAdapter(mAdapter);
+        // mGridView.invalidate();
 
-        // If this is a new student display fields with defaults.
-        if (studentId == Student.INVALID_ID) {
-            Log.d(TAG, "invalid student ID");
-        } else {
-            mStudent = mStudentManager.getStudent(studentId);
-
-            // Get sticker count.
-            mStickerCount = mStudent.getNumStickers();
-
-            // Add required number of stickers to mGridArray.
-            for (int i = 0; i < mStickerCount - 1; i++) {
-                gridArray.add(mSmileSticker);
-            }
-
-            // Display the Students name at the top of the screen (if it
-            // exists).
-            // String name = mStudent.getName();
-            // displayName.setText(name);
-
-            // Show a picture of the student. (if it exists).
-            // icon.setImageResource(R.id.ic_launcher);
-            // TODO get images working
-
-            // Set the text of the name EditText to the value of the current
-            // name, if any.
-            // mNameField.setText(name);
-        }
+        // TODO Get this part working
+        // // TextView displayName = (TextView) getView().findViewById(R.id.studentName);
+        //
+        // // If this is a new student display fields with defaults.
+        // if (studentId == Student.INVALID_ID) {
+        // Log.d(TAG, "invalid student ID");
+        // } else {
+        // mStudent = mStudentManager.getStudent(studentId);
+        //
+        // // Get sticker count.
+        // mStickerCount = mStudent.getNumStickers();
+        //
+        // // Add required number of stickers to mGridArray.
+        // for (int i = 0; i < mStickerCount - 1; i++) {
+        // gridArray.add(mSmileSticker);
+        // }
+        //
+        // // Display the Students name at the top of the screen (if it
+        // // exists).
+        // // String name = mStudent.getName();
+        // // displayName.setText(name);
+        //
+        // // Show a picture of the student. (if it exists).
+        // // icon.setImageResource(R.id.ic_launcher);
+        // // TODO get images working
+        //
+        // // Set the text of the name EditText to the value of the current
+        // // name, if any.
+        // // mNameField.setText(name);
+        // }
     }
 
     private class GridViewCustomAdapter<Bitmap> extends ArrayAdapter {

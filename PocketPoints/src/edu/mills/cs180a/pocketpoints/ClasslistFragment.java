@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -63,6 +64,13 @@ public class ClasslistFragment extends ListFragment {
         setListAdapter(new ClasslistAdapter(getActivity()));
 
         return view;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        OnStudentSelectedListener listener = (OnStudentSelectedListener) getActivity();
+        Student selectedStudent = (Student) getListAdapter().getItem(position);
+        listener.onStudentSelected(selectedStudent);
     }
 
     private class ClasslistAdapter extends StudentCursorAdapter {
