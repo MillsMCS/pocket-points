@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -54,7 +56,6 @@ public class StickerChartFragment extends Fragment {
     private int mStickerCount;
     private Bitmap mSmileSticker;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,12 @@ public class StickerChartFragment extends Fragment {
         // Set grid view item.
         mSmileSticker = BitmapFactory.decodeResource(this.getResources(), R.drawable.satisfied);
 
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.sticker_chart_options, menu);
     }
 
     @Override
