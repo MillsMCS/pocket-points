@@ -41,7 +41,7 @@
         android:contentDescription="@string/row_image_content_description"
         android:paddingLeft="200dip"
         android:paddingTop="20dip"
-        android:src="@drawable/ic_go"
+        android:src="@drawable/ic_btn_search_go"
         android:text="@string/row_edit_student_icon" />
 
 </LinearLayout>
