@@ -15,6 +15,7 @@
     <string name="add_student">Add New Student</string>
     <string name="done_edit">Done Editing</string>
     <string name="name_header"><u>Student Name</u></string>
+    <string name="row_smile_image_content_description">Smiley Image</string>
     <string name="sticker_header"><u>Stickers</u></string>
     <string name="row_edit_student_icon">Edit Student</string>
     <string name="delete_success_toast">Student Deleted</string>
