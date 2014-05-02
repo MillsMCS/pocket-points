@@ -27,8 +27,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-// TODO: photo associated with mNewProfilePath should also be deleted if back button is pressed...
-
 /**
  * {@code EditStudentFragment} is displayed whenever the {@link ClassListFragment} "Add Student"
  * button is pressed or when a student's row in the {@link EditClassListFragment} is selected.
@@ -105,6 +103,19 @@ public class EditStudentFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden) {
+            if (mNewProfilePhotoPath != null) {
+                // Then need to delete the image file located at mNewProfilePath (it is not being
+                // used by the mStudent, and so should be removed from memory).
+                deleteProfilePhoto(mNewProfilePhotoPath);
+                Log.d(TAG, mNewProfilePhotoPath + " has been deleted, since it is not being used");
+                mNewProfilePhotoPath = null;
+            }
+        }
+    }
+
     /**
      * Sets the student whose information is displayed in this {@code EditStudentFragment}.
      *
@@ -144,7 +155,6 @@ public class EditStudentFragment extends Fragment {
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Log.d(TAG, "Save button clicked");
                 saveCurrentStudent();
                 OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
                 listener.onEditStudentButtonClicked(R.id.studentSaveButton);
@@ -166,12 +176,6 @@ public class EditStudentFragment extends Fragment {
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Delete the current profile image, if it is different than the student's profile
-                // image.
-                if (mNewProfilePhotoPath != null) {
-                    deleteProfilePhoto(mNewProfilePhotoPath);
-                }
-
                 OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
                 listener.onEditStudentButtonClicked(R.id.studentCancelButton);
             }
@@ -199,12 +203,6 @@ public class EditStudentFragment extends Fragment {
     }
 
     private void deleteCurrentStudent() {
-        // Delete the student's profile photo, if necessary.
-        // NOTE: This is independent from deleting the student from the database.
-        if (mNewProfilePhotoPath != null) {
-            deleteProfilePhoto(mNewProfilePhotoPath);
-        }
-
         // Delete the student from the database, if necessary.
         if (mStudent.getId() != Student.INVALID_ID) {
             boolean deleted = mStudentManager.deleteStudent(mStudent.getId());
@@ -221,7 +219,6 @@ public class EditStudentFragment extends Fragment {
     }
 
     private void saveCurrentStudent() {
-        Log.d(TAG, "saveCurrentStudent() method called");
         mStudent.setName(mNameField.getText().toString());
 
         // Update the student's profile photo, if necessary.
@@ -231,16 +228,15 @@ public class EditStudentFragment extends Fragment {
             if (currentProfilePhotoPath != null) {
                 // Then need to delete the student's old profile photo from memory.
                 deleteProfilePhoto(currentProfilePhotoPath);
+                Log.d(TAG, "Deleted the old student profile photo at: " + currentProfilePhotoPath);
             }
+            mNewProfilePhotoPath = null;
         }
 
         // Try to save the student in the database.
         boolean saved = false;
         if (mStudent.getId() == Student.INVALID_ID) {
-            Log.d(TAG, "New Student to be saved ");
             saved = mStudentManager.createStudent(mStudent);
-            Log.d(TAG, "New Student should be saved: "
-                    + mStudentManager.getStudent(mStudent.getId()).toString());
         } else {
             saved = mStudentManager.updateStudent(mStudent);
         }
@@ -305,7 +301,6 @@ public class EditStudentFragment extends Fragment {
     private void displayProfilePhoto(String profilePhotoPath) {
         if (profilePhotoPath == null) {
             // Display the default (anonymous) profile photo.
-            // TODO(Ching): Make new photo resource for this (should say "Take Photo")
             mImageButton.setImageResource(R.drawable.ic_take_picture);
         } else {
             // Get the dimensions of the bitmap
