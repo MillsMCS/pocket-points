@@ -27,6 +27,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+// TODO: handle cancel case.
+
 /**
  * {@code EditStudentFragment} is displayed whenever the {@link ClassListFragment} "Add Student"
  * button is pressed or when a student's row in the {@link EditClassListFragment} is selected.
@@ -88,10 +90,12 @@ public class EditStudentFragment extends Fragment {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             switch (resultCode) {
             case Activity.RESULT_OK:
-                setPic();
+                deleteCurrentProfilePhoto(); // Delete the old profile photo, if applicable.
+                mStudent.setImgName(mCurrentPhotoPath); // Set the new profile photo.
+                displayProfilePhoto(); // Display the new profile photo.
                 break;
             case Activity.RESULT_CANCELED:
-                Toast.makeText(getActivity(), "No Photo Taken", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.no_photo_taken, Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Log.w(TAG, "Unhandled result code " + resultCode);
@@ -117,21 +121,13 @@ public class EditStudentFragment extends Fragment {
             mStudent = new Student();
             displayName.setText(DEFAULT_NAME);
             mNameField.setText("");
+            displayProfilePhoto();
         } else {
             mStudent = mStudentManager.getStudent(studentId);
-
-            // Display the Students name at the top of the screen (if it
-            // exists).
             String name = mStudent.getName();
             displayName.setText(name);
-
-            // Show a picture of the student. (if it exists).
-            // icon.setImageResource(R.id.ic_launcher);
-            // TODO get images working
-
-            // Set the text of the name EditText to the value of the current
-            // name, if any.
             mNameField.setText(name);
+            displayProfilePhoto();
         }
 
         // Add listeners.
@@ -195,7 +191,11 @@ public class EditStudentFragment extends Fragment {
     }
 
     private void deleteCurrentStudent() {
-        // If the student has a valid Id.
+        // Delete the student's profile photo, if necessary.
+        // NOTE: This is independent from deleting the student from the database.
+        deleteCurrentProfilePhoto();
+
+        // Delete the student from the database, if necessary.
         if (mStudent.getId() != Student.INVALID_ID) {
             boolean deleted = mStudentManager.deleteStudent(mStudent.getId());
             if (deleted) {
@@ -206,7 +206,6 @@ public class EditStudentFragment extends Fragment {
                         .show();
             }
         } else {
-            // TODO: still need to delete the student's photo, if applicable!
             Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT).show();
         }
     }
@@ -214,7 +213,6 @@ public class EditStudentFragment extends Fragment {
     private void saveCurrentStudent() {
         Log.d(TAG, "saveCurrentStudent() method called");
         mStudent.setName(mNameField.getText().toString());
-        // mStudent.setImgName(imgName);
 
         // Try to save the student in the database.
         boolean saved = false;
@@ -284,27 +282,55 @@ public class EditStudentFragment extends Fragment {
         return imageFile;
     }
 
-    private void setPic() {
-        // Get the dimensions of the View
-        int targetW = mImageButton.getWidth();
-        int targetH = mImageButton.getHeight();
+    private void displayProfilePhoto() {
+        String profilePhotoPath = mStudent.getImgName();
+        if (profilePhotoPath == null) {
+            // Display the default (anonymous) profile photo.
+            // TODO(Ching): Make new photo resource for this (should say "Take Photo")
+            mImageButton.setImageResource(R.drawable.ic_contact_picture);
+        } else {
+            // Get the dimensions of the View
+            int targetW = mImageButton.getWidth();
+            if (targetW == 0) {
+                targetW = 200; // TODO: Better way to do this?
+            }
+            int targetH = mImageButton.getHeight();
+            if (targetH == 0) {
+                targetH = 200; // TODO: Better way to do this?
+            }
+            Log.d(TAG, "tagetW = " + targetW + ", targetH = " + targetH);
 
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(profilePhotoPath, bmOptions);
+            int photoW = bmOptions.outWidth;
+            int photoH = bmOptions.outHeight;
 
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+            // Determine how much to scale down the image
+            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaleFactor;
+            bmOptions.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImageButton.setImageBitmap(bitmap);
+            Bitmap bitmap = BitmapFactory.decodeFile(profilePhotoPath, bmOptions);
+            mImageButton.setImageBitmap(bitmap);
+        }
+    }
+
+    private boolean deleteCurrentProfilePhoto() {
+        String currentProfilePhotoName = mStudent.getImgName();
+        if (currentProfilePhotoName != null) { // If there is a profile photo to delete.
+            File currentProfilePhotoFile = new File(currentProfilePhotoName);
+            if (!currentProfilePhotoFile.delete()) {
+                Log.w(TAG, "Failed to delete " + mStudent.getName() + "'s profile photo! ("
+                        + currentProfilePhotoName + ")");
+                return false;
+            }
+            mStudent.setImgName(null); // Profile photo has been deleted, so set image name to null.
+        }
+        return true;
     }
 }

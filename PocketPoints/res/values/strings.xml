@@ -1,5 +1,4 @@
 <resources>
-
     <string name="app_name">PocketPoints</string>
     <string name="save_button">Save</string>
     <string name="delete_button">Delete</string>
@@ -26,4 +25,6 @@
     <string name="clear_all_stickers">Clear All</string>
     <string name="undo_sticker_addition">Undo</string>
     <string name="save_photo_failed">Sorry, can\'t take a picture right now!</string>
+    <string name="no_photo_taken">No photo taken</string>
+    <string name="take_photo">Take photo</string>
 </resources>
