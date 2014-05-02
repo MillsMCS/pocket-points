@@ -8,22 +8,12 @@
         android:id="@+id/nameHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/name_header"
+        android:text="@string/edit_students"
         android:textSize="24sp" 
         android:textStyle="bold"
         android:paddingLeft="110dip"
         android:paddingTop="10dip" />
-    
-    <TextView
-        android:id="@+id/stickerHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/nameHeader"
-        android:text="@string/sticker_header"
-        android:textSize="24sp" 
-        android:textStyle="bold" 
-        android:paddingLeft="50dip"
-        android:paddingTop="10dip" />
+
     
     <ListView
         android:id="@android:id/list"

@@ -1,19 +1,15 @@
 package edu.mills.cs180a.pocketpoints;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -46,23 +42,16 @@ public class StickerChartFragment extends Fragment {
     private static final String TAG = "StickerChartFragment";
 
     private GridView mGridView;
-
-    private ArrayList<Bitmap> gridArray = new ArrayList<Bitmap>();
-    private GridViewCustomAdapter mCustomGridAdapter;
+    private GridViewCustomAdapter mAdapter;
     private LayoutInflater mInflater;
-    private List<Student> mStudentList;
     private StudentManager mStudentManager;
     private Student mStudent;
     private int mStickerCount;
-    private Bitmap mSmileSticker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Set grid view item.
-        mSmileSticker = BitmapFactory.decodeResource(this.getResources(), R.drawable.satisfied);
-
+        mStudentManager = StudentManager.get(getActivity());
         setHasOptionsMenu(true);
     }
 
@@ -78,9 +67,10 @@ public class StickerChartFragment extends Fragment {
 
         // Set up the adapter.
         Activity activity = getActivity();
-        GridViewCustomAdapter<Bitmap> adapter = new GridViewCustomAdapter<Bitmap>(activity);
-        GridView gridView = (GridView) view.findViewById(R.id.gridView1);
-        gridView.setAdapter(adapter);
+        mAdapter = new GridViewCustomAdapter(activity);
+        mAdapter.setNotifyOnChange(true);
+        mGridView = (GridView) view.findViewById(R.id.gridView1);
+        mGridView.setAdapter(mAdapter);
         return view;
     }
 
@@ -89,16 +79,16 @@ public class StickerChartFragment extends Fragment {
      * {@code StickerChartFragment}.
      *
      * <p>
-     * We expect this to be called by the {@code OnSelectStudentListener} which should supply a
-     * {@code studentId} argument of -1 in the event of creating a new student.
+     * We expect this to be called by the {@code OnSelectStudentListener}.
      * </p>
      *
      * @param personId the ID of the student whose stickers are being displayed
      */
     void setStickersForStudent(long studentId) {
+        // TODO Display Student name
         // TextView displayName = (TextView) getView().findViewById(R.id.studentName);
 
-        // If this is a new student display fields with defaults.
+        mAdapter.clear();
         if (studentId == Student.INVALID_ID) {
             Log.d(TAG, "invalid student ID");
         } else {
@@ -108,28 +98,25 @@ public class StickerChartFragment extends Fragment {
             mStickerCount = mStudent.getNumStickers();
 
             // Add required number of stickers to mGridArray.
-            for (int i = 0; i < mStickerCount - 1; i++) {
-                gridArray.add(mSmileSticker);
+            for (int i = 0; i < mStickerCount; i++) {
+                mAdapter.add(R.drawable.ic_smile_sticker);
             }
-
-            // Display the Students name at the top of the screen (if it
-            // exists).
-            // String name = mStudent.getName();
-            // displayName.setText(name);
-
-            // Show a picture of the student. (if it exists).
-            // icon.setImageResource(R.id.ic_launcher);
-            // TODO get images working
-
-            // Set the text of the name EditText to the value of the current
-            // name, if any.
-            // mNameField.setText(name);
         }
+        mAdapter.add(R.drawable.ic_add_sticker);
+
+        // Display the Students name at the top of the screen (if it
+        // exists).
+        // String name = mStudent.getName();
+        // displayName.setText(name);
+
+        // Show a picture of the student. (if it exists).
+        // icon.setImageResource(R.id.ic_launcher);
+        // TODO get images working
     }
 
-    private class GridViewCustomAdapter<Bitmap> extends ArrayAdapter {
+    private class GridViewCustomAdapter extends ArrayAdapter<Integer> {
         public GridViewCustomAdapter(Context context) {
-            super(context, R.id.rowSmileImage, gridArray);
+            super(context, R.id.rowSmileImage);
         }
 
         @Override
@@ -138,10 +125,30 @@ public class StickerChartFragment extends Fragment {
                 Log.d(TAG, "row was null");
                 convertView = mInflater.inflate(R.layout.fragment_sticker_chart_row, null);
             }
-
+            int itemResId = getItem(position);
             ImageView sticker = (ImageView) convertView.findViewById(R.id.rowSmileImage);
-            sticker.setImageResource(R.drawable.satisfied);
-            return convertView;
+            sticker.setImageResource(itemResId);
+
+            // If the add smiley icon was just added, increment student's sticker count by 1.
+            if (itemResId != R.drawable.ic_add_sticker) {
+                sticker.setOnClickListener(null);
+
+            } else {
+                Log.d(TAG, "added the add sticker icon");
+                sticker.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d(TAG, "register button press");
+                        Log.d(TAG, "old sticker count " + mStudent.getNumStickers());
+                        mStudent.setNumStickers(mStudent.getNumStickers() + 1);
+                        Log.d(TAG, "new sticker count " + mStudent.getNumStickers());
+                        mStudentManager.updateStudent(mStudent);
+                        setStickersForStudent(mStudent.getId());
+                    }
+                });
             }
+
+            return convertView;
         }
     }
+}
