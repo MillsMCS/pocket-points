@@ -1,20 +1,13 @@
 package edu.mills.cs180a.pocketpoints;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,7 +47,6 @@ public class EditStudentFragment extends Fragment {
     private EditText mNameField;
     private Student mStudent;
     private StudentManager mStudentManager;
-    private String mCurrentPhotoPath;
     private ImageButton mImageButton;
 
     /**
@@ -82,21 +74,19 @@ public class EditStudentFragment extends Fragment {
         return view;
     }
 
-    //TODO: Get camera working
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        Log.d(TAG, "onACtivityResult request code is " + requestCode + "Result code is "
-//                + resultCode);
-//        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == getActivity().RESULT_OK) {
-//            Log.d(TAG, "onActivityResult photo taken!");
-//            if (data != null) {
-//                Log.d(TAG, "data not null");
-//            }
-//
-//            Log.d(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
-//            setPic();
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            Log.d(TAG, "onActivityResult photo taken!");
+            if (data != null) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                if (imageBitmap != null) {
+                    mImageButton.setImageBitmap(imageBitmap);
+                }
+            }
+        }
+    }
 
     /**
      * Sets the student whose information is displayed in this {@code EditStudentFragment}.
@@ -246,68 +236,8 @@ public class EditStudentFragment extends Fragment {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Log.e(TAG, "Unable to create image file to save.", ex);
-                Toast.makeText(getActivity(), "Sorry, Can't take a picture right now.",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
+            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
         }
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-
-        // We want to store the files in a directory which is private for our application.
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName, /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        // Note: This file name can later be stored in the SQL database.
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        Log.d(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
-        return image;
-    }
-
-    private void setPic() {
-        // Get the dimensions of the View
-        int targetW = mImageButton.getWidth();
-        int targetH = mImageButton.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImageButton.setImageBitmap(bitmap);
     }
 }
