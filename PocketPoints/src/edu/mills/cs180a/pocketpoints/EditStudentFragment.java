@@ -82,22 +82,6 @@ public class EditStudentFragment extends Fragment {
         return view;
     }
 
-    //TODO: Get camera working
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        Log.d(TAG, "onACtivityResult request code is " + requestCode + "Result code is "
-//                + resultCode);
-//        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == getActivity().RESULT_OK) {
-//            Log.d(TAG, "onActivityResult photo taken!");
-//            if (data != null) {
-//                Log.d(TAG, "data not null");
-//            }
-//
-//            Log.d(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
-//            setPic();
-//        }
-//    }
-
     /**
      * Sets the student whose information is displayed in this {@code EditStudentFragment}.
      *

@@ -97,11 +97,10 @@ public class StickerChartFragment extends Fragment {
 
             // Add required number of stickers to mGridArray.
             for (int i = 0; i < mStickerCount; i++) {
-                mAdapter.add(R.drawable.satisfied);
+                mAdapter.add(R.drawable.ic_smile_sticker);
             }
         }
-
-        mAdapter.add(R.drawable.smiley_add);
+        mAdapter.add(R.drawable.ic_add_sticker);
 
         // Display the Students name at the top of the screen (if it
         // exists).
@@ -111,11 +110,6 @@ public class StickerChartFragment extends Fragment {
         // Show a picture of the student. (if it exists).
         // icon.setImageResource(R.id.ic_launcher);
         // TODO get images working
-
-        // Set the text of the name EditText to the value of the current
-        // name, if any.
-        // mNameField.setText(name);
-
     }
 
     private class GridViewCustomAdapter extends ArrayAdapter<Integer> {
