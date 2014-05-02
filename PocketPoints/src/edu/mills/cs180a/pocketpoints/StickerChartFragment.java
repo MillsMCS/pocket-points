@@ -54,6 +54,7 @@ public class StickerChartFragment extends Fragment {
     private int mStickerCount;
     private Bitmap mSmileSticker;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,9 +127,7 @@ public class StickerChartFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View row = convertView;
-
-            if (row == null) {
+            if (convertView == null) {
                 Log.d(TAG, "row was null");
                 convertView = mInflater.inflate(R.layout.fragment_sticker_chart_row, null);
             }

@@ -45,7 +45,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                 .beginTransaction()
                 .hide(mEditStudentFragment)
                 .hide(mEditClasslistFragment)
-                .hide(mClasslistFragment)
+                .hide(mStickerChartFragment)
                 .commit();
     }
 
@@ -81,9 +81,20 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     }
 
     @Override
-    public void onStudentSelected(Student student) {
-        // Display the StudentStickerFragment.
-        // TODO: Not yet implemented.
+    public void onStudentSelected(Student selectedStudent) {
+        long selectedPersonId = selectedStudent.getId();
+
+        // Display the EditStudentFragment.
+        mFragmentManager
+                .beginTransaction()
+                .hide(mClasslistFragment)
+                .hide(mEditClasslistFragment)
+                .show(mEditStudentFragment)
+                .addToBackStack(null)
+                .commit();
+
+        // Show the current person.
+        mStickerChartFragment.setStickersForStudent(selectedPersonId);
     }
 
     @Override
