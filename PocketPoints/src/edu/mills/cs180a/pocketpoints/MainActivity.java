@@ -3,8 +3,6 @@ package edu.mills.cs180a.pocketpoints;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
@@ -47,13 +45,6 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                 .hide(mEditClasslistFragment)
                 .hide(mStickerChartFragment)
                 .commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.classlist_options, menu);
-        return true;
     }
 
     @Override
