@@ -86,19 +86,17 @@ public class EditStudentFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
-            Log.d(TAG, "onActivityResult photo taken!");
-            if (data != null) {
-                Log.d(TAG, "result of intent is not null");
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                if (imageBitmap != null) {
-                    mImageButton.setImageBitmap(imageBitmap);
-                }
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            switch (resultCode) {
+            case Activity.RESULT_OK:
+                setPic();
+                break;
+            case Activity.RESULT_CANCELED:
+                Toast.makeText(getActivity(), "No Photo Taken", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Log.w(TAG, "Unhandled result code " + resultCode);
             }
-
-            // Verify that the file where the photo should have been saved exists.
-            setPic();
         }
     }
 
@@ -198,7 +196,6 @@ public class EditStudentFragment extends Fragment {
     }
 
     private void deleteCurrentStudent() {
-
         // If the student has a valid Id.
         if (mStudent.getId() != Student.INVALID_ID) {
             boolean deleted = mStudentManager.deleteStudent(mStudent.getId());
@@ -210,6 +207,7 @@ public class EditStudentFragment extends Fragment {
                         .show();
             }
         } else {
+            // TODO: still need to delete the student's photo, if applicable!
             Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT).show();
         }
     }
