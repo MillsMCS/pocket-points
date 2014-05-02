@@ -90,6 +90,12 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
 
         // Show the current person.
         mStickerChartFragment.setStickersForStudent(selectedPersonId);
+
+        // Update the students displayed on ClasslistFragment.
+        StudentCursor studentCursor = StudentManager.get(this).getAllStudentsCursor();
+        StudentCursorAdapter studentAdapter = ((StudentCursorAdapter) mClasslistFragment
+                .getListAdapter());
+        studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
     }
 
     @Override

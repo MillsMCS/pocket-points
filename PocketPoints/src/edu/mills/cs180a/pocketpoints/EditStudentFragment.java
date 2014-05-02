@@ -66,9 +66,9 @@ public class EditStudentFragment extends Fragment {
     interface OnEditStudentButtonClickedListener {
 
         /**
-         * Called when a {@code Student} is selected.
-         *
-         * @param personId the ID of the selected person
+         * Called when the save, delete, or cancel button is selected.
+         * 
+         * @param buttonResId the resourceId of the selected button.
          */
         void onEditStudentButtonClicked(int buttonResId);
     }
