@@ -2,7 +2,6 @@ package edu.mills.cs180a.pocketpoints;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
@@ -257,8 +256,7 @@ public class EditStudentFragment extends Fragment {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 Log.e(TAG, "Unable to write create the file for saving photo.", ex);
-                // TODO: remove raw text
-                Toast.makeText(getActivity(), "Sorry, can't take a picture right now!",
+                Toast.makeText(getActivity(), R.string.save_photo_failed,
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -272,18 +270,18 @@ public class EditStudentFragment extends Fragment {
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        // Create the name of the image file.
+        long timeStamp = new Date().getTime(); // Use current timestamp to make image names unique.
+        String imageName = "student_profile_" + timeStamp;
 
         // We want to store the files in a directory which is private for our application.
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName, /* prefix */
+        File imageFile = File.createTempFile(
+                imageName, /* prefix */
                 ".jpg", /* suffix */
                 storageDir /* directory */
         );
-        return image;
+        return imageFile;
     }
 
     private void setPic() {
