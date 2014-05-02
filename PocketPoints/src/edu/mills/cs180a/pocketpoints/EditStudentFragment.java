@@ -27,6 +27,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+// TODO: photo associated with mNewProfilePath should also be deleted if back button is pressed...
+
 /**
  * {@code EditStudentFragment} is displayed whenever the {@link ClassListFragment} "Add Student"
  * button is pressed or when a student's row in the {@link EditClassListFragment} is selected.
@@ -71,7 +73,7 @@ public class EditStudentFragment extends Fragment {
 
         /**
          * Called when the save, delete, or cancel button is selected.
-         * 
+         *
          * @param buttonResId the resourceId of the selected button.
          */
         void onEditStudentButtonClicked(int buttonResId);
@@ -304,19 +306,8 @@ public class EditStudentFragment extends Fragment {
         if (profilePhotoPath == null) {
             // Display the default (anonymous) profile photo.
             // TODO(Ching): Make new photo resource for this (should say "Take Photo")
-            mImageButton.setImageResource(R.drawable.ic_contact_picture);
+            mImageButton.setImageResource(R.drawable.ic_take_picture);
         } else {
-            // Get the dimensions of the View
-            int targetW = mImageButton.getWidth();
-            if (targetW == 0) {
-                targetW = 200; // TODO: Better way to do this?
-            }
-            int targetH = mImageButton.getHeight();
-            if (targetH == 0) {
-                targetH = 200; // TODO: Better way to do this?
-            }
-            Log.d(TAG, "tagetW = " + targetW + ", targetH = " + targetH);
-
             // Get the dimensions of the bitmap
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             bmOptions.inJustDecodeBounds = true;
@@ -325,6 +316,8 @@ public class EditStudentFragment extends Fragment {
             int photoH = bmOptions.outHeight;
 
             // Determine how much to scale down the image
+            int targetW = 200;
+            int targetH = 200;
             int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
             // Decode the image file into a Bitmap sized to fill the View
