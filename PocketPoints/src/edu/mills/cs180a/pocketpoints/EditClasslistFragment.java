@@ -92,9 +92,6 @@ public class EditClasslistFragment extends ListFragment {
 
             TextView name = (TextView) view.findViewById(R.id.rowStudentName);
             name.setText(student.getName());
-
-            TextView stickerCount = (TextView) view.findViewById(R.id.rowStickerCount);
-            stickerCount.setText(String.valueOf(student.getNumStickers()));
         }
     }
 }
