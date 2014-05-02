@@ -53,8 +53,10 @@ public class EditClasslistFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mInflater = inflater;
+        View view = mInflater.inflate(R.layout.fragment_edit_classlist, container, false);
+
         setListAdapter(new EditClasslistAdapter(getActivity())); // Set up the ListView adapter.
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
     @Override

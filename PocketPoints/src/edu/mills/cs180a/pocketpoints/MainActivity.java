@@ -80,7 +80,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                 .beginTransaction()
                 .hide(mClasslistFragment)
                 .hide(mEditClasslistFragment)
-                .show(mEditStudentFragment)
+                .show(mStickerChartFragment)
                 .addToBackStack(null)
                 .commit();
 
