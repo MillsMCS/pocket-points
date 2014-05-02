@@ -27,8 +27,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-// TODO: handle cancel case.
-
 /**
  * {@code EditStudentFragment} is displayed whenever the {@link ClassListFragment} "Add Student"
  * button is pressed or when a student's row in the {@link EditClassListFragment} is selected.
@@ -58,7 +56,10 @@ public class EditStudentFragment extends Fragment {
     private StudentManager mStudentManager;
     private ImageButton mImageButton;
 
-    private String mCurrentPhotoPath;
+    private String mNewProfilePhotoPath;
+    private String mPossibleNewProfilePhotoPath; // This is only used for telling the camera app
+                                                 // where to save the photo (an action which may be
+                                                 // cancelled).
 
     /**
      * Interface definition for a callback to be invoked when a {@link Student} is selected in the
@@ -90,9 +91,8 @@ public class EditStudentFragment extends Fragment {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             switch (resultCode) {
             case Activity.RESULT_OK:
-                deleteCurrentProfilePhoto(); // Delete the old profile photo, if applicable.
-                mStudent.setImgName(mCurrentPhotoPath); // Set the new profile photo.
-                displayProfilePhoto(); // Display the new profile photo.
+                mNewProfilePhotoPath = mPossibleNewProfilePhotoPath;
+                displayProfilePhoto(mNewProfilePhotoPath); // Display the new profile photo.
                 break;
             case Activity.RESULT_CANCELED:
                 Toast.makeText(getActivity(), R.string.no_photo_taken, Toast.LENGTH_SHORT).show();
@@ -121,13 +121,13 @@ public class EditStudentFragment extends Fragment {
             mStudent = new Student();
             displayName.setText(DEFAULT_NAME);
             mNameField.setText("");
-            displayProfilePhoto();
+            displayProfilePhoto(null); // Displays the default image.
         } else {
             mStudent = mStudentManager.getStudent(studentId);
             String name = mStudent.getName();
             displayName.setText(name);
             mNameField.setText(name);
-            displayProfilePhoto();
+            displayProfilePhoto(mStudent.getImgName());
         }
 
         // Add listeners.
@@ -164,6 +164,12 @@ public class EditStudentFragment extends Fragment {
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Delete the current profile image, if it is different than the student's profile
+                // image.
+                if (mNewProfilePhotoPath != null) {
+                    deleteProfilePhoto(mNewProfilePhotoPath);
+                }
+
                 OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
                 listener.onEditStudentButtonClicked(R.id.studentCancelButton);
             }
@@ -193,7 +199,9 @@ public class EditStudentFragment extends Fragment {
     private void deleteCurrentStudent() {
         // Delete the student's profile photo, if necessary.
         // NOTE: This is independent from deleting the student from the database.
-        deleteCurrentProfilePhoto();
+        if (mNewProfilePhotoPath != null) {
+            deleteProfilePhoto(mNewProfilePhotoPath);
+        }
 
         // Delete the student from the database, if necessary.
         if (mStudent.getId() != Student.INVALID_ID) {
@@ -213,6 +221,16 @@ public class EditStudentFragment extends Fragment {
     private void saveCurrentStudent() {
         Log.d(TAG, "saveCurrentStudent() method called");
         mStudent.setName(mNameField.getText().toString());
+
+        // Update the student's profile photo, if necessary.
+        if (mNewProfilePhotoPath != null) {
+            String currentProfilePhotoPath = mStudent.getImgName();
+            mStudent.setImgName(mNewProfilePhotoPath);
+            if (currentProfilePhotoPath != null) {
+                // Then need to delete the student's old profile photo from memory.
+                deleteProfilePhoto(currentProfilePhotoPath);
+            }
+        }
 
         // Try to save the student in the database.
         boolean saved = false;
@@ -260,7 +278,7 @@ public class EditStudentFragment extends Fragment {
 
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                mCurrentPhotoPath = photoFile.getAbsolutePath();
+                mPossibleNewProfilePhotoPath = photoFile.getAbsolutePath();
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
@@ -282,8 +300,7 @@ public class EditStudentFragment extends Fragment {
         return imageFile;
     }
 
-    private void displayProfilePhoto() {
-        String profilePhotoPath = mStudent.getImgName();
+    private void displayProfilePhoto(String profilePhotoPath) {
         if (profilePhotoPath == null) {
             // Display the default (anonymous) profile photo.
             // TODO(Ching): Make new photo resource for this (should say "Take Photo")
@@ -320,17 +337,10 @@ public class EditStudentFragment extends Fragment {
         }
     }
 
-    private boolean deleteCurrentProfilePhoto() {
-        String currentProfilePhotoName = mStudent.getImgName();
-        if (currentProfilePhotoName != null) { // If there is a profile photo to delete.
-            File currentProfilePhotoFile = new File(currentProfilePhotoName);
-            if (!currentProfilePhotoFile.delete()) {
-                Log.w(TAG, "Failed to delete " + mStudent.getName() + "'s profile photo! ("
-                        + currentProfilePhotoName + ")");
-                return false;
-            }
-            mStudent.setImgName(null); // Profile photo has been deleted, so set image name to null.
+    private void deleteProfilePhoto(String profilePhotoPath) {
+        File currentProfilePhotoFile = new File(profilePhotoPath);
+        if (!currentProfilePhotoFile.delete()) {
+            Log.e(TAG, "Deletion of " + profilePhotoPath + " failed!");
         }
-        return true;
     }
 }
