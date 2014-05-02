@@ -38,7 +38,7 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         class="edu.mills.cs180a.pocketpoints.StickerChartFragment"
-        tools:layout="@layout/fragment_edit_student" >
+        tools:layout="@layout/fragment_sticker_chart" >
     </fragment>
 
 </LinearLayout>

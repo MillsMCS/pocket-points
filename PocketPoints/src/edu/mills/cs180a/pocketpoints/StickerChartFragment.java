@@ -68,7 +68,7 @@ public class StickerChartFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.student_sticker_options, menu);
+        inflater.inflate(R.menu.sticker_chart_options, menu);
     }
 
     @Override
