@@ -1,6 +1,6 @@
 package edu.mills.cs180a.pocketpoints;
 
-import android.app.Fragment;
+import android.app.ListFragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -10,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -24,7 +23,7 @@ import android.widget.TextView;
  *
  * @author chingmyu@gmail.com (Ching Yu)
  */
-public class ClasslistFragment extends Fragment {
+public class ClasslistFragment extends ListFragment {
     private LayoutInflater mInflater;
     private StudentManager mStudentManager;
 
@@ -61,8 +60,7 @@ public class ClasslistFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_classlist, container, false);
 
         // Set up the adapter.
-        ListView listView = (ListView) view.findViewById(R.id.listView1);
-        listView.setAdapter(new ClasslistAdapter(getActivity()));
+        setListAdapter(new ClasslistAdapter(getActivity()));
 
         return view;
     }

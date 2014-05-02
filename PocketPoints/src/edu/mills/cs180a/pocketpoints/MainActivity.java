@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ListView;
 import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
@@ -116,9 +115,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
         studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
 
         // Update the students displayed on ClasslistFragment.
-        ListView classListView = (ListView) mClasslistFragment.getView().findViewById(
-                R.id.listView1);
-        studentAdapter = ((StudentCursorAdapter) classListView.getAdapter());
+        studentAdapter = ((StudentCursorAdapter) mClasslistFragment.getListAdapter());
         studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
     }
 }
