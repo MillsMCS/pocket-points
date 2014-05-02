@@ -16,7 +16,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 /**
- *
  * An {@code Fragment} called by {@link EditStickerActivity} that displays a graphical
  * {@code GridView} representation of the number of stickers currently associated with a the
  * selected student.
@@ -33,7 +32,7 @@ import android.widget.ImageView;
  * added sticker.
  *
  * <P>
- * Clicking the "Clear ALl" button will, after confirming via an alert dialog, clear all stickers
+ * Clicking the "Clear All" button will, after confirming via an alert dialog, clear all stickers
  * associated with the student and will update the database accordingly.
  *
  * @author renee.johnston1149@gmail.com (Renee Johnston)

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
  * Fragment to display a list of students available for editing. Clicking on a student notifies an
@@ -23,6 +24,7 @@ import android.widget.TextView;
  */
 public class EditClasslistFragment extends ListFragment {
     private LayoutInflater mInflater;
+    private EditClasslistAdapter mAdapter;
 
     /**
      * Interface definition for the callback to be invoked when a student in the edit class list is
@@ -37,6 +39,14 @@ public class EditClasslistFragment extends ListFragment {
          * @param student the selected student
          */
         public void onEditStudentSelected(Student selectedStudent);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            StudentCursor studentCursor = StudentManager.get(getActivity()).getAllStudentsCursor();
+            mAdapter.changeCursor(studentCursor); // closes old cursor
+        }
     }
 
     @Override
@@ -55,7 +65,10 @@ public class EditClasslistFragment extends ListFragment {
         mInflater = inflater;
         View view = mInflater.inflate(R.layout.fragment_edit_classlist, container, false);
 
-        setListAdapter(new EditClasslistAdapter(getActivity())); // Set up the ListView adapter.
+        // Set up the ListView adapter.
+        mAdapter = new EditClasslistAdapter(getActivity());
+        setListAdapter(mAdapter);
+
         return view;
     }
 
