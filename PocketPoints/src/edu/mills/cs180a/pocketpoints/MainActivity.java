@@ -20,6 +20,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     private static final String TAG = "MainActivity";
 
     private FragmentManager mFragmentManager;
+    private StickerChartFragment mStickerChartFragment;
     private EditStudentFragment mEditStudentFragment;
     private ClasslistFragment mClasslistFragment;
     private EditClasslistFragment mEditClasslistFragment;
@@ -37,11 +38,14 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
                 .findFragmentById(R.id.classlistFragment);
         mEditClasslistFragment = (EditClasslistFragment) mFragmentManager
                 .findFragmentById(R.id.editClasslistFragment);
+        mStickerChartFragment = (StickerChartFragment) mFragmentManager
+                .findFragmentById(R.id.stickerChartFragment);
 
         mFragmentManager
                 .beginTransaction()
                 .hide(mEditStudentFragment)
                 .hide(mEditClasslistFragment)
+                .hide(mStickerChartFragment)
                 .commit();
     }
 
@@ -77,9 +81,20 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     }
 
     @Override
-    public void onStudentSelected(Student student) {
-        // Display the StudentStickerFragment.
-        // TODO: Not yet implemented.
+    public void onStudentSelected(Student selectedStudent) {
+        long selectedPersonId = selectedStudent.getId();
+
+        // Display the EditStudentFragment.
+        mFragmentManager
+                .beginTransaction()
+                .hide(mClasslistFragment)
+                .hide(mEditClasslistFragment)
+                .show(mEditStudentFragment)
+                .addToBackStack(null)
+                .commit();
+
+        // Show the current person.
+        mStickerChartFragment.setStickersForStudent(selectedPersonId);
     }
 
     @Override

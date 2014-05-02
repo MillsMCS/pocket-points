@@ -44,7 +44,7 @@ public class StudentManager {
 
     /**
      * Creates an instance of {@code StudentManager} for the given test context.
-     *
+     * 
      * <p>
      * <b><i> PLEASE NOTE </i></b> that this method exists only for testing the
      * {@code StudentManager}. Please use it for NO other purpose.
@@ -81,8 +81,7 @@ public class StudentManager {
      */
     public List<Student> getAllStudents() {
         StudentCursor studentCursor = mHelper.queryStudents();
-        List<Student> students = new ArrayList<Student>(
-                studentCursor.getCount());
+        List<Student> students = new ArrayList<Student>(studentCursor.getCount());
         while (studentCursor.moveToNext()) {
             students.add(studentCursor.getStudent());
         }

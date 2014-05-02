@@ -1,9 +1,21 @@
 package edu.mills.cs180a.pocketpoints;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,10 +49,13 @@ import android.widget.Toast;
 public class EditStudentFragment extends Fragment {
     private static final String TAG = "EditStudentFragment";
     private static final String DEFAULT_NAME = "New Student";
+    private static final int REQUEST_TAKE_PHOTO = 1;
 
     private EditText mNameField;
     private Student mStudent;
     private StudentManager mStudentManager;
+    private String mCurrentPhotoPath;
+    private ImageButton mImageButton;
 
     /**
      * Interface definition for a callback to be invoked when a {@link Student} is selected in the
@@ -62,9 +77,26 @@ public class EditStudentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_student, container, false);
         mNameField = (EditText) view.findViewById(R.id.editStudentName);
+        mImageButton = (ImageButton) view.findViewById(R.id.studentImageButton);
         mStudentManager = StudentManager.get(getActivity());
         return view;
     }
+
+    //TODO: Get camera working
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        Log.d(TAG, "onACtivityResult request code is " + requestCode + "Result code is "
+//                + resultCode);
+//        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == getActivity().RESULT_OK) {
+//            Log.d(TAG, "onActivityResult photo taken!");
+//            if (data != null) {
+//                Log.d(TAG, "data not null");
+//            }
+//
+//            Log.d(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
+//            setPic();
+//        }
+//    }
 
     /**
      * Sets the student whose information is displayed in this {@code EditStudentFragment}.
@@ -78,7 +110,6 @@ public class EditStudentFragment extends Fragment {
      */
     void setStudent(long studentId) {
         TextView displayName = (TextView) getView().findViewById(R.id.studentName);
-        ImageButton imageButton = (ImageButton) getView().findViewById(R.id.studentImageButton);
 
         // If this is a new student display fields with defaults.
         if (studentId == Student.INVALID_ID) {
@@ -103,10 +134,10 @@ public class EditStudentFragment extends Fragment {
         }
 
         // Add listeners.
-        imageButton.setOnClickListener(new OnClickListener() {
+        mImageButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // take me to the camera!
+                takePicture();
             }
         });
 
@@ -201,5 +232,82 @@ public class EditStudentFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), R.string.saved_failure_toast, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void takePicture() {
+        PackageManager pm = getActivity().getPackageManager();
+        if (pm != null && pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            // Then take the picture.
+            dispatchTakePictureIntent();
+        } else {
+            Toast.makeText(getActivity(), R.string.no_camera_toast, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.e(TAG, "Unable to create image file to save.", ex);
+                Toast.makeText(getActivity(), "Sorry, Can't take a picture right now.",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        // We want to store the files in a directory which is private for our application.
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        // Note: This file name can later be stored in the SQL database.
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        Log.d(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
+        return image;
+    }
+
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = mImageButton.getWidth();
+        int targetH = mImageButton.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImageButton.setImageBitmap(bitmap);
     }
 }
