@@ -8,8 +8,6 @@
     <ImageView
         android:id="@+id/rowSmileImage"
         android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/satisfied" >
+        android:layout_height="50dp" >
     </ImageView>
 </LinearLayout>

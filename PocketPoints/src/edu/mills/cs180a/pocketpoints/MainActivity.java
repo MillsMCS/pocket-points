@@ -3,8 +3,8 @@ package edu.mills.cs180a.pocketpoints;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ListView;
 import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
@@ -74,13 +74,13 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
     @Override
     public void onStudentSelected(Student selectedStudent) {
         long selectedPersonId = selectedStudent.getId();
+        Log.d(TAG, "Student id is " + selectedPersonId);
 
         // Display the EditStudentFragment.
         mFragmentManager
                 .beginTransaction()
                 .hide(mClasslistFragment)
-                .hide(mEditClasslistFragment)
-                .show(mEditStudentFragment)
+                .show(mStickerChartFragment)
                 .addToBackStack(null)
                 .commit();
 
@@ -116,9 +116,7 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
         studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
 
         // Update the students displayed on ClasslistFragment.
-        ListView classListView = (ListView) mClasslistFragment.getView().findViewById(
-                R.id.listView1);
-        studentAdapter = ((StudentCursorAdapter) classListView.getAdapter());
+        studentAdapter = ((StudentCursorAdapter) mClasslistFragment.getListAdapter());
         studentAdapter.changeCursor(studentCursor); // Closes the old cursor.
     }
 }

@@ -1,6 +1,6 @@
 package edu.mills.cs180a.pocketpoints;
 
-import android.app.Fragment;
+import android.app.ListFragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import android.widget.TextView;
  *
  * @author chingmyu@gmail.com (Ching Yu)
  */
-public class ClasslistFragment extends Fragment {
+public class ClasslistFragment extends ListFragment {
     private LayoutInflater mInflater;
     private StudentManager mStudentManager;
 
@@ -61,10 +61,16 @@ public class ClasslistFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_classlist, container, false);
 
         // Set up the adapter.
-        ListView listView = (ListView) view.findViewById(R.id.listView1);
-        listView.setAdapter(new ClasslistAdapter(getActivity()));
+        setListAdapter(new ClasslistAdapter(getActivity()));
 
         return view;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        OnStudentSelectedListener listener = (OnStudentSelectedListener) getActivity();
+        Student selectedStudent = (Student) getListAdapter().getItem(position);
+        listener.onStudentSelected(selectedStudent);
     }
 
     private class ClasslistAdapter extends StudentCursorAdapter {
