@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -87,6 +88,7 @@ public class StickerChartFragment extends Fragment {
         // TODO Display Student name
         // TextView displayName = (TextView) getView().findViewById(R.id.studentName);
 
+        mAdapter.clear();
         if (studentId == Student.INVALID_ID) {
             Log.d(TAG, "invalid student ID");
         } else {
@@ -123,9 +125,29 @@ public class StickerChartFragment extends Fragment {
                 Log.d(TAG, "row was null");
                 convertView = mInflater.inflate(R.layout.fragment_sticker_chart_row, null);
             }
-
+            int itemResId = getItem(position);
             ImageView sticker = (ImageView) convertView.findViewById(R.id.rowSmileImage);
-            sticker.setImageResource(getItem(position));
+            sticker.setImageResource(itemResId);
+
+            // If the add smiley icon was just added, increment student's sticker count by 1.
+            if (itemResId != R.drawable.ic_add_sticker) {
+                sticker.setOnClickListener(null);
+
+            } else {
+                Log.d(TAG, "added the add sticker icon");
+                sticker.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d(TAG, "register button press");
+                        Log.d(TAG, "old sticker count " + mStudent.getNumStickers());
+                        mStudent.setNumStickers(mStudent.getNumStickers() + 1);
+                        Log.d(TAG, "new sticker count " + mStudent.getNumStickers());
+                        mStudentManager.updateStudent(mStudent);
+                        setStickersForStudent(mStudent.getId());
+                    }
+                });
+            }
+
             return convertView;
         }
     }
