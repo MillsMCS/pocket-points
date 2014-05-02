@@ -3,6 +3,8 @@ package edu.mills.cs180a.pocketpoints;
 import android.app.ListFragment;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -95,10 +97,18 @@ public class EditClasslistFragment extends ListFragment {
             Student student = getCursor().getStudent();
 
             // Populate the row's fields with the student data.
-            ImageView picture = (ImageView) view.findViewById(R.id.rowStudentPicture);
-            // TODO: Need to get an image resource ID
-            // picture.setImageResource(student.getName());
-            picture.setImageResource(R.drawable.ic_contact_picture);
+            ImageView studentImageView = (ImageView) view.findViewById(R.id.rowStudentPicture);
+            String imgName = student.getImgName();
+            if (imgName == null) {
+                studentImageView.setImageResource(R.drawable.ic_contact_picture);
+            } else {
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inPurgeable = true;
+
+                Bitmap studentProfilePhoto = BitmapFactory.decodeFile(imgName, bmOptions);
+                studentImageView.setImageBitmap(studentProfilePhoto);
+            }
 
             TextView name = (TextView) view.findViewById(R.id.rowStudentName);
             name.setText(student.getName());

@@ -19,7 +19,7 @@
         android:layout_below="@+id/studentName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp"
-        android:src="@drawable/ic_launcher" />
+        android:contentDescription="@string/take_photo" />
 
     <Button
         android:id="@+id/studentCancelButton"

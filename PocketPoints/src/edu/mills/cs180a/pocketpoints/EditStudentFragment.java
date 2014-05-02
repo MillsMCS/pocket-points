@@ -2,9 +2,9 @@ package edu.mills.cs180a.pocketpoints;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -54,8 +54,12 @@ public class EditStudentFragment extends Fragment {
     private EditText mNameField;
     private Student mStudent;
     private StudentManager mStudentManager;
-    private String mCurrentPhotoPath;
     private ImageButton mImageButton;
+
+    private String mNewProfilePhotoPath;
+    private String mPossibleNewProfilePhotoPath; // This is only used for telling the camera app
+                                                 // where to save the photo (an action which may be
+                                                 // cancelled).
 
     /**
      * Interface definition for a callback to be invoked when a {@link Student} is selected in the
@@ -67,7 +71,7 @@ public class EditStudentFragment extends Fragment {
 
         /**
          * Called when the save, delete, or cancel button is selected.
-         * 
+         *
          * @param buttonResId the resourceId of the selected button.
          */
         void onEditStudentButtonClicked(int buttonResId);
@@ -80,6 +84,36 @@ public class EditStudentFragment extends Fragment {
         mImageButton = (ImageButton) view.findViewById(R.id.studentImageButton);
         mStudentManager = StudentManager.get(getActivity());
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            switch (resultCode) {
+            case Activity.RESULT_OK:
+                mNewProfilePhotoPath = mPossibleNewProfilePhotoPath;
+                displayProfilePhoto(mNewProfilePhotoPath); // Display the new profile photo.
+                break;
+            case Activity.RESULT_CANCELED:
+                Toast.makeText(getActivity(), R.string.no_photo_taken, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Log.w(TAG, "Unhandled result code " + resultCode);
+            }
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden) {
+            if (mNewProfilePhotoPath != null) {
+                // Then need to delete the image file located at mNewProfilePath (it is not being
+                // used by the mStudent, and so should be removed from memory).
+                deleteProfilePhoto(mNewProfilePhotoPath);
+                Log.d(TAG, mNewProfilePhotoPath + " has been deleted, since it is not being used");
+                mNewProfilePhotoPath = null;
+            }
+        }
     }
 
     /**
@@ -100,21 +134,13 @@ public class EditStudentFragment extends Fragment {
             mStudent = new Student();
             displayName.setText(DEFAULT_NAME);
             mNameField.setText("");
+            displayProfilePhoto(null); // Displays the default image.
         } else {
             mStudent = mStudentManager.getStudent(studentId);
-
-            // Display the Students name at the top of the screen (if it
-            // exists).
             String name = mStudent.getName();
             displayName.setText(name);
-
-            // Show a picture of the student. (if it exists).
-            // icon.setImageResource(R.id.ic_launcher);
-            // TODO get images working
-
-            // Set the text of the name EditText to the value of the current
-            // name, if any.
             mNameField.setText(name);
+            displayProfilePhoto(mStudent.getImgName());
         }
 
         // Add listeners.
@@ -129,7 +155,6 @@ public class EditStudentFragment extends Fragment {
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Log.d(TAG, "Save button clicked");
                 saveCurrentStudent();
                 OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
                 listener.onEditStudentButtonClicked(R.id.studentSaveButton);
@@ -178,8 +203,7 @@ public class EditStudentFragment extends Fragment {
     }
 
     private void deleteCurrentStudent() {
-
-        // If the student has a valid Id.
+        // Delete the student from the database, if necessary.
         if (mStudent.getId() != Student.INVALID_ID) {
             boolean deleted = mStudentManager.deleteStudent(mStudent.getId());
             if (deleted) {
@@ -195,17 +219,24 @@ public class EditStudentFragment extends Fragment {
     }
 
     private void saveCurrentStudent() {
-        Log.d(TAG, "saveCurrentStudent() method called");
         mStudent.setName(mNameField.getText().toString());
-        // mStudent.setImgName(imgName);
+
+        // Update the student's profile photo, if necessary.
+        if (mNewProfilePhotoPath != null) {
+            String currentProfilePhotoPath = mStudent.getImgName();
+            mStudent.setImgName(mNewProfilePhotoPath);
+            if (currentProfilePhotoPath != null) {
+                // Then need to delete the student's old profile photo from memory.
+                deleteProfilePhoto(currentProfilePhotoPath);
+                Log.d(TAG, "Deleted the old student profile photo at: " + currentProfilePhotoPath);
+            }
+            mNewProfilePhotoPath = null;
+        }
 
         // Try to save the student in the database.
         boolean saved = false;
         if (mStudent.getId() == Student.INVALID_ID) {
-            Log.d(TAG, "New Student to be saved ");
             saved = mStudentManager.createStudent(mStudent);
-            Log.d(TAG, "New Student should be saved: "
-                    + mStudentManager.getStudent(mStudent.getId()).toString());
         } else {
             saved = mStudentManager.updateStudent(mStudent);
         }
@@ -230,21 +261,22 @@ public class EditStudentFragment extends Fragment {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
+
+        // Ensure that there's a camera activity to handle the intent.
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
-                Log.e(TAG, "Unable to create image file to save.", ex);
-                Toast.makeText(getActivity(), "Sorry, Can't take a picture right now.",
+                Log.e(TAG, "Unable to write create the file for saving photo.", ex);
+                Toast.makeText(getActivity(), R.string.save_photo_failed,
                         Toast.LENGTH_SHORT).show();
             }
 
             // Continue only if the File was successfully created
             if (photoFile != null) {
+                mPossibleNewProfilePhotoPath = photoFile.getAbsolutePath();
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
@@ -252,46 +284,51 @@ public class EditStudentFragment extends Fragment {
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        // Create the name of the image file.
+        long timeStamp = new Date().getTime(); // Use current timestamp to make image names unique.
+        String imageName = "student_profile_" + timeStamp;
 
         // We want to store the files in a directory which is private for our application.
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName, /* prefix */
+        File imageFile = File.createTempFile(
+                imageName, /* prefix */
                 ".jpg", /* suffix */
                 storageDir /* directory */
         );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        // Note: This file name can later be stored in the SQL database.
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        Log.d(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
-        return image;
+        return imageFile;
     }
 
-    private void setPic() {
-        // Get the dimensions of the View
-        int targetW = mImageButton.getWidth();
-        int targetH = mImageButton.getHeight();
+    private void displayProfilePhoto(String profilePhotoPath) {
+        if (profilePhotoPath == null) {
+            // Display the default (anonymous) profile photo.
+            mImageButton.setImageResource(R.drawable.ic_take_picture);
+        } else {
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(profilePhotoPath, bmOptions);
+            int photoW = bmOptions.outWidth;
+            int photoH = bmOptions.outHeight;
 
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
+            // Determine how much to scale down the image
+            int targetW = 200;
+            int targetH = 200;
+            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaleFactor;
+            bmOptions.inPurgeable = true;
 
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
+            Bitmap bitmap = BitmapFactory.decodeFile(profilePhotoPath, bmOptions);
+            mImageButton.setImageBitmap(bitmap);
+        }
+    }
 
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImageButton.setImageBitmap(bitmap);
+    private void deleteProfilePhoto(String profilePhotoPath) {
+        File currentProfilePhotoFile = new File(profilePhotoPath);
+        if (!currentProfilePhotoFile.delete()) {
+            Log.e(TAG, "Deletion of " + profilePhotoPath + " failed!");
+        }
     }
 }
