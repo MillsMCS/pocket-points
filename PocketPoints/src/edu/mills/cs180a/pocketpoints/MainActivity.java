@@ -67,8 +67,10 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
             // Tell the EditStudentFragment that it is creating a new student.
             mEditStudentFragment.setStudent(Student.INVALID_ID);
             return true;
+
         case R.id.menu_item_done_edit:
             mFragmentManager.popBackStack();
+            return true;
 
         default:
             return super.onOptionsItemSelected(item);
