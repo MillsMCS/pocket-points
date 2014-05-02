@@ -23,4 +23,6 @@
     <string name="saved_success_toast">Student Saved</string>
     <string name="saved_failure_toast">Save Not Successful</string>
     <string name="no_camera_toast">Unable to take picture</string>
+    <string name="clear_all_stickers">Clear All</string>
+    <string name="undo_sticker_addition">Undo</string>
 </resources>
