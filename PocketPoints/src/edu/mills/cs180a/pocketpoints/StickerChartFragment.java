@@ -1,13 +1,8 @@
 package edu.mills.cs180a.pocketpoints;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,24 +41,16 @@ public class StickerChartFragment extends Fragment {
     private static final String TAG = "StickerChartFragment";
 
     private GridView mGridView;
-    GridViewCustomAdapter<Bitmap> mAdapter;
-    private ArrayList<Bitmap> gridArray = new ArrayList<Bitmap>();
-    private GridViewCustomAdapter mCustomGridAdapter;
+    private GridViewCustomAdapter mAdapter;
     private LayoutInflater mInflater;
-    private List<Student> mStudentList;
     private StudentManager mStudentManager;
     private Student mStudent;
     private int mStickerCount;
-    private Bitmap mSmileSticker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Set grid view item.
-        mSmileSticker = BitmapFactory.decodeResource(this.getResources(), R.drawable.satisfied);
-        gridArray.add(mSmileSticker);
-        gridArray.add(mSmileSticker);
+        mStudentManager = StudentManager.get(getActivity());
         setHasOptionsMenu(true);
     }
 
@@ -79,7 +66,8 @@ public class StickerChartFragment extends Fragment {
 
         // Set up the adapter.
         Activity activity = getActivity();
-        mAdapter = new GridViewCustomAdapter<Bitmap>(activity);
+        mAdapter = new GridViewCustomAdapter(activity);
+        mAdapter.setNotifyOnChange(true);
         mGridView = (GridView) view.findViewById(R.id.gridView1);
         mGridView.setAdapter(mAdapter);
         return view;
@@ -90,54 +78,49 @@ public class StickerChartFragment extends Fragment {
      * {@code StickerChartFragment}.
      *
      * <p>
-     * We expect this to be called by the {@code OnSelectStudentListener} which should supply a
-     * {@code studentId} argument of -1 in the event of creating a new student.
+     * We expect this to be called by the {@code OnSelectStudentListener}.
      * </p>
      *
      * @param personId the ID of the student whose stickers are being displayed
      */
     void setStickersForStudent(long studentId) {
-        gridArray.add(mSmileSticker);
-        gridArray.add(mSmileSticker);
-        mAdapter.notifyDataSetChanged();
-        mGridView.setAdapter(mAdapter);
-        // mGridView.invalidate();
+        // TODO Display Student name
+        // TextView displayName = (TextView) getView().findViewById(R.id.studentName);
 
-        // TODO Get this part working
-        // // TextView displayName = (TextView) getView().findViewById(R.id.studentName);
-        //
-        // // If this is a new student display fields with defaults.
-        // if (studentId == Student.INVALID_ID) {
-        // Log.d(TAG, "invalid student ID");
-        // } else {
-        // mStudent = mStudentManager.getStudent(studentId);
-        //
-        // // Get sticker count.
-        // mStickerCount = mStudent.getNumStickers();
-        //
-        // // Add required number of stickers to mGridArray.
-        // for (int i = 0; i < mStickerCount - 1; i++) {
-        // gridArray.add(mSmileSticker);
-        // }
-        //
-        // // Display the Students name at the top of the screen (if it
-        // // exists).
-        // // String name = mStudent.getName();
-        // // displayName.setText(name);
-        //
-        // // Show a picture of the student. (if it exists).
-        // // icon.setImageResource(R.id.ic_launcher);
-        // // TODO get images working
-        //
-        // // Set the text of the name EditText to the value of the current
-        // // name, if any.
-        // // mNameField.setText(name);
-        // }
+        if (studentId == Student.INVALID_ID) {
+            Log.d(TAG, "invalid student ID");
+        } else {
+            mStudent = mStudentManager.getStudent(studentId);
+
+            // Get sticker count.
+            mStickerCount = mStudent.getNumStickers();
+
+            // Add required number of stickers to mGridArray.
+            for (int i = 0; i < mStickerCount; i++) {
+                mAdapter.add(R.drawable.satisfied);
+            }
+        }
+
+        mAdapter.add(R.drawable.smiley_add);
+
+        // Display the Students name at the top of the screen (if it
+        // exists).
+        // String name = mStudent.getName();
+        // displayName.setText(name);
+
+        // Show a picture of the student. (if it exists).
+        // icon.setImageResource(R.id.ic_launcher);
+        // TODO get images working
+
+        // Set the text of the name EditText to the value of the current
+        // name, if any.
+        // mNameField.setText(name);
+
     }
 
-    private class GridViewCustomAdapter<Bitmap> extends ArrayAdapter {
+    private class GridViewCustomAdapter extends ArrayAdapter<Integer> {
         public GridViewCustomAdapter(Context context) {
-            super(context, R.id.rowSmileImage, gridArray);
+            super(context, R.id.rowSmileImage);
         }
 
         @Override
@@ -148,8 +131,8 @@ public class StickerChartFragment extends Fragment {
             }
 
             ImageView sticker = (ImageView) convertView.findViewById(R.id.rowSmileImage);
-            sticker.setImageResource(R.drawable.satisfied);
+            sticker.setImageResource(getItem(position));
             return convertView;
-            }
         }
     }
+}
