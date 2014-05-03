@@ -154,9 +154,10 @@ public class EditStudentFragment extends Fragment {
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                saveCurrentStudent();
-                OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
-                listener.onEditStudentButtonClicked(R.id.studentSaveButton);
+                if (saveCurrentStudent()) {
+                    OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
+                    listener.onEditStudentButtonClicked(R.id.studentSaveButton);
+                }
             }
         });
 
@@ -164,10 +165,10 @@ public class EditStudentFragment extends Fragment {
         deleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                deleteCurrentStudent();
-                // TODO: implement delete dialog.
-                OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
-                listener.onEditStudentButtonClicked(R.id.studentDeleteButton);
+                if (deleteCurrentStudent()) {
+                    OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
+                    listener.onEditStudentButtonClicked(R.id.studentDeleteButton);
+                }
             }
         });
 
@@ -201,7 +202,7 @@ public class EditStudentFragment extends Fragment {
         return builder.create();
     }
 
-    private void deleteCurrentStudent() {
+    private boolean deleteCurrentStudent() {
         // Delete the student from the database, if necessary.
         if (mStudent.getId() != Student.INVALID_ID) {
             boolean deleted = mStudentManager.deleteStudent(mStudent.getId());
@@ -212,12 +213,20 @@ public class EditStudentFragment extends Fragment {
                 Toast.makeText(getActivity(), R.string.delete_failure_toast, Toast.LENGTH_SHORT)
                         .show();
             }
-        } else {
-            Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT).show();
+            return deleted;
         }
+        Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT).show();
+        return true;
     }
 
-    private void saveCurrentStudent() {
+    private boolean saveCurrentStudent() {
+        String newName = mNameField.getText().toString();
+        if (newName.isEmpty()) {
+            // Can't save a student with an empty name.
+            Toast.makeText(getActivity(), R.string.save_failure_empty_name_toast,
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
         mStudent.setName(mNameField.getText().toString());
 
         // Update the student's profile photo, if necessary.
@@ -242,10 +251,11 @@ public class EditStudentFragment extends Fragment {
 
         // Inform the user if the student was saved.
         if (saved) {
-            Toast.makeText(getActivity(), R.string.saved_success_toast, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.save_success_toast, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getActivity(), R.string.saved_failure_toast, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.save_failure_toast, Toast.LENGTH_SHORT).show();
         }
+        return saved;
     }
 
     private void takePicture() {

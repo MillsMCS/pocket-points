@@ -19,9 +19,10 @@
     <string name="sticker_header"><u>Stickers</u></string>
     <string name="row_edit_student_icon">Edit Student</string>
     <string name="delete_success_toast">Student Deleted</string>
-    <string name="delete_failure_toast">Deletion Failed</string>
-    <string name="saved_success_toast">Student Saved</string>
-    <string name="saved_failure_toast">Save Not Successful</string>
+    <string name="delete_failure_toast">Deletion Failed!</string>
+    <string name="save_success_toast">Student Saved</string>
+    <string name="save_failure_toast">Save Failed!</string>
+    <string name="save_failure_empty_name_toast">Can\'t save student with an empty name</string>
     <string name="no_camera_toast">Unable to take picture</string>
     <string name="clear_all_stickers">Clear All</string>
     <string name="undo_sticker_addition">Undo</string>
