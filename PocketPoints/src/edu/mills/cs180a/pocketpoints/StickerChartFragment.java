@@ -63,16 +63,16 @@ public class StickerChartFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.menu_item_undo_sticker_addition:// pretend this is delete sticker
-            if (mStudent.getNumStickers() != 0) {
-                mStudent.setNumStickers(mStudent.getNumStickers() - 1);
+        case R.id.menu_item_undo_sticker_addition:
+            if (mStudent.getNumStickers() > 0) {
+                mStudent.removeLastSticker();
                 mStudentManager.updateStudent(mStudent);
                 setStickersForStudent(mStudent.getId());
                 return true;
             }
 
-        case R.id.menu_item_clear_all_stickers:// pretend this is clear all stickers
-            if (mStudent.getNumStickers() != 0) {
+        case R.id.menu_item_clear_all_stickers:
+            if (mStudent.getNumStickers() > 0) {
                 mStudent.setNumStickers(0);
                 mStudentManager.updateStudent(mStudent);
                 setStickersForStudent(mStudent.getId());
@@ -161,7 +161,7 @@ public class StickerChartFragment extends Fragment {
                 sticker.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mStudent.setNumStickers(mStudent.getNumStickers() + 1);
+                        mStudent.addSticker();
                         mStudentManager.updateStudent(mStudent);
                         setStickersForStudent(mStudent.getId());
                     }
