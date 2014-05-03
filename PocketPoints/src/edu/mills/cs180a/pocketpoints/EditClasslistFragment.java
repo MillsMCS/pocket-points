@@ -4,7 +4,6 @@ import android.app.ListFragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +24,8 @@ import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
  * @author chingmyu@gmail.com (Ching Yu)
  */
 public class EditClasslistFragment extends ListFragment {
+    private static final String TAG = "EditClasslistFragment";
+
     private LayoutInflater mInflater;
     private EditClasslistAdapter mAdapter;
 
@@ -96,20 +97,18 @@ public class EditClasslistFragment extends ListFragment {
             // Get the student for the current row.
             Student student = getCursor().getStudent();
 
-            // Populate the row's fields with the student data.
+            // Set the picture of the student in the row.
             ImageView studentImageView = (ImageView) view.findViewById(R.id.rowStudentPicture);
-            String imgName = student.getImgName();
-            if (imgName == null) {
+            String studentImgPath = student.getImgName();
+            if (studentImgPath == null) {
                 studentImageView.setImageResource(R.drawable.ic_contact_picture);
             } else {
-                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                bmOptions.inJustDecodeBounds = false;
-                bmOptions.inPurgeable = true;
-
-                Bitmap studentProfilePhoto = BitmapFactory.decodeFile(imgName, bmOptions);
+                Bitmap studentProfilePhoto = ImageUtils.loadImage(getActivity(), studentImgPath,
+                        R.drawable.ic_contact_picture);
                 studentImageView.setImageBitmap(studentProfilePhoto);
             }
 
+            // Set the name of the student in the row.
             TextView name = (TextView) view.findViewById(R.id.rowStudentName);
             name.setText(student.getName());
         }

@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -303,25 +302,9 @@ public class EditStudentFragment extends Fragment {
             // Display the default (anonymous) profile photo.
             mImageButton.setImageResource(R.drawable.ic_take_picture);
         } else {
-            // Get the dimensions of the bitmap
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(profilePhotoPath, bmOptions);
-            int photoW = bmOptions.outWidth;
-            int photoH = bmOptions.outHeight;
-
-            // Determine how much to scale down the image
-            int targetW = 200;
-            int targetH = 200;
-            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-            // Decode the image file into a Bitmap sized to fill the View
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(profilePhotoPath, bmOptions);
-            mImageButton.setImageBitmap(bitmap);
+            Bitmap profilePhoto = ImageUtils.loadImage(getActivity(), profilePhotoPath,
+                    R.drawable.ic_take_picture);
+            mImageButton.setImageBitmap(profilePhoto);
         }
     }
 
