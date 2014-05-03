@@ -8,6 +8,7 @@
     <ImageView
         android:id="@+id/rowSmileImage"
         android:layout_width="50dp"
-        android:layout_height="50dp" >
+        android:layout_height="50dp"
+        android:contentDescription="@string/row_smile_image_content_description" >
     </ImageView>
 </LinearLayout>
