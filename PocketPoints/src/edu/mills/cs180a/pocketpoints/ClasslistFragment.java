@@ -4,7 +4,6 @@ import android.app.ListFragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -103,15 +102,12 @@ public class ClasslistFragment extends ListFragment {
 
             // Populate the fields with the student data.
             ImageView studentImageView = (ImageView) view.findViewById(R.id.rowStudentPicture);
-            String imgName = student.getImgName();
-            if(imgName == null){
+            String studentImgPath = student.getImgName();
+            if (studentImgPath == null) {
                 studentImageView.setImageResource(R.drawable.ic_contact_picture);
             }else{
-                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                bmOptions.inJustDecodeBounds = false;
-                bmOptions.inPurgeable = true;
-
-                Bitmap studentProfilePhoto = BitmapFactory.decodeFile(imgName, bmOptions);
+                Bitmap studentProfilePhoto = ImageUtils.loadImage(getActivity(), studentImgPath,
+                        R.drawable.ic_contact_picture);
                 studentImageView.setImageBitmap(studentProfilePhoto);
             }
 
