@@ -69,12 +69,6 @@ public class MainActivity extends Activity implements ClasslistFragment.OnStuden
         case R.id.menu_item_done_edit:
             mFragmentManager.popBackStack();
             return true;
-        case R.id.menu_item_clear_all_stickers:
-            // TODO: call method here to remove all stickers
-            return true;
-        case R.id.menu_item_undo_sticker_addition:
-            // TODO: call method here to remove one sticker
-            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
