@@ -68,16 +68,15 @@ public class StickerChartFragment extends Fragment {
                 mStudent.removeLastSticker();
                 mStudentManager.updateStudent(mStudent);
                 setStickersForStudent(mStudent.getId());
-                return true;
             }
-
+            return true;
         case R.id.menu_item_clear_all_stickers:
             if (mStudent.getNumStickers() > 0) {
                 mStudent.setNumStickers(0);
                 mStudentManager.updateStudent(mStudent);
                 setStickersForStudent(mStudent.getId());
-                return true;
             }
+            return true;
         }
         return false;
     }
