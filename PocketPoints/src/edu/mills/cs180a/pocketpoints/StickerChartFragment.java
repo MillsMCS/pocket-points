@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -58,6 +59,29 @@ public class StickerChartFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.sticker_chart_options, menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menu_item_undo_sticker_addition:// pretend this is delete sticker
+            if (mStudent.getNumStickers() != 0) {
+                mStudent.setNumStickers(mStudent.getNumStickers() - 1);
+                mStudentManager.updateStudent(mStudent);
+                setStickersForStudent(mStudent.getId());
+                return true;
+            }
+
+        case R.id.menu_item_clear_all_stickers:// pretend this is clear all stickers
+            if (mStudent.getNumStickers() != 0) {
+                mStudent.setNumStickers(0);
+                mStudentManager.updateStudent(mStudent);
+                setStickersForStudent(mStudent.getId());
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -137,10 +161,7 @@ public class StickerChartFragment extends Fragment {
                 sticker.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d(TAG, "register button press");
-                        Log.d(TAG, "old sticker count " + mStudent.getNumStickers());
                         mStudent.setNumStickers(mStudent.getNumStickers() + 1);
-                        Log.d(TAG, "new sticker count " + mStudent.getNumStickers());
                         mStudentManager.updateStudent(mStudent);
                         setStickersForStudent(mStudent.getId());
                     }
