@@ -40,13 +40,14 @@ import android.widget.ImageView;
  */
 public class StickerChartFragment extends Fragment {
     private static final String TAG = "StickerChartFragment";
+    private static final String KEY_STUDENT =
+            "edu.mills.cs180a.pocketpoints.StickerChartFragment.displayed_student";
 
     private GridView mGridView;
     private GridViewCustomAdapter mAdapter;
     private LayoutInflater mInflater;
     private StudentManager mStudentManager;
     private Student mStudent;
-    private int mStickerCount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,26 @@ public class StickerChartFragment extends Fragment {
         mAdapter.setNotifyOnChange(true);
         mGridView = (GridView) view.findViewById(R.id.gridView1);
         mGridView.setAdapter(mAdapter);
+
+        // Get the student currently being displayed, if any.
+        if (savedInstanceState != null) {
+            long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
+            if (studentId != Student.INVALID_ID) {
+                setStickersForStudent(studentId);
+            }
+        }
+
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        // Save the student being displayed.
+        if (mStudent != null) {
+            savedInstanceState.putLong(KEY_STUDENT, mStudent.getId());
+        }
     }
 
     /**
@@ -117,10 +137,10 @@ public class StickerChartFragment extends Fragment {
             mStudent = mStudentManager.getStudent(studentId);
 
             // Get sticker count.
-            mStickerCount = mStudent.getNumStickers();
+            int stickerCount = mStudent.getNumStickers();
 
             // Add required number of stickers to mGridArray.
-            for (int i = 0; i < mStickerCount; i++) {
+            for (int i = 0; i < stickerCount; i++) {
                 mAdapter.add(R.drawable.ic_smile_sticker);
             }
         }
