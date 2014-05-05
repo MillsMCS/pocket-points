@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
+import android.database.sqlite.SQLiteDatabase;
 import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
@@ -21,7 +21,6 @@ import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 // Modeled after the RunManager class from the RunTracker app in "Android
 // Programming: The Big Nerd Ranch Guide".
 public class StudentManager {
-    private static final String TAG = "StudentManager";
     private static StudentManager sStudentManager;
 
     private StudentSQLiteOpenHelper mHelper;
@@ -44,7 +43,7 @@ public class StudentManager {
 
     /**
      * Creates an instance of {@code StudentManager} for the given test context.
-     * 
+     *
      * <p>
      * <b><i> PLEASE NOTE </i></b> that this method exists only for testing the
      * {@code StudentManager}. Please use it for NO other purpose.
@@ -80,22 +79,27 @@ public class StudentManager {
      * @return a list of all students in the database
      */
     public List<Student> getAllStudents() {
-        StudentCursor studentCursor = mHelper.queryStudents();
+        // Query the database for all students.
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+        StudentCursor studentCursor = new StudentCursor(db.query(
+                StudentSQLiteOpenHelper.TABLE_STUDENTS, null, // All columns.
+                null, // No where (selection) clause.
+                null, // No selection args.
+                null, // No grouping constraint.
+                null, // No 'having' constraint.
+                StudentSQLiteOpenHelper.COLUMN_NAME + " asc")); // Order by ascending student names.
+
+        // Compile a list of all the students in the database.
         List<Student> students = new ArrayList<Student>(studentCursor.getCount());
         while (studentCursor.moveToNext()) {
             students.add(studentCursor.getStudent());
         }
-        studentCursor.close();
-        return students;
-    }
 
-    /**
-     * Retrieves a {@link StudentCursor} for all students in the database.
-     *
-     * @return the cursor for all students in the database
-     */
-    public StudentCursor getAllStudentsCursor() {
-        return mHelper.queryStudents();
+        // Close the cursor and the connection to the database.
+        studentCursor.close();
+        db.close();
+
+        return students;
     }
 
     /**
@@ -106,15 +110,27 @@ public class StudentManager {
      *         ID in the database
      */
     public Student getStudent(long id) {
-        StudentCursor studentCursor = mHelper.queryStudent(id);
+        // Query the database for the desired student.
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+        StudentCursor studentCursor = new StudentCursor(db.query(
+                StudentSQLiteOpenHelper.TABLE_STUDENTS, null, // All columns.
+                StudentSQLiteOpenHelper.COLUMN_ID + " = ?", // Look for a run ID.
+                new String[] { String.valueOf(id) }, // with this value.
+                null, // No grouping constraint.
+                null, // No 'having' constraint.
+                null, // No ordering constraint.
+                "1")); // Limit the result to 1 row (there should only be 1).
+
+        // Get the desired student, if there is any.
         Student student = null;
         if (studentCursor.moveToFirst()) {
             student = studentCursor.getStudent();
-            if (!studentCursor.isLast()) {
-                Log.e(TAG, "Cursor returned more than 1 result for student with id = " + id);
-            }
         }
+
+        // Close the cursor and the connection to the database.
         studentCursor.close();
+        db.close();
+
         return student;
     }
 

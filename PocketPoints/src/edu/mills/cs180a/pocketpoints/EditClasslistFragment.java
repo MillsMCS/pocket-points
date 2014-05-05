@@ -2,7 +2,6 @@ package edu.mills.cs180a.pocketpoints;
 
 import android.app.ListFragment;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,10 +9,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
  * Fragment to display a list of students available for editing. Clicking on a student notifies an
@@ -24,8 +23,6 @@ import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
  * @author chingmyu@gmail.com (Ching Yu)
  */
 public class EditClasslistFragment extends ListFragment {
-    private static final String TAG = "EditClasslistFragment";
-
     private LayoutInflater mInflater;
     private EditClasslistAdapter mAdapter;
 
@@ -47,8 +44,8 @@ public class EditClasslistFragment extends ListFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (!hidden) {
-            StudentCursor studentCursor = StudentManager.get(getActivity()).getAllStudentsCursor();
-            mAdapter.changeCursor(studentCursor); // closes old cursor
+            mAdapter.clear();
+            mAdapter.addAll(StudentManager.get(getActivity()).getAllStudents());
         }
     }
 
@@ -82,23 +79,24 @@ public class EditClasslistFragment extends ListFragment {
         listener.onEditStudentSelected(selectedStudent);
     }
 
-    private class EditClasslistAdapter extends StudentCursorAdapter {
+    private class EditClasslistAdapter extends ArrayAdapter<Student> {
         private EditClasslistAdapter(Context context) {
-            super(context);
+            super(context, R.layout.fragment_edit_classlist_row, R.id.rowStudentName,
+                    StudentManager.get(context).getAllStudents());
         }
 
         @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return mInflater.inflate(R.layout.fragment_edit_classlist_row, parent, false);
-        }
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (null == convertView) {
+                convertView = mInflater.inflate(R.layout.fragment_edit_classlist_row, null);
+            }
 
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
             // Get the student for the current row.
-            Student student = getCursor().getStudent();
+            Student student = getItem(position);
 
             // Set the picture of the student in the row.
-            ImageView studentImageView = (ImageView) view.findViewById(R.id.rowStudentPicture);
+            ImageView studentImageView = (ImageView) convertView
+                    .findViewById(R.id.rowStudentPicture);
             String studentImgPath = student.getImgName();
             if (studentImgPath == null) {
                 studentImageView.setImageResource(R.drawable.ic_contact_picture);
@@ -109,8 +107,10 @@ public class EditClasslistFragment extends ListFragment {
             }
 
             // Set the name of the student in the row.
-            TextView name = (TextView) view.findViewById(R.id.rowStudentName);
-            name.setText(student.getName());
+            TextView nameTextView = (TextView) convertView.findViewById(R.id.rowStudentName);
+            nameTextView.setText(student.getName());
+
+            return convertView;
         }
     }
 }

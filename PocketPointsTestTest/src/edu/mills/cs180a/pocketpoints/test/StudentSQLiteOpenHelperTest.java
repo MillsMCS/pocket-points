@@ -8,7 +8,6 @@ import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 import edu.mills.cs180a.pocketpoints.Student;
 import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper;
-import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
  * JUnit tests for {@link StudentSQLiteOpenHelper}.
@@ -27,7 +26,6 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
     private static final int STUDENT_2_NUM_STICKERS = 0;
 
     private StudentSQLiteOpenHelper studentDbHelper;
-    private SQLiteDatabase db;
     private Student student1;
     private Student student2;
 
@@ -40,7 +38,6 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
 
         // Initialize the variables that will be used during this test.
         studentDbHelper = new StudentSQLiteOpenHelper(context);
-        db = studentDbHelper.getWritableDatabase();
         student1 = new Student()
                 .setName(STUDENT_1_NAME)
                 .setImgName(STUDENT_1_IMG_NAME)
@@ -78,7 +75,12 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_1_NUM_STICKERS);
 
         // Insert the values into the database.
-        db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
+        try {
+            db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        } finally {
+            db.close();
+        }
 
         // Verify that the database contains the expected information.
         Cursor cursor = queryEntireStudentTable();
@@ -97,18 +99,23 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         verifyDatabaseInitiallyEmpty();
 
         // Insert a student into the database.
-        ContentValues values = new ContentValues();
-        values.put(StudentSQLiteOpenHelper.COLUMN_NAME, STUDENT_1_NAME);
-        values.put(StudentSQLiteOpenHelper.COLUMN_IMAGE_NAME, STUDENT_1_IMG_NAME);
-        values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_1_NUM_STICKERS);
-        db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(StudentSQLiteOpenHelper.COLUMN_NAME, STUDENT_1_NAME);
+            values.put(StudentSQLiteOpenHelper.COLUMN_IMAGE_NAME, STUDENT_1_IMG_NAME);
+            values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_1_NUM_STICKERS);
+            db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
 
-        // Insert another student into the database.
-        values = new ContentValues();
-        values.put(StudentSQLiteOpenHelper.COLUMN_NAME, STUDENT_2_NAME);
-        values.put(StudentSQLiteOpenHelper.COLUMN_IMAGE_NAME, STUDENT_2_IMG_NAME);
-        values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_2_NUM_STICKERS);
-        db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+            // Insert another student into the database.
+            values = new ContentValues();
+            values.put(StudentSQLiteOpenHelper.COLUMN_NAME, STUDENT_2_NAME);
+            values.put(StudentSQLiteOpenHelper.COLUMN_IMAGE_NAME, STUDENT_2_IMG_NAME);
+            values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_2_NUM_STICKERS);
+            db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        } finally {
+            db.close();
+        }
 
         // Verify that the database contains the expected two entries.
         Cursor cursor = queryEntireStudentTable();
@@ -141,11 +148,15 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_1_NUM_STICKERS);
 
         // Insert the values into the database.
+
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
         try {
             long row = db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
             fail("Inserted student without name successfully into the database at row " + row);
         } catch (SQLException expected) {
             // Expected.
+        } finally {
+            db.close();
         }
     }
 
@@ -160,11 +171,14 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_1_NUM_STICKERS);
 
         // Insert the values into the database.
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
         try {
             long row = db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
             fail("Inserted student with null name successfully into the database at row " + row);
         } catch (SQLException expected) {
             // Expected.
+        } finally {
+            db.close();
         }
     }
 
@@ -179,11 +193,14 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_1_NUM_STICKERS);
 
         // Insert the values into the database.
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
         try {
             long row = db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
             fail("Inserted student with empty name successfully into the database at row " + row);
         } catch (SQLException expected) {
             // Expected.
+        } finally {
+            db.close();
         }
     }
 
@@ -197,7 +214,12 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_1_NUM_STICKERS);
 
         // Insert the values into the database.
-        db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
+        try {
+            db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        } finally {
+            db.close();
+        }
 
         // Verify that the database contains the expected information.
         Cursor cursor = queryEntireStudentTable();
@@ -222,7 +244,12 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, STUDENT_1_NUM_STICKERS);
 
         // Insert the values into the database.
-        db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
+        try {
+            db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        } finally {
+            db.close();
+        }
 
         // Verify that the database contains the expected information.
         Cursor cursor = queryEntireStudentTable();
@@ -246,7 +273,12 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         values.put(StudentSQLiteOpenHelper.COLUMN_IMAGE_NAME, STUDENT_1_IMG_NAME);
 
         // Insert the values into the database.
-        db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
+        try {
+            db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
+        } finally {
+            db.close();
+        }
 
         // Verify that the database contains the expected information.
         Cursor cursor = queryEntireStudentTable();
@@ -271,12 +303,15 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, (Integer) null);
 
         // Insert the values into the database.
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
         try{
             long row = db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
             fail("Inserted student with 'NULL' number of stickers successfully into the database"
                     + " at row " + row);
         } catch (SQLException expected) {
             // Expected.
+        } finally {
+            db.close();
         }
     }
 
@@ -291,12 +326,15 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
         values.put(StudentSQLiteOpenHelper.COLUMN_NUM_STICKERS, -1);
 
         // Insert the values into the database.
+        SQLiteDatabase db = studentDbHelper.getWritableDatabase();
         try {
             long row = db.insertOrThrow(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, values);
             fail("Inserted student with 'NULL' number of stickers successfully into the database"
                     + " at row " + row);
         } catch (SQLException expected) {
             // Expected.
+        } finally {
+            db.close();
         }
     }
 
@@ -331,108 +369,6 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
                 STUDENT_2_NUM_STICKERS);
         assertTrue(cursor.isLast());
         cursor.close();
-    }
-
-    public void testQueryStudents_databaseEmpty() {
-        verifyDatabaseInitiallyEmpty();
-
-        // Query for students in the empty database.
-        StudentCursor studentCursor = studentDbHelper.queryStudents();
-
-        // Verify get the expected results.
-        assertEquals(0, studentCursor.getCount());
-        assertFalse(studentCursor.moveToFirst());
-        studentCursor.close();
-    }
-
-    public void testQueryStudents_databaseHasSingleEntry() {
-        verifyDatabaseInitiallyEmpty();
-        studentDbHelper.insertStudent(student1);
-
-        // Query for students in the database.
-        StudentCursor studentCursor = studentDbHelper.queryStudents();
-
-        // Verify get the expected results.
-        assertEquals(1, studentCursor.getCount());
-
-        // Verify that the first student returned is as expected.
-        assertTrue(studentCursor.moveToFirst());
-        Student student = studentCursor.getStudent();
-        assertEquals(student1.getId(), student.getId());
-        assertEquals(student1.getName(), student.getName());
-        assertEquals(student1.getImgName(), student.getImgName());
-        assertEquals(student1.getNumStickers(), student.getNumStickers());
-
-        // Close the cursor.
-        assertTrue(studentCursor.isLast());
-        studentCursor.close();
-    }
-
-    public void testQueryStudents_datbaseHasMultipleEntries() {
-        verifyDatabaseInitiallyEmpty();
-        studentDbHelper.insertStudent(student1);
-        studentDbHelper.insertStudent(student2);
-
-        // Query for students in the database.
-        StudentCursor studentCursor = studentDbHelper.queryStudents();
-
-        // Verify get the expected results.
-        assertEquals(2, studentCursor.getCount());
-
-        // Verify that the first student returned is as expected.
-        assertTrue(studentCursor.moveToFirst());
-        Student student = studentCursor.getStudent();
-        assertEquals(student1.getId(), student.getId());
-        assertEquals(student1.getName(), student.getName());
-        assertEquals(student1.getImgName(), student.getImgName());
-        assertEquals(student1.getNumStickers(), student.getNumStickers());
-
-        // Verify that the second student returned is as expected.
-        assertTrue(studentCursor.moveToNext());
-        student = studentCursor.getStudent();
-        assertEquals(student2.getId(), student.getId());
-        assertEquals(student2.getName(), student.getName());
-        assertEquals(student2.getImgName(), student.getImgName());
-        assertEquals(student2.getNumStickers(), student.getNumStickers());
-
-        // Close the cursor.
-        assertTrue(studentCursor.isLast());
-        studentCursor.close();
-    }
-
-    public void testQueryStudent_studentExistsInDatabase() {
-        verifyDatabaseInitiallyEmpty();
-        studentDbHelper.insertStudent(student1);
-
-        StudentCursor studentCursor = studentDbHelper.queryStudent(student1.getId());
-
-        // Verify get the expected results.
-        assertEquals(1, studentCursor.getCount());
-
-        // Verify that the first student returned is as expected.
-        assertTrue(studentCursor.moveToFirst());
-        Student student = studentCursor.getStudent();
-        assertEquals(student1.getId(), student.getId());
-        assertEquals(student1.getName(), student.getName());
-        assertEquals(student1.getImgName(), student.getImgName());
-        assertEquals(student1.getNumStickers(), student.getNumStickers());
-
-        // Close the cursor.
-        assertTrue(studentCursor.isLast());
-        studentCursor.close();
-    }
-
-    public void testQueryStudent_studentDoesNotExistInDatabase() {
-        verifyDatabaseInitiallyEmpty();
-        studentDbHelper.insertStudent(student1);
-
-        StudentCursor studentCursor = studentDbHelper.queryStudent(
-                student1.getId() + 1 /* Non-existent ID*/);
-
-        // Verify get the expected results.
-        assertEquals(0, studentCursor.getCount());
-        assertFalse(studentCursor.moveToFirst());
-        studentCursor.close();
     }
 
     public void testUpdateStudent_fails() {
@@ -524,12 +460,12 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
 
     @Override
     public void tearDown() throws Exception {
-        db.close();
         studentDbHelper.close();
         super.tearDown();
     }
 
     private Cursor queryEntireStudentTable() {
+        SQLiteDatabase db = studentDbHelper.getReadableDatabase();
         return db.query(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, // Get all columns.
                 null, // Get all rows
                 null, // No selection args
@@ -539,6 +475,7 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
     }
 
     private void verifyDatabaseInitiallyEmpty() {
+        SQLiteDatabase db = studentDbHelper.getReadableDatabase();
         Cursor cursor = db.query(StudentSQLiteOpenHelper.TABLE_STUDENTS, null, // Get all columns.
                 null, // Get all rows
                 null, // No selection args
@@ -547,6 +484,7 @@ public class StudentSQLiteOpenHelperTest extends AndroidTestCase {
                 null); // Don't care about order
         assertEquals(0, cursor.getCount());
         cursor.close();
+        db.close();
     }
 
     private void verifyRowContainsExpectedInfo(Cursor cursor, String expectedName,
