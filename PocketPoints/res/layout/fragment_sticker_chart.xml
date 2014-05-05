@@ -17,8 +17,6 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-
-
     <GridView
         android:id="@+id/gridView1"
         android:layout_width="fill_parent"
