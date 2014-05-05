@@ -102,8 +102,6 @@ public class StickerChartFragment extends Fragment {
                 setStickersForStudent(studentId, view);
             }
         }
-
-
         return view;
     }
 
@@ -144,15 +142,12 @@ public class StickerChartFragment extends Fragment {
             TextView displayName = (TextView) fragmentView.findViewById(R.id.nameHeaderSticker);
             displayName.setText(mStudent.getName() + " has " + stickerCount + " stickers!");
 
-
-
             // Add required number of stickers to mGridArray.
             for (int i = 0; i < stickerCount; i++) {
                 mAdapter.add(R.drawable.ic_smile_sticker);
             }
         }
         mAdapter.add(R.drawable.ic_add_sticker);
-
     }
 
     private class GridViewCustomAdapter extends ArrayAdapter<Integer> {
@@ -185,7 +180,6 @@ public class StickerChartFragment extends Fragment {
                     }
                 });
             }
-
             return convertView;
         }
     }
