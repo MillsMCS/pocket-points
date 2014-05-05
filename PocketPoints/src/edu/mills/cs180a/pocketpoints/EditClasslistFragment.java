@@ -23,8 +23,6 @@ import android.widget.TextView;
  * @author chingmyu@gmail.com (Ching Yu)
  */
 public class EditClasslistFragment extends ListFragment {
-    private static final String TAG = "EditClasslistFragment";
-
     private LayoutInflater mInflater;
     private EditClasslistAdapter mAdapter;
 
@@ -48,9 +46,6 @@ public class EditClasslistFragment extends ListFragment {
         if (!hidden) {
             mAdapter.clear();
             mAdapter.addAll(StudentManager.get(getActivity()).getAllStudents());
-            // StudentCursor studentCursor =
-            // StudentManager.get(getActivity()).getAllStudentsCursor();
-            // mAdapter.changeCursor(studentCursor); // closes old cursor
         }
     }
 

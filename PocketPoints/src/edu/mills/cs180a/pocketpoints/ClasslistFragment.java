@@ -27,7 +27,6 @@ import android.widget.TextView;
  */
 public class ClasslistFragment extends ListFragment {
     private LayoutInflater mInflater;
-    private StudentManager mStudentManager;
     private ClasslistAdapter mAdapter;
 
     /**
@@ -50,16 +49,12 @@ public class ClasslistFragment extends ListFragment {
         if (!hidden) {
             mAdapter.clear();
             mAdapter.addAll(StudentManager.get(getActivity()).getAllStudents());
-            // StudentCursor studentCursor =
-            // StudentManager.get(getActivity()).getAllStudentsCursor();
-            // mAdapter.changeCursor(studentCursor); // closes old cursor
         }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStudentManager = StudentManager.get(getActivity());
         setHasOptionsMenu(true);
     }
 
@@ -116,12 +111,13 @@ public class ClasslistFragment extends ListFragment {
             }
 
             // Set the name of the student in the row.
-            TextView name = (TextView) convertView.findViewById(R.id.rowStudentName);
-            name.setText(student.getName());
+            TextView nameTextView = (TextView) convertView.findViewById(R.id.rowStudentName);
+            nameTextView.setText(student.getName());
 
             // Set the sticker count of the student in the row.
-            TextView stickerCount = (TextView) convertView.findViewById(R.id.rowStickerCount);
-            stickerCount.setText(String.valueOf(student.getNumStickers()));
+            TextView stickerCountTextView = (TextView) convertView
+                    .findViewById(R.id.rowStickerCount);
+            stickerCountTextView.setText(String.valueOf(student.getNumStickers()));
 
             return convertView;
         }
