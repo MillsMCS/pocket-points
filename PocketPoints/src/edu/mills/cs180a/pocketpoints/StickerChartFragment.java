@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * An {@code Fragment} called by {@link EditStickerActivity} that displays a graphical
@@ -98,9 +99,10 @@ public class StickerChartFragment extends Fragment {
         if (savedInstanceState != null) {
             long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
             if (studentId != Student.INVALID_ID) {
-                setStickersForStudent(studentId);
+                setStickersForStudent(studentId, view);
             }
         }
+
 
         return view;
     }
@@ -126,17 +128,23 @@ public class StickerChartFragment extends Fragment {
      * @param personId the ID of the student whose stickers are being displayed
      */
     void setStickersForStudent(long studentId) {
-        // TODO Display Student name
-        // TextView displayName = (TextView) getView().findViewById(R.id.studentName);
+        setStickersForStudent(studentId, getView());
+    }
 
+    private void setStickersForStudent(long studentId, View fragmentView) {
         mAdapter.clear();
         if (studentId == Student.INVALID_ID) {
             Log.d(TAG, "invalid student ID");
         } else {
             mStudent = mStudentManager.getStudent(studentId);
-
             // Get sticker count.
             int stickerCount = mStudent.getNumStickers();
+
+            //Display student's name:
+            TextView displayName = (TextView) fragmentView.findViewById(R.id.nameHeaderSticker);
+            displayName.setText(mStudent.getName() + " has " + stickerCount + " stickers!");
+
+
 
             // Add required number of stickers to mGridArray.
             for (int i = 0; i < stickerCount; i++) {
@@ -145,14 +153,6 @@ public class StickerChartFragment extends Fragment {
         }
         mAdapter.add(R.drawable.ic_add_sticker);
 
-        // Display the Students name at the top of the screen (if it
-        // exists).
-        // String name = mStudent.getName();
-        // displayName.setText(name);
-
-        // Show a picture of the student. (if it exists).
-        // icon.setImageResource(R.id.ic_launcher);
-        // TODO get images working
     }
 
     private class GridViewCustomAdapter extends ArrayAdapter<Integer> {
