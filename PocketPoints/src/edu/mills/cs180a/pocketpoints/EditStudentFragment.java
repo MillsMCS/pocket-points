@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -169,14 +171,19 @@ public class EditStudentFragment extends Fragment {
     private void setStudent(long studentId, View fragmentView) {
         TextView displayName = (TextView) fragmentView.findViewById(R.id.studentName);
 
+        // Get the student (if any) associated with the given ID.
+        mStudent = null;
+        if (studentId != Student.INVALID_ID) {
+            mStudent = mStudentManager.getStudent(studentId);
+        }
+
         // If this is a new student display fields with defaults.
-        if (studentId == Student.INVALID_ID) {
+        if (mStudent == null) {
             mStudent = new Student();
             displayName.setText(DEFAULT_NAME);
             mNameField.setText("");
             displayProfilePhoto(null); // Displays the default image.
         } else {
-            mStudent = mStudentManager.getStudent(studentId);
             String name = mStudent.getName();
             displayName.setText(name);
             mNameField.setText(name);
@@ -206,10 +213,7 @@ public class EditStudentFragment extends Fragment {
         deleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (deleteCurrentStudent()) {
-                    OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
-                    listener.onEditStudentButtonClicked(R.id.studentDeleteButton);
-                }
+                createDeleteStudentDialog().show();
             }
         });
 
@@ -239,6 +243,27 @@ public class EditStudentFragment extends Fragment {
         }
         Toast.makeText(getActivity(), R.string.delete_success_toast, Toast.LENGTH_SHORT).show();
         return true;
+    }
+
+    private AlertDialog createDeleteStudentDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.verify_delete_student_text).setTitle(R.string.delete_button);
+        builder.setPositiveButton(R.string.yes_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (deleteCurrentStudent()) {
+                    OnEditStudentButtonClickedListener listener = (OnEditStudentButtonClickedListener) getActivity();
+                    listener.onEditStudentButtonClicked(R.id.studentDeleteButton);
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.no_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing.
+            }
+        });
+        return builder.create();
     }
 
     private boolean saveCurrentStudent() {
