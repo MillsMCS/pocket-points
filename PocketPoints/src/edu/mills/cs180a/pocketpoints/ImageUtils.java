@@ -36,7 +36,8 @@ public class ImageUtils {
         int unscaledImageHeight = bmOptions.outHeight;
 
         // Determine how much to scale down the image
-        int scaleFactor = Math.min(unscaledImageWidth / targetWidth, unscaledImageHeight / targetHeight);
+        int scaleFactor = Math.max(unscaledImageWidth / targetWidth, 
+                unscaledImageHeight / targetHeight);
 
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;

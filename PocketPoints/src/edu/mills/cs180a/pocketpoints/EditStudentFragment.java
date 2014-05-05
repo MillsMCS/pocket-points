@@ -47,6 +47,10 @@ import android.widget.Toast;
  */
 public class EditStudentFragment extends Fragment {
     private static final String TAG = "EditStudentFragment";
+    private static final String KEY_STUDENT =
+            "edu.mills.cs180a.pocketpoints.EditStudentFragment.displayed_student";
+    private static final String KEY_NEW_PROFILE_PHOTO_PATH =
+            "edu.mills.cs180a.pocketpoints.EditStudentFragment.new_profile_photo_path";
     private static final String DEFAULT_NAME = "New Student";
     private static final int REQUEST_TAKE_PHOTO = 1;
 
@@ -76,12 +80,34 @@ public class EditStudentFragment extends Fragment {
         void onEditStudentButtonClicked(int buttonResId);
     }
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mStudentManager = StudentManager.get(getActivity());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_student, container, false);
         mNameField = (EditText) view.findViewById(R.id.editStudentName);
         mImageButton = (ImageButton) view.findViewById(R.id.studentImageButton);
-        mStudentManager = StudentManager.get(getActivity());
+
+        // Get the student currently being displayed, if any.
+        if (savedInstanceState != null) {
+            long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
+            if (studentId != Student.INVALID_ID) {
+                setStudent(studentId, view);
+            }
+
+            CharSequence newProfilePhotoPath = savedInstanceState
+                    .getCharSequence(KEY_NEW_PROFILE_PHOTO_PATH);
+            if (newProfilePhotoPath != null) {
+                mNewProfilePhotoPath = newProfilePhotoPath.toString();
+                displayProfilePhoto(mNewProfilePhotoPath);
+            }
+        }
+
         return view;
     }
 
@@ -115,6 +141,21 @@ public class EditStudentFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        // Save the student being displayed.
+        if (mStudent != null) {
+            savedInstanceState.putLong(KEY_STUDENT, mStudent.getId());
+        }
+
+        // Save the path to the new profile photo.
+        if (mNewProfilePhotoPath != null) {
+            savedInstanceState.putCharSequence(KEY_NEW_PROFILE_PHOTO_PATH, mNewProfilePhotoPath);
+        }
+    }
+
     /**
      * Sets the student whose information is displayed in this {@code EditStudentFragment}.
      *
@@ -126,7 +167,11 @@ public class EditStudentFragment extends Fragment {
      * @param personId the ID of the recipient
      */
     void setStudent(long studentId) {
-        TextView displayName = (TextView) getView().findViewById(R.id.studentName);
+        setStudent(studentId, getView());
+    }
+
+    private void setStudent(long studentId, View fragmentView) {
+        TextView displayName = (TextView) fragmentView.findViewById(R.id.studentName);
 
         // If this is a new student display fields with defaults.
         if (studentId == Student.INVALID_ID) {
@@ -150,7 +195,7 @@ public class EditStudentFragment extends Fragment {
             }
         });
 
-        Button saveButton = (Button) getView().findViewById(R.id.studentSaveButton);
+        Button saveButton = (Button) fragmentView.findViewById(R.id.studentSaveButton);
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -161,7 +206,7 @@ public class EditStudentFragment extends Fragment {
             }
         });
 
-        Button deleteButton = (Button) getView().findViewById(R.id.studentDeleteButton);
+        Button deleteButton = (Button) fragmentView.findViewById(R.id.studentDeleteButton);
         deleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -172,7 +217,7 @@ public class EditStudentFragment extends Fragment {
             }
         });
 
-        Button cancelButton = (Button) getView().findViewById(R.id.studentCancelButton);
+        Button cancelButton = (Button) fragmentView.findViewById(R.id.studentCancelButton);
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
