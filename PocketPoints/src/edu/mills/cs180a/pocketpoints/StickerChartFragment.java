@@ -135,6 +135,7 @@ public class StickerChartFragment extends Fragment {
             Log.d(TAG, "invalid student ID");
         } else {
             mStudent = mStudentManager.getStudent(studentId);
+
             // Get sticker count.
             int stickerCount = mStudent.getNumStickers();
 
