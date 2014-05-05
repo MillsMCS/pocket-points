@@ -2,7 +2,6 @@ package edu.mills.cs180a.pocketpoints;
 
 import android.app.ListFragment;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,10 +9,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import edu.mills.cs180a.pocketpoints.StudentSQLiteOpenHelper.StudentCursor;
 
 /**
  * ClassListFragment is displayed as the main page when the application is first launched.
@@ -49,8 +48,11 @@ public class ClasslistFragment extends ListFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (!hidden) {
-            StudentCursor studentCursor = StudentManager.get(getActivity()).getAllStudentsCursor();
-            mAdapter.changeCursor(studentCursor); // closes old cursor
+            mAdapter.clear();
+            mAdapter.addAll(StudentManager.get(getActivity()).getAllStudents());
+            // StudentCursor studentCursor =
+            // StudentManager.get(getActivity()).getAllStudentsCursor();
+            // mAdapter.changeCursor(studentCursor); // closes old cursor
         }
     }
 
@@ -85,37 +87,43 @@ public class ClasslistFragment extends ListFragment {
         listener.onStudentSelected(selectedStudent);
     }
 
-    private class ClasslistAdapter extends StudentCursorAdapter {
-        ClasslistAdapter(Context context) {
-            super(context);
+    private class ClasslistAdapter extends ArrayAdapter<Student> {
+        private ClasslistAdapter(Context context) {
+            super(context, R.layout.fragment_classlist_row, R.id.rowStudentName, StudentManager
+                    .get(context)
+                    .getAllStudents());
         }
 
         @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return mInflater.inflate(R.layout.fragment_classlist_row, parent, false);
-        }
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (null == convertView) {
+                convertView = mInflater.inflate(R.layout.fragment_classlist_row, null);
+            }
 
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
             // Get the student for the current row.
-            Student student = getCursor().getStudent();
+            Student student = getItem(position);
 
             // Populate the fields with the student data.
-            ImageView studentImageView = (ImageView) view.findViewById(R.id.rowStudentPicture);
+            ImageView studentImageView = (ImageView) convertView
+                    .findViewById(R.id.rowStudentPicture);
             String studentImgPath = student.getImgName();
             if (studentImgPath == null) {
                 studentImageView.setImageResource(R.drawable.ic_contact_picture);
-            }else{
+            } else {
                 Bitmap studentProfilePhoto = ImageUtils.loadImage(getActivity(), studentImgPath,
                         R.drawable.ic_contact_picture);
                 studentImageView.setImageBitmap(studentProfilePhoto);
             }
 
-            TextView name = (TextView) view.findViewById(R.id.rowStudentName);
+            // Set the name of the student in the row.
+            TextView name = (TextView) convertView.findViewById(R.id.rowStudentName);
             name.setText(student.getName());
 
-            TextView stickerCount = (TextView) view.findViewById(R.id.rowStickerCount);
+            // Set the sticker count of the student in the row.
+            TextView stickerCount = (TextView) convertView.findViewById(R.id.rowStickerCount);
             stickerCount.setText(String.valueOf(student.getNumStickers()));
+
+            return convertView;
         }
     }
 }
