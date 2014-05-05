@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/studentName"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="150dip"
         android:layout_marginTop="25dip"
         android:contentDescription="@string/take_photo" />
 
@@ -27,9 +27,9 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/studentImageButton"
+        android:layout_below="@+id/studentName"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dip"
+        android:layout_marginTop="25dip"
         android:text="@string/name_label"
         android:textSize="24sp" />
 
@@ -46,26 +46,27 @@
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/studentDeleteButton"
+        android:id="@+id/studentSaveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editStudentName"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textView1"
+        android:layout_marginLeft="100dip"
         android:layout_marginTop="20dip"
+        android:layout_toRightOf="@+id/editStudentName"
         android:background="@drawable/ic_apple"
-        android:text="@string/delete_button"
+        android:text="@string/save_button"
         android:textSize="26sp"
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/studentSaveButton"
+        android:id="@+id/studentDeleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editStudentName"
+        android:layout_below="@id/textView1"
         android:layout_marginTop="20dip"
-        android:layout_toLeftOf="@id/studentDeleteButton"
+        android:layout_toRightOf="@id/studentSaveButton"
         android:background="@drawable/ic_apple"
-        android:text="@string/save_button"
+        android:text="@string/delete_button"
         android:textSize="26sp"
         android:textStyle="bold" />
 
@@ -73,7 +74,7 @@
         android:id="@+id/studentCancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editStudentName"
+        android:layout_below="@id/textView1"
         android:layout_marginTop="20dip"
         android:layout_toRightOf="@id/studentDeleteButton"
         android:background="@drawable/ic_apple"
