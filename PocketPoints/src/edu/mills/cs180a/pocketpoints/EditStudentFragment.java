@@ -94,9 +94,7 @@ public class EditStudentFragment extends Fragment {
         // Get the student currently being displayed, if any.
         if (savedInstanceState != null) {
             long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
-            if (studentId != Student.INVALID_ID) {
-                setStudent(studentId, view);
-            }
+            setStudent(studentId, view);
 
             CharSequence newProfilePhotoPath = savedInstanceState
                     .getCharSequence(KEY_NEW_PROFILE_PHOTO_PATH);
