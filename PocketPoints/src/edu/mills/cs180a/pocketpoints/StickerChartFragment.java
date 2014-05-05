@@ -81,7 +81,6 @@ public class StickerChartFragment extends Fragment {
         return false;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mInflater = inflater;

@@ -8,10 +8,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-     <GridView
+    <TextView
+        android:id="@+id/nameHeaderSticker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dip"
+        android:text="@string/name_header"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
+
+    <GridView
         android:id="@+id/gridView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/nameHeaderSticker"
+        android:layout_below="@+id/nameHeaderSticker"
         android:layout_margin="4dp"
         android:columnWidth="80dp"
         android:gravity="center"
