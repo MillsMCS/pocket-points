@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_background" >
+
+    <TextView
+        android:id="@+id/studentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dip"
+        android:text="@string/new_student"
+        android:textSize="48sp" />
+
+    <ImageButton
+        android:id="@+id/studentImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/studentName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dip"
+        android:contentDescription="@string/take_photo" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/studentImageButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:text="@string/name_label"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/editStudentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/studentSaveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editStudentName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:background="@drawable/ic_apple"
+        android:text="@string/save_button"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/studentDeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/studentSaveButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:background="@drawable/ic_apple"
+        android:text="@string/delete_button"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/studentCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/studentDeleteButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:background="@drawable/ic_apple"
+        android:text="@string/cancel_button"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

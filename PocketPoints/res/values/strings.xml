@@ -9,9 +9,10 @@
     <string name="new_student">New Student</string>
     <string name="name_prompt">Name</string>
     <string name="row_image_content_description">Student Image</string>
+    <string name="row_star_content_description">Star</string>
     <string name="row_student_name">Student Name</string>
     <string name="row_sticker_count">Sticker Count</string>
-    <string name="edit_students">Edit Students</string>
+    <string name="edit_students"><u>Edit Students</u></string>
     <string name="add_student">Add New Student</string>
     <string name="done_edit">Done Editing</string>
     <string name="name_header"><u>Student Name</u></string>
@@ -29,4 +30,5 @@
     <string name="save_photo_failed">Sorry, can\'t take a picture right now!</string>
     <string name="no_photo_taken">No photo taken</string>
     <string name="take_photo">Take photo</string>
+    <string name="name_label">Student Name:</string>
 </resources>
