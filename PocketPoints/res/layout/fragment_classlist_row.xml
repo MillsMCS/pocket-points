@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal" >
@@ -19,17 +19,27 @@
         android:id="@+id/rowStudentName"
         android:layout_width="200dip"
         android:layout_height="wrap_content"
-        android:paddingTop="20dip"
+        android:layout_toRightOf="@id/rowStudentPicture"
         android:paddingLeft="50dip"
+        android:paddingTop="5dip"
         android:text="@string/row_student_name"
-        android:textSize="20sp" />
-    
+        android:textSize="24sp" />
+
     <TextView
         android:id="@+id/rowStickerCount"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:layout_toRightOf="@id/rowStudentName"
+        android:paddingLeft="50dip"
+        android:text="@string/row_sticker_count"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/rowStickerStar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/row_sticker_count" 
-        android:textSize="20sp"
-        android:paddingLeft="50dip"  />
+        android:layout_toRightOf="@id/rowStickerCount"
+        android:contentDescription="@string/row_star_content_description"
+        android:src="@drawable/ic_star" />
 
-</LinearLayout>
+</RelativeLayout>

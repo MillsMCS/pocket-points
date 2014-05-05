@@ -2,23 +2,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_background"
     tools:context=".MainActivity" >
 
     <TextView
         android:id="@+id/nameHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="120dip"
+        android:paddingTop="10dip"
         android:text="@string/edit_students"
-        android:textSize="24sp" 
-        android:textStyle="bold"
-        android:paddingLeft="110dip"
-        android:paddingTop="10dip" />
+        android:textColor="#FFFFFF"
+        android:textSize="26sp"
+        android:textStyle="bold" />
 
-    
     <ListView
         android:id="@android:id/list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
+        android:layout_height="720dip"
         android:layout_below="@id/nameHeader"
         android:paddingLeft="20dip"
         android:paddingTop="10dip" >
