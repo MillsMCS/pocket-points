@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -226,25 +224,6 @@ public class EditStudentFragment extends Fragment {
             }
         });
 
-    }
-
-    // TODO: implement this within the deleteButton listener.
-    private AlertDialog createDeleteStudentDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.verify_delete_comment_text).setTitle(R.string.delete_button);
-        builder.setPositiveButton(R.string.yes_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteCurrentStudent();
-            }
-        });
-        builder.setNegativeButton(R.string.no_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing.
-            }
-        });
-        return builder.create();
     }
 
     private boolean deleteCurrentStudent() {
