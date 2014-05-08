@@ -53,17 +53,17 @@ public class BitmapListFragment extends ListFragment {
 
         if (bitmapWorkerTask != null) {
             String imagePath = bitmapWorkerTask.imagePath;
-            // If bitmapData is not yet set or it differs from the new data
+            // If bitmapData is not yet set or it differs from the new data.
             if (imagePath == null || !imagePath.equals(path)) {
-                // Cancel previous task
+                // Cancel previous task.
                 bitmapWorkerTask.cancel(true);
             } else {
-                // The same work is already in progress
+                // Then the same work is already in progress, and shouldn't be cancelled.
                 return false;
             }
         }
 
-        // No task associated with the ImageView, or an existing task was cancelled
+        // No task is associated with the ImageView, or an existing task was cancelled.
         return true;
     }
 
