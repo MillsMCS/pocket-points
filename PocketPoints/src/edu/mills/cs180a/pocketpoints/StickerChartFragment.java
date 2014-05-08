@@ -98,10 +98,10 @@ public class StickerChartFragment extends Fragment {
         mGridView.setAdapter(mAdapter);
 
         // Determine if this fragment should be displayed.
-        boolean display = false; // By default, this fragment should be hidden.
+        boolean currentlyDisplayed = false; // By default, this fragment should be hidden.
         if (savedInstanceState != null) {
-            display = savedInstanceState.getBoolean(KEY_CURRENTLY_DISPLAYED, false);
-            if (display) {
+            currentlyDisplayed = savedInstanceState.getBoolean(KEY_CURRENTLY_DISPLAYED, false);
+            if (currentlyDisplayed) {
                 // Get the student currently being displayed (if any).
                 long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
                 if (studentId != Student.INVALID_ID) {
@@ -111,7 +111,7 @@ public class StickerChartFragment extends Fragment {
         }
 
         // Hide this fragment, if necessary.
-        if (!display) {
+        if (!currentlyDisplayed) {
             getFragmentManager().beginTransaction().hide(this).commit();
         }
 

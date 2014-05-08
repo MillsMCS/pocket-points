@@ -76,13 +76,13 @@ public class ClasslistFragment extends ListFragment {
         setListAdapter(mAdapter);
 
         // Determine if this fragment should be displayed.
-        boolean display = true; // By default, this fragment should be displayed.
+        boolean currentlyDisplayed = true; // By default, this fragment should be displayed.
         if (savedInstanceState != null) {
-            display = savedInstanceState.getBoolean(KEY_CURRENTLY_DISPLAYED, true);
+            currentlyDisplayed = savedInstanceState.getBoolean(KEY_CURRENTLY_DISPLAYED, true);
         }
 
         // Hide the fragment, if necessary.
-        if (!display) {
+        if (!currentlyDisplayed) {
             getFragmentManager().beginTransaction().hide(this).commit();
         }
 
