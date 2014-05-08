@@ -33,9 +33,12 @@ public class BitmapListFragment extends ListFragment {
     }
 
     /**
-     *
-     * @param imagePath
-     * @param imageView
+     * Loads the image with the given path on a background thread, displaying the resulting
+     * {@link Bitmap} in the given {@link ImageView} (if that {@link ImageView} has not already been
+     * garbage collected).
+     * 
+     * @param imagePath the path of the image to load
+     * @param imageView the image view in which to desplay the loaded image
      */
     public void loadBitmap(String imagePath, ImageView imageView) {
         if (cancelPotentialWork(imagePath, imageView)) {
