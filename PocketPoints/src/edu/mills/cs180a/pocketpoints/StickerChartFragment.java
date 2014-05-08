@@ -41,6 +41,8 @@ import android.widget.TextView;
  */
 public class StickerChartFragment extends Fragment {
     private static final String TAG = "StickerChartFragment";
+    private static final String KEY_CURRENTLY_DISPLAYED =
+            "edu.mills.cs180a.pocketpoints.StickerChartFragment.being_displayed";
     private static final String KEY_STUDENT =
             "edu.mills.cs180a.pocketpoints.StickerChartFragment.displayed_student";
 
@@ -95,13 +97,24 @@ public class StickerChartFragment extends Fragment {
         mGridView = (GridView) view.findViewById(R.id.gridView1);
         mGridView.setAdapter(mAdapter);
 
-        // Get the student currently being displayed, if any.
+        // Determine if this fragment should be displayed.
+        boolean currentlyDisplayed = false; // By default, this fragment should be hidden.
         if (savedInstanceState != null) {
-            long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
-            if (studentId != Student.INVALID_ID) {
-                setStickersForStudent(studentId, view);
+            currentlyDisplayed = savedInstanceState.getBoolean(KEY_CURRENTLY_DISPLAYED, false);
+            if (currentlyDisplayed) {
+                // Get the student currently being displayed (if any).
+                long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
+                if (studentId != Student.INVALID_ID) {
+                    setStickersForStudent(studentId, view);
+                }
             }
         }
+
+        // Hide this fragment, if necessary.
+        if (!currentlyDisplayed) {
+            getFragmentManager().beginTransaction().hide(this).commit();
+        }
+
         return view;
     }
 
@@ -109,9 +122,15 @@ public class StickerChartFragment extends Fragment {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        // Save the student being displayed.
-        if (mStudent != null) {
-            savedInstanceState.putLong(KEY_STUDENT, mStudent.getId());
+        // Save whether or not this fragment is currently being displayed.
+        boolean currentlyDisplayed = isVisible();
+        savedInstanceState.putBoolean(KEY_CURRENTLY_DISPLAYED, currentlyDisplayed);
+
+        if (currentlyDisplayed) {
+            // Save the student being displayed.
+            if (mStudent != null) {
+                savedInstanceState.putLong(KEY_STUDENT, mStudent.getId());
+            }
         }
     }
 
@@ -131,8 +150,15 @@ public class StickerChartFragment extends Fragment {
 
     private void setStickersForStudent(long studentId, View fragmentView) {
         mAdapter.clear();
-        if (studentId == Student.INVALID_ID) {
-            Log.d(TAG, "invalid student ID");
+
+        // Get the student (if any) associated with this ID.
+        mStudent = null;
+        if (studentId != Student.INVALID_ID) {
+            mStudent = mStudentManager.getStudent(studentId);
+        }
+
+        if (mStudent == null) {
+            Log.w(TAG, "invalid student ID");
         } else {
             mStudent = mStudentManager.getStudent(studentId);
 
@@ -159,7 +185,6 @@ public class StickerChartFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                Log.d(TAG, "row was null");
                 convertView = mInflater.inflate(R.layout.fragment_sticker_chart_row, null);
             }
             int itemResId = getItem(position);
@@ -169,9 +194,7 @@ public class StickerChartFragment extends Fragment {
             // If the add smiley icon was just added, increment student's sticker count by 1.
             if (itemResId != R.drawable.ic_add_sticker) {
                 sticker.setOnClickListener(null);
-
             } else {
-                Log.d(TAG, "added the add sticker icon");
                 sticker.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
