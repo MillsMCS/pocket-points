@@ -132,6 +132,15 @@ public class EditStudentFragment extends Fragment {
                 break;
             case Activity.RESULT_CANCELED:
                 Toast.makeText(getActivity(), R.string.no_photo_taken, Toast.LENGTH_SHORT).show();
+
+                // Delete the file for the unused photo, if it exists.
+                File unusedProfilePhotoFile = new File(mPossibleNewProfilePhotoPath);
+                if (unusedProfilePhotoFile.exists()) {
+                    boolean deleted = unusedProfilePhotoFile.delete();
+                    if (!deleted) {
+                        Log.e(TAG, "Failed to delete " + mPossibleNewProfilePhotoPath);
+                    }
+                }
                 break;
             default:
                 Log.w(TAG, "Unhandled result code " + resultCode);
