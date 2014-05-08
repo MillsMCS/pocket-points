@@ -131,16 +131,11 @@ public class StickerChartFragment extends Fragment {
 
     private void setStickersForStudent(long studentId, View fragmentView) {
         mAdapter.clear();
-
-        // Get the student (if any) associated with this ID.
-        mStudent = null;
-        if (studentId != Student.INVALID_ID) {
-            mStudent = mStudentManager.getStudent(studentId);
-        }
-
-        if (mStudent == null) {
+        if (studentId == Student.INVALID_ID) {
             Log.d(TAG, "invalid student ID");
         } else {
+            mStudent = mStudentManager.getStudent(studentId);
+
             // Get sticker count.
             int stickerCount = mStudent.getNumStickers();
 
