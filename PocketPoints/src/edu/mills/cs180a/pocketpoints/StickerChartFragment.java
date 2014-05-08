@@ -158,7 +158,7 @@ public class StickerChartFragment extends Fragment {
         }
 
         if (mStudent == null) {
-            Log.d(TAG, "invalid student ID");
+            Log.w(TAG, "invalid student ID");
         } else {
             // Get sticker count.
             int stickerCount = mStudent.getNumStickers();
@@ -183,7 +183,6 @@ public class StickerChartFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                Log.d(TAG, "row was null");
                 convertView = mInflater.inflate(R.layout.fragment_sticker_chart_row, null);
             }
             int itemResId = getItem(position);
@@ -193,9 +192,7 @@ public class StickerChartFragment extends Fragment {
             // If the add smiley icon was just added, increment student's sticker count by 1.
             if (itemResId != R.drawable.ic_add_sticker) {
                 sticker.setOnClickListener(null);
-
             } else {
-                Log.d(TAG, "added the add sticker icon");
                 sticker.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
