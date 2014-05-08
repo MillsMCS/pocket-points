@@ -23,6 +23,9 @@ import android.widget.TextView;
  * @author chingmyu@gmail.com (Ching Yu)
  */
 public class EditClasslistFragment extends ListFragment {
+    private static final String KEY_CURRENTLY_DISPLAYED =
+            "edu.mills.cs180a.pocketpoints.EditClasslistFragment.being_displayed";
+
     private LayoutInflater mInflater;
     private EditClasslistAdapter mAdapter;
 
@@ -69,6 +72,17 @@ public class EditClasslistFragment extends ListFragment {
         mAdapter = new EditClasslistAdapter(getActivity());
         setListAdapter(mAdapter);
 
+        // Determine if this fragment should be displayed.
+        boolean display = false; // By default, this fragment should be hidden.
+        if (savedInstanceState != null) {
+            display = savedInstanceState.getBoolean(KEY_CURRENTLY_DISPLAYED, false);
+        }
+
+        // Hide the fragment, if necessary.
+        if (!display) {
+            getFragmentManager().beginTransaction().hide(this).commit();
+        }
+
         return view;
     }
 
@@ -77,6 +91,15 @@ public class EditClasslistFragment extends ListFragment {
         OnEditStudentSelectedListener listener = (OnEditStudentSelectedListener) getActivity();
         Student selectedStudent = (Student) getListAdapter().getItem(position);
         listener.onEditStudentSelected(selectedStudent);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        // Save whether or not this fragment is currently being displayed.
+        boolean currentlyDisplayed = isVisible();
+        savedInstanceState.putBoolean(KEY_CURRENTLY_DISPLAYED, currentlyDisplayed);
     }
 
     private class EditClasslistAdapter extends ArrayAdapter<Student> {

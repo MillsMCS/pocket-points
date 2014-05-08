@@ -41,6 +41,8 @@ import android.widget.TextView;
  */
 public class StickerChartFragment extends Fragment {
     private static final String TAG = "StickerChartFragment";
+    private static final String KEY_CURRENTLY_DISPLAYED =
+            "edu.mills.cs180a.pocketpoints.StickerChartFragment.being_displayed";
     private static final String KEY_STUDENT =
             "edu.mills.cs180a.pocketpoints.StickerChartFragment.displayed_student";
 
@@ -95,13 +97,24 @@ public class StickerChartFragment extends Fragment {
         mGridView = (GridView) view.findViewById(R.id.gridView1);
         mGridView.setAdapter(mAdapter);
 
-        // Get the student currently being displayed, if any.
+        // Determine if this fragment should be displayed.
+        boolean display = false; // By default, this fragment should be hidden.
         if (savedInstanceState != null) {
-            long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
-            if (studentId != Student.INVALID_ID) {
-                setStickersForStudent(studentId, view);
+            display = savedInstanceState.getBoolean(KEY_CURRENTLY_DISPLAYED, false);
+            if (display) {
+                // Get the student currently being displayed (if any).
+                long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
+                if (studentId != Student.INVALID_ID) {
+                    setStickersForStudent(studentId, view);
+                }
             }
         }
+
+        // Hide this fragment, if necessary.
+        if (!display) {
+            getFragmentManager().beginTransaction().hide(this).commit();
+        }
+
         return view;
     }
 
@@ -109,9 +122,15 @@ public class StickerChartFragment extends Fragment {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        // Save the student being displayed.
-        if (mStudent != null) {
-            savedInstanceState.putLong(KEY_STUDENT, mStudent.getId());
+        // Save whether or not this fragment is currently being displayed.
+        boolean currentlyDisplayed = isVisible();
+        savedInstanceState.putBoolean(KEY_CURRENTLY_DISPLAYED, currentlyDisplayed);
+
+        if (currentlyDisplayed) {
+            // Save the student being displayed.
+            if (mStudent != null) {
+                savedInstanceState.putLong(KEY_STUDENT, mStudent.getId());
+            }
         }
     }
 

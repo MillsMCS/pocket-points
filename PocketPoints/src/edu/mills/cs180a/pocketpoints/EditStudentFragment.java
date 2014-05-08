@@ -47,6 +47,8 @@ import android.widget.Toast;
  */
 public class EditStudentFragment extends Fragment {
     private static final String TAG = "EditStudentFragment";
+    private static final String KEY_CURRENTLY_DISPLAYED =
+            "edu.mills.cs180a.pocketpoints.EditStudentFragment.being_displayed";
     private static final String KEY_STUDENT =
             "edu.mills.cs180a.pocketpoints.EditStudentFragment.displayed_student";
     private static final String KEY_NEW_PROFILE_PHOTO_PATH =
@@ -93,17 +95,28 @@ public class EditStudentFragment extends Fragment {
         mNameField = (EditText) view.findViewById(R.id.editStudentName);
         mImageButton = (ImageButton) view.findViewById(R.id.studentImageButton);
 
-        // Get the student currently being displayed, if any.
+        // Determine if this fragment should be displayed.
+        boolean display = false; // By default, this fragment should be hidden.
         if (savedInstanceState != null) {
-            long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
-            setStudent(studentId, view);
+            display = savedInstanceState.getBoolean(KEY_CURRENTLY_DISPLAYED, false);
+            if (display) {
+                // Get the student currently being displayed (if any).
+                long studentId = savedInstanceState.getLong(KEY_STUDENT, Student.INVALID_ID);
+                setStudent(studentId, view);
 
-            CharSequence newProfilePhotoPath = savedInstanceState
-                    .getCharSequence(KEY_NEW_PROFILE_PHOTO_PATH);
-            if (newProfilePhotoPath != null) {
-                mNewProfilePhotoPath = newProfilePhotoPath.toString();
-                displayProfilePhoto(mNewProfilePhotoPath);
+                // Get the currently displayed photo (if any).
+                CharSequence newProfilePhotoPath = savedInstanceState
+                        .getCharSequence(KEY_NEW_PROFILE_PHOTO_PATH);
+                if (newProfilePhotoPath != null) {
+                    mNewProfilePhotoPath = newProfilePhotoPath.toString();
+                    displayProfilePhoto(mNewProfilePhotoPath);
+                }
             }
+        }
+
+        // Hide this fragment, if necessary.
+        if (!display) {
+            getFragmentManager().beginTransaction().hide(this).commit();
         }
 
         return view;
@@ -143,14 +156,20 @@ public class EditStudentFragment extends Fragment {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        // Save the student being displayed.
-        if (mStudent != null) {
-            savedInstanceState.putLong(KEY_STUDENT, mStudent.getId());
-        }
+        // Save whether or not this fragment is currently being displayed.
+        boolean currentlyDisplayed = isVisible();
+        savedInstanceState.putBoolean(KEY_CURRENTLY_DISPLAYED, currentlyDisplayed);
 
-        // Save the path to the new profile photo.
-        if (mNewProfilePhotoPath != null) {
-            savedInstanceState.putCharSequence(KEY_NEW_PROFILE_PHOTO_PATH, mNewProfilePhotoPath);
+        if(currentlyDisplayed){
+            // Save the student being displayed.
+            if (mStudent != null) {
+                savedInstanceState.putLong(KEY_STUDENT, mStudent.getId());
+            }
+
+            // Save the path to the new profile photo.
+            if (mNewProfilePhotoPath != null) {
+                savedInstanceState.putCharSequence(KEY_NEW_PROFILE_PHOTO_PATH, mNewProfilePhotoPath);
+            }
         }
     }
 
