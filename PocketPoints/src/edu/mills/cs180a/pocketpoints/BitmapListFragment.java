@@ -3,7 +3,6 @@ package edu.mills.cs180a.pocketpoints;
 import java.lang.ref.WeakReference;
 
 import android.app.ListFragment;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -36,15 +35,14 @@ public class BitmapListFragment extends ListFragment {
      * Loads the image with the given path on a background thread, displaying the resulting
      * {@link Bitmap} in the given {@link ImageView} (if that {@link ImageView} has not already been
      * garbage collected).
-     * 
+     *
      * @param imagePath the path of the image to load
      * @param imageView the image view in which to desplay the loaded image
      */
     public void loadBitmap(String imagePath, ImageView imageView) {
         if (cancelPotentialWork(imagePath, imageView)) {
             BitmapWorkerTask task = new BitmapWorkerTask(imageView);
-            AsyncDrawable asyncDrawable = new AsyncDrawable(getResources(), mDefaultProfileImg,
-                    task);
+            AsyncDrawable asyncDrawable = new AsyncDrawable(task);
             imageView.setImageDrawable(asyncDrawable);
             task.execute(imagePath);
         }
@@ -80,24 +78,27 @@ public class BitmapListFragment extends ListFragment {
         return null;
     }
 
-    private static class AsyncDrawable extends BitmapDrawable {
+    // Drawable with a reference to the BitmapWorkerTask loading the desired image into the
+    // ImageView. The default image for this Drawable is mDefaultProfileImage.
+    private class AsyncDrawable extends BitmapDrawable {
         private WeakReference<BitmapWorkerTask> bitmapWorkerTaskReference;
 
-        public AsyncDrawable(Resources res, Bitmap bitmap, BitmapWorkerTask workerTask) {
-            super(res, bitmap);
+        private AsyncDrawable(BitmapWorkerTask workerTask) {
+            super(getResources(), mDefaultProfileImg);
             bitmapWorkerTaskReference = new WeakReference<BitmapWorkerTask>(workerTask);
         }
 
-        public BitmapWorkerTask getBitmapWorkerTask() {
+        private BitmapWorkerTask getBitmapWorkerTask() {
             return bitmapWorkerTaskReference.get();
         }
     }
 
+    // Async task that loads a bitmap in a background thread.
     private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
         private final WeakReference<ImageView> imageViewReference;
         private String imagePath = null;
 
-        public BitmapWorkerTask(ImageView imageView) {
+        private BitmapWorkerTask(ImageView imageView) {
             // Use a WeakReference to ensure the ImageView can be garbage collected.
             imageViewReference = new WeakReference<ImageView>(imageView);
         }
@@ -110,7 +111,8 @@ public class BitmapListFragment extends ListFragment {
                     mDefaultProfileImg.getHeight());
         }
 
-        // Once complete, see if ImageView is still around and set bitmap.
+        // Once complete, see if ImageView is still around and if so, set the bitmap to the loaded
+        // result.
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             if (isCancelled()) {
