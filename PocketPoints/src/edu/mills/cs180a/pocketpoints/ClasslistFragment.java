@@ -13,15 +13,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * ClassListFragment is displayed as the main page when the application is first launched.
- * 
+ * {@code ClassListFragment} is displayed as the main page when the application is first launched.
  * The fragment will display a populated list view of student's picture and name. Selecting a
- * student from the list will direct to {@link StudentStickerFragment}. The Fragment will also
- * display two buttons on the upper righthand corner of the screen: 'Edit Student' and 'Add New
- * Student'. Clicking on the 'Edit Student' button will direct to {@link EditClasslistFragment} and
- * the 'Add New Student' button will direct to {@link EditStudentFragment}.
+ * student from the list will direct to {@link StudentStickerFragment}. {@code ClassListFragment}
+ * will also display two buttons on the upper right-hand corner of the screen: 'Edit Student' and
+ * 'Add New Student'. Clicking on the 'Edit Student' button will direct to
+ * {@link EditClasslistFragment} and the 'Add New Student' button will direct to
+ * {@link EditStudentFragment}.
  * 
  * @author chingmyu@gmail.com (Ching Yu)
+ * @author renee.johnston@gmail.com (Renee Johnston)
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class ClasslistFragment extends BitmapListFragment {
     private static final String KEY_CURRENTLY_DISPLAYED =

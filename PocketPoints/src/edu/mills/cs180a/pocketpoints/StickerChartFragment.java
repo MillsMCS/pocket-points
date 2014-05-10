@@ -20,24 +20,23 @@ import android.widget.TextView;
 /**
  * An {@code Fragment} called by {@link EditStickerActivity} that displays a graphical
  * representation of the number of stickers currently associated with the selected student.
- *
- * <p>
- * Clicking on the "add sticker" button increments the student's sticker count by one, the new
- * sticker count is added to the database, and an additional sticker icon appears on the
- * {@code StickerChartFragment} graphical display.
- * </p>
- *
- * <p>
- * Clicking the remove sticker button will erase the most recently added sticker from the display
- * and decrement the sticker count associated with the selected student in the database.
- * </p>
  * 
  * <p>
- * Clicking the "Clear All" button will clear all sticker associated with the student and will
- * update the database accordingly.
- * </p>
+ * Clicking on the "add sticker" button increments the student's sticker count by one, updates the
+ * database, and adds an additional sticker image to the {@code StickerChartFragment} graphical
+ * display.
+ * 
+ * <p>
+ * "Clicking the remove sticker button decrements the student's sticker count by one, and updates
+ * the UI accordingly"
  *
- * @author renee.johnston1149@gmail.com (Renee Johnston)
+ * <p>
+ * Clicking the "Clear All" button sets the student's sticker count to zero and updates the UI
+ * accordingly.
+ * 
+ * @author chingmyu@gmail.com (Ching Yu)
+ * @author renee.johnston@gmail.com (Renee Johnston)
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class StickerChartFragment extends Fragment {
     private static final String TAG = "StickerChartFragment";
