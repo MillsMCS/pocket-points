@@ -1,8 +1,6 @@
 package edu.mills.cs180a.pocketpoints;
 
-import android.app.ListFragment;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +23,7 @@ import android.widget.TextView;
  * 
  * @author chingmyu@gmail.com (Ching Yu)
  */
-public class ClasslistFragment extends ListFragment {
+public class ClasslistFragment extends BitmapListFragment {
     private static final String KEY_CURRENTLY_DISPLAYED =
             "edu.mills.cs180a.pocketpoints.ClasslistFragment.being_displayed";
 
@@ -126,11 +124,9 @@ public class ClasslistFragment extends ListFragment {
                     .findViewById(R.id.rowStudentPicture);
             String studentImgPath = student.getImgName();
             if (studentImgPath == null) {
-                studentImageView.setImageResource(R.drawable.ic_contact_picture);
+                studentImageView.setImageBitmap(mDefaultProfileImg);
             } else {
-                Bitmap studentProfilePhoto = ImageUtils.loadImage(getActivity(), studentImgPath,
-                        R.drawable.ic_contact_picture);
-                studentImageView.setImageBitmap(studentProfilePhoto);
+                loadBitmap(studentImgPath, studentImageView);
             }
 
             // Set the name of the student in the row.

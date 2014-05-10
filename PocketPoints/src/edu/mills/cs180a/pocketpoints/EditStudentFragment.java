@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -60,6 +61,7 @@ public class EditStudentFragment extends Fragment {
     private Student mStudent;
     private StudentManager mStudentManager;
     private ImageButton mImageButton;
+    private Bitmap mDefaultProfileImg;
 
     private String mNewProfilePhotoPath;
     private String mPossibleNewProfilePhotoPath; // This is only used for telling the camera app
@@ -87,6 +89,8 @@ public class EditStudentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mStudentManager = StudentManager.get(getActivity());
+        mDefaultProfileImg = BitmapFactory.decodeResource(getResources(),
+                R.drawable.ic_take_picture);
     }
 
     @Override
@@ -385,10 +389,10 @@ public class EditStudentFragment extends Fragment {
     private void displayProfilePhoto(String profilePhotoPath) {
         if (profilePhotoPath == null) {
             // Display the default (anonymous) profile photo.
-            mImageButton.setImageResource(R.drawable.ic_take_picture);
+            mImageButton.setImageBitmap(mDefaultProfileImg);
         } else {
-            Bitmap profilePhoto = ImageUtils.loadImage(getActivity(), profilePhotoPath,
-                    R.drawable.ic_take_picture);
+            Bitmap profilePhoto = ImageUtils.loadImage(profilePhotoPath, mDefaultProfileImg
+                    .getWidth(), mDefaultProfileImg.getHeight());
             mImageButton.setImageBitmap(profilePhoto);
         }
     }
