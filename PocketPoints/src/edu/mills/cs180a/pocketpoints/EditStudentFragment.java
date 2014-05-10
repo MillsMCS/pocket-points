@@ -35,16 +35,16 @@ import android.widget.Toast;
  * For an existing student, the fragment view displays an image of the selected student, the
  * student's name, and a {@link TextField} to edit the student's name. Clicking on the student's
  * picture will launch the device's embedded camera application, regardless of whether the picture
- * has been set or not.
- * </p>
+ * has previously been set or not.
  *
  * <p>
  * If the student has already been added, clicking on the Delete button will delete the student from
  * the database; otherwise, it will have no effect. Clicking on the Save button will either update a
  * previous database entry or add the student to the database.
- * </p>
  *
- * @author Renee Johnston (renee.johnston1149@gmail.com)
+ * @author chingmyu@gmail.com (Ching Yu)
+ * @author renee.johnston@gmail.com (Renee Johnston)
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class EditStudentFragment extends Fragment {
     private static final String TAG = "EditStudentFragment";

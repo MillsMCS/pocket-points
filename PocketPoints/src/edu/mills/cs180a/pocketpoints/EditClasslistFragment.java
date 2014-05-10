@@ -16,9 +16,10 @@ import android.widget.TextView;
  * Fragment to display a list of students available for editing. Clicking on a student notifies an
  * {@link OnEditStudentSelectedListener}. Clicking on the 'Done' button will return the user to the
  * previously created {@link ClasslistFragment}.
- *
- * @author renee.johnston1149@gmail.com (Renee Johnston)
+ * 
  * @author chingmyu@gmail.com (Ching Yu)
+ * @author renee.johnston@gmail.com (Renee Johnston)
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class EditClasslistFragment extends BitmapListFragment {
     private static final String KEY_CURRENTLY_DISPLAYED =

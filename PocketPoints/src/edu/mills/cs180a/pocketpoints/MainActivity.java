@@ -7,9 +7,13 @@ import android.util.Log;
 import android.view.MenuItem;
 
 /**
- * Activity that decides which fragment to display.
- *
+ * 
+ * The PocketPoints app's sole {@code Activity}. Determines which {@code Fragment} is displayed and
+ * when.
+ * 
  * @author chingmyu@gmail.com (Ching Yu)
+ * @author renee.johnston@gmail.com (Renee Johnston)
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class MainActivity extends Activity implements ClasslistFragment.OnStudentSelectedListener,
         EditClasslistFragment.OnEditStudentSelectedListener,
