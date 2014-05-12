@@ -18,26 +18,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * An {@code Fragment} called by {@link EditStickerActivity} that displays a graphical
- * {@code GridView} representation of the number of stickers currently associated with a the
- * selected student.
+ * A {@link Fragment} that displays a graphical representation of the number of stickers currently
+ * associated with the selected student.
  *
- * <P>
- * After clicking on the "empty sticker", the user is given the choice (via an alert dialog) of
- * adding or canceling the sticker. If added, the student's sticker count will increment by one, the
- * new sticker count is added to the database, and the result code {@link Activity#RESULT_OK} is
- * provided to the parent activity. Otherwise, the database is not modified, and the result code
- * {@link Activity#RESULT_CANCELED} is provided.
+ * <p>
+ * Clicking on the "add sticker" button increments the student's sticker count by one, updates the
+ * database, and adds an additional sticker image to the {@code StickerChartFragment} graphical
+ * display.
  *
- * <P>
- * Clicking the "Undo" button will, after confirming via an alert dialog, erase the most recently
- * added sticker.
+ * <p>
+ * Clicking the "remove sticker" button decrements the student's sticker count by one, and updates
+ * the PocketPoints database and UI accordingly.
  *
- * <P>
- * Clicking the "Clear All" button will, after confirming via an alert dialog, clear all stickers
- * associated with the student and will update the database accordingly.
+ * <p>
+ * Clicking the "clear stickers" button sets the student's sticker count to zero and updates the
+ * PocketPoints database and UI accordingly.
  *
- * @author renee.johnston1149@gmail.com (Renee Johnston)
+ * @author chingmyu@gmail.com (Ching Yu)
+ * @author renee.johnston@gmail.com (Renee Johnston)
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class StickerChartFragment extends Fragment {
     private static final String TAG = "StickerChartFragment";
@@ -139,10 +138,10 @@ public class StickerChartFragment extends Fragment {
      * {@code StickerChartFragment}.
      *
      * <p>
-     * We expect this to be called by the {@code OnSelectStudentListener}.
-     * </p>
+     * We expect this to be called by the {@link ClasslistFragment.OnStudentSelectedListener
+     * OnStudentSelectedListener}.
      *
-     * @param personId the ID of the student whose stickers are being displayed
+     * @param studentId the ID of the student whose stickers are being displayed
      */
     void setStickersForStudent(long studentId) {
         setStickersForStudent(studentId, getView());
@@ -160,6 +159,8 @@ public class StickerChartFragment extends Fragment {
         if (mStudent == null) {
             Log.w(TAG, "invalid student ID");
         } else {
+            mStudent = mStudentManager.getStudent(studentId);
+
             // Get sticker count.
             int stickerCount = mStudent.getNumStickers();
 

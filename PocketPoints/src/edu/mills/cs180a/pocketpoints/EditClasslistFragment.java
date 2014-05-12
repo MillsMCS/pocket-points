@@ -1,5 +1,6 @@
 package edu.mills.cs180a.pocketpoints;
 
+import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,12 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * Fragment to display a list of students available for editing. Clicking on a student notifies an
- * {@link OnEditStudentSelectedListener}. Clicking on the 'Done' button will return the user to the
- * previously created {@link ClasslistFragment}.
- *
- * @author renee.johnston1149@gmail.com (Renee Johnston)
+ * A {@link ListFragment} that displays a list of students available for editing. Clicking on a
+ * student notifies an {@link OnEditStudentSelectedListener}. Clicking on the Done button will
+ * return the user to the previously displayed page.
+ * 
  * @author chingmyu@gmail.com (Ching Yu)
+ * @author renee.johnston@gmail.com (Renee Johnston)
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class EditClasslistFragment extends BitmapListFragment {
     private static final String KEY_CURRENTLY_DISPLAYED =
@@ -28,8 +30,8 @@ public class EditClasslistFragment extends BitmapListFragment {
     private EditClasslistAdapter mAdapter;
 
     /**
-     * Interface definition for the callback to be invoked when a student in the edit class list is
-     * selected.
+     * Interface definition for the callback to be invoked when a {@link Student} in the edit class
+     * list is selected.
      *
      * @author chingmyu@gmail.com (Ching Yu)
      */
@@ -37,7 +39,7 @@ public class EditClasslistFragment extends BitmapListFragment {
         /**
          * Called when a student in the list is selected.
          *
-         * @param student the selected student
+         * @param selectedStudent the selected student
          */
         public void onEditStudentSelected(Student selectedStudent);
     }

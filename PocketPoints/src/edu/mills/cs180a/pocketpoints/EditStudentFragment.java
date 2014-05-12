@@ -28,23 +28,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * {@code EditStudentFragment} is displayed whenever the {@link ClassListFragment} "Add Student"
- * button is pressed or when a student's row in the {@link EditClassListFragment} is selected.
+ * A {@link Fragment} that is displayed whenever the user wants to add a new student or edit a
+ * current student.
  *
  * <p>
  * For an existing student, the fragment view displays an image of the selected student, the
- * student's name, and a {@link TextField} to edit the student's name. Clicking on the student's
+ * student's name, and a {@link EditText} to edit the student's name. Clicking on the student's
  * picture will launch the device's embedded camera application, regardless of whether the picture
- * has been set or not.
- * </p>
+ * has previously been set or not.
  *
  * <p>
  * If the student has already been added, clicking on the Delete button will delete the student from
  * the database; otherwise, it will have no effect. Clicking on the Save button will either update a
  * previous database entry or add the student to the database.
- * </p>
  *
- * @author Renee Johnston (renee.johnston1149@gmail.com)
+ * @author chingmyu@gmail.com (Ching Yu)
+ * @author renee.johnston@gmail.com (Renee Johnston)
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class EditStudentFragment extends Fragment {
     private static final String TAG = "EditStudentFragment";
@@ -190,11 +190,11 @@ public class EditStudentFragment extends Fragment {
      * Sets the student whose information is displayed in this {@code EditStudentFragment}.
      *
      * <p>
-     * We expect this to be called by the {@code OnSelectStudentListener} which should supply a
-     * {@code studentId} argument of -1 in the event of creating a new student.
-     * </p>
+     * We expect this to be called by the {@link ClasslistFragment.OnStudentSelectedListener
+     * OnStudentSelectedListener} which should supply a valid student ID, or
+     * {@link Student#INVALID_ID} if a new student is being created.
      *
-     * @param personId the ID of the recipient
+     * @param studentId the ID of the student to set
      */
     void setStudent(long studentId) {
         setStudent(studentId, getView());

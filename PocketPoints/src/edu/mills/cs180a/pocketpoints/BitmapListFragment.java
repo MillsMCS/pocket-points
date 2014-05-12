@@ -22,6 +22,10 @@ import android.widget.ListView;
 // The code for loading the images in the ListView in a background thread was adapted from
 // http://developer.android.com/training/displaying-bitmaps/index.html
 public class BitmapListFragment extends ListFragment {
+    /**
+     * The default profile image to display while loading the desired final profile image in a
+     * background thread.
+     */
     protected Bitmap mDefaultProfileImg;
 
     @Override
