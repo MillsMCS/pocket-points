@@ -18,22 +18,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * An {@code Fragment} called by {@link EditStickerActivity} that displays a graphical
- * representation of the number of stickers currently associated with the selected student.
- * 
+ * A {@code Fragment} called by {@link EditStickerActivity} that displays a graphical representation
+ * of the number of stickers currently associated with the selected student.
+ *
  * <p>
  * Clicking on the "add sticker" button increments the student's sticker count by one, updates the
  * database, and adds an additional sticker image to the {@code StickerChartFragment} graphical
  * display.
- * 
- * <p>
- * "Clicking the remove sticker button decrements the student's sticker count by one, and updates
- * the UI accordingly"
  *
  * <p>
- * Clicking the "Clear All" button sets the student's sticker count to zero and updates the UI
- * accordingly.
- * 
+ * Clicking the "remove sticker" button decrements the student's sticker count by one, and updates
+ * the PocketPoints database and UI accordingly.
+ *
+ * <p>
+ * Clicking the "clear stickers" button sets the student's sticker count to zero and updates the
+ * PocketPoints database and UI accordingly.
+ *
  * @author chingmyu@gmail.com (Ching Yu)
  * @author renee.johnston@gmail.com (Renee Johnston)
  * @author ajkwak@users.noreply.github.com (AJ Parmidge)

@@ -28,8 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * {@code EditStudentFragment} is displayed whenever the {@link ClassListFragment} "Add Student"
- * button is pressed or when a student's row in the {@link EditClassListFragment} is selected.
+ * A {@link Fragment} that is displayed whenever the user wants to add a new student or edit a
+ * current student.
  *
  * <p>
  * For an existing student, the fragment view displays an image of the selected student, the
