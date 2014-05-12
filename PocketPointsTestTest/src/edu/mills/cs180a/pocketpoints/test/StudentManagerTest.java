@@ -7,6 +7,11 @@ import android.test.RenamingDelegatingContext;
 import edu.mills.cs180a.pocketpoints.Student;
 import edu.mills.cs180a.pocketpoints.StudentManager;
 
+/**
+ * JUnit tests for {@link StudentManager}.
+ * 
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
+ */
 public class StudentManagerTest extends AndroidTestCase {
     // Fields for Student 1 (Name is Lexicographically before student2).
     private static final String STUDENT_1_NAME = "Phillipa Gordon";
