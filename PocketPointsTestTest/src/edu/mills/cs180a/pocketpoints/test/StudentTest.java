@@ -9,8 +9,8 @@ import org.junit.Test;
 import edu.mills.cs180a.pocketpoints.Student;
 
 /**
- * JUnit test for {@link Student}.
- *
+ * JUnit tests for {@link Student}.
+ * 
  * @author ajkwak@users.noreply.github.com (AJ Parmidge)
  */
 public class StudentTest {
