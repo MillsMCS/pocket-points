@@ -18,8 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * A {@code Fragment} called by {@link EditStickerActivity} that displays a graphical representation
- * of the number of stickers currently associated with the selected student.
+ * A {@code Fragment} that displays a graphical representation of the number of stickers currently
+ * associated with the selected student.
  *
  * <p>
  * Clicking on the "add sticker" button increments the student's sticker count by one, updates the
@@ -136,12 +136,12 @@ public class StickerChartFragment extends Fragment {
     /**
      * Sets the sticker count for the student whose chart is displayed in this instance of the
      * {@code StickerChartFragment}.
-     *
+     * 
      * <p>
-     * We expect this to be called by the {@code OnSelectStudentListener}.
-     * </p>
-     *
-     * @param personId the ID of the student whose stickers are being displayed
+     * We expect this to be called by the {@link ClasslistFragment.OnStudentSelectedListener
+     * OnStudentSelectedListener}.
+     * 
+     * @param studentId the ID of the student whose stickers are being displayed
      */
     void setStickersForStudent(long studentId) {
         setStickersForStudent(studentId, getView());

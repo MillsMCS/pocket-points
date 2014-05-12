@@ -28,9 +28,9 @@ public class StudentManager {
     /**
      * Gets the singleton instance of {@code StudentManager}. If no instance currently exists,
      * create an instance using the singleton application context provided by the given context.
-     *
+     * 
      * @param context the context to use
-     * @return the current instance of {@StudentManager}
+     * @return the singleton instance of {@code StudentManager}
      */
     public static synchronized StudentManager get(Context context) {
         if (sStudentManager == null) {

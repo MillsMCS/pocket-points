@@ -13,9 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * A {@link Fragment} to display a list of students available for editing. Clicking on a student
- * notifies an {@link OnEditStudentSelectedListener}. Clicking on the 'Done' button will return the
- * user to the previously created {@link ClasslistFragment}.
+ * A fragment that displays a list of students available for editing. Clicking on a student notifies
+ * an {@link OnEditStudentSelectedListener}. Clicking on the 'Done' button will return the user to
+ * the previously created {@link ClasslistFragment}.
  *
  * @author chingmyu@gmail.com (Ching Yu)
  * @author renee.johnston@gmail.com (Renee Johnston)
@@ -37,8 +37,8 @@ public class EditClasslistFragment extends BitmapListFragment {
     protected interface OnEditStudentSelectedListener {
         /**
          * Called when a student in the list is selected.
-         *
-         * @param student the selected student
+         * 
+         * @param selectedStudent the selected student
          */
         public void onEditStudentSelected(Student selectedStudent);
     }

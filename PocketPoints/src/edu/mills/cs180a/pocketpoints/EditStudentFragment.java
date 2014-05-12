@@ -33,7 +33,7 @@ import android.widget.Toast;
  *
  * <p>
  * For an existing student, the fragment view displays an image of the selected student, the
- * student's name, and a {@link TextField} to edit the student's name. Clicking on the student's
+ * student's name, and a {@link EditText} to edit the student's name. Clicking on the student's
  * picture will launch the device's embedded camera application, regardless of whether the picture
  * has previously been set or not.
  *
@@ -190,11 +190,11 @@ public class EditStudentFragment extends Fragment {
      * Sets the student whose information is displayed in this {@code EditStudentFragment}.
      *
      * <p>
-     * We expect this to be called by the {@code OnSelectStudentListener} which should supply a
-     * {@code studentId} argument of -1 in the event of creating a new student.
-     * </p>
+     * We expect this to be called by the {@link ClasslistFragment.OnStudentSelectedListener
+     * OnStudentSelectedListener} which should supply a valid student ID, or
+     * {@link Student#INVALID_ID} if a new student is being created.
      *
-     * @param personId the ID of the recipient
+     * @param studentId the ID of the student to set
      */
     void setStudent(long studentId) {
         setStudent(studentId, getView());
