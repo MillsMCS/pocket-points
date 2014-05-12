@@ -1,5 +1,6 @@
 package edu.mills.cs180a.pocketpoints;
 
+import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,12 +14,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * {@code ClassListFragment} is displayed as the main page when the application is first launched.
- * The fragment will display a populated list view of student's picture and name. Selecting a
- * student from the list will direct to {@link StickerChartFragment}. {@code ClassListFragment} will
- * also display two buttons on the upper right-hand corner of the screen: 'Edit Student' and 'Add
- * New Student'. Clicking on the 'Edit Student' button will direct to {@link EditClasslistFragment}
- * and the 'Add New Student' button will direct to {@link EditStudentFragment}.
+ * A {@link ListFragment} that displays the current list of students in the PocketPoints app.
+ * {@code ClasslistFragment} is displayed as the main page when the application is first launched.
+ * Clicking on a student from the list notifies an {@link OnStudentSelectedListener}. Clicking on
+ * the 'Edit Student' button will direct to {@link EditClasslistFragment} and the 'Add New Student'
+ * button will direct to {@link EditStudentFragment}.
  *
  * @author chingmyu@gmail.com (Ching Yu)
  * @author renee.johnston@gmail.com (Renee Johnston)
@@ -32,8 +32,8 @@ public class ClasslistFragment extends BitmapListFragment {
     private ClasslistAdapter mAdapter;
 
     /**
-     * Interface definition for the callback to be invoked when a student in the class list is
-     * selected.
+     * Interface definition for the callback to be invoked when a {@link Student} in the class list
+     * is selected.
      *
      * @author chingmyu@gmail.com (Ching Yu)
      */
