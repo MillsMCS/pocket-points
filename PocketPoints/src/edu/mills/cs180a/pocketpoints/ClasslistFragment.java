@@ -15,11 +15,14 @@ import android.widget.TextView;
 
 /**
  * A {@link ListFragment} that displays the current list of students in the PocketPoints app.
- * {@code ClasslistFragment} is displayed as the main page when the application is first launched.
- * Clicking on a student from the list notifies an {@link OnStudentSelectedListener}. Clicking on
- * the 'Edit Student' button will direct to {@link EditClasslistFragment} and the 'Add New Student'
- * button will direct to {@link EditStudentFragment}.
+ * {@code ClasslistFragment} is the main page displayed to the user when the application is first
+ * launched.
  *
+ * <p>
+ * Clicking on a student notifies a {@link OnStudentSelectedListener}. Clicking on the 'Edit
+ * students' button allows the user to edit student information. Clicking on the 'Add Student'
+ * button allows the user to add a new student to the database.
+ * 
  * @author chingmyu@gmail.com (Ching Yu)
  * @author renee.johnston@gmail.com (Renee Johnston)
  * @author ajkwak@users.noreply.github.com (AJ Parmidge)
